@@ -1,0 +1,1663 @@
+{
+  "id": "cn",
+  "code": "CS241503",
+  "title": "Computer Networks",
+  "icon": "🌐",
+  "modules": [
+    {
+      "id": "m1",
+      "num": 1,
+      "title": "Introduction to Computer Networks and Physical Layer",
+      "topics": [
+        {
+          "id": "cn_osi_model",
+          "cat": "Architecture",
+          "title": "OSI 7-LAYER REFERENCE MODEL",
+          "sub": "Layer Hierarchy, Encapsulation & Protocol Data Units (PDUs)",
+          "plain": "The OSI model is a 7-floor conceptual building for networking. Each floor has one job: Physical moves raw electrical/optical bits, Data Link hops between direct physical neighbors, Network routes packets across world-wide networks, Transport manages end-to-end reliability, Session manages dialogues, Presentation translates and encrypts formats, and Application is what software interacts with.",
+          "def": "The Open Systems Interconnection (OSI) reference model (ISO/IEC 7498-1) is an architectural framework that divides computer network communication into seven distinct hierarchical layers: Physical (Layer 1, bits), Data Link (Layer 2, frames), Network (Layer 3, packets), Transport (Layer 4, segments/datagrams), Session (Layer 5, dialogues), Presentation (Layer 6, syntax/encryption), and Application (Layer 7, user services).",
+          "exam": "Memorize Layer PDUs: Layer 1 = Bits, Layer 2 = Frames, Layer 3 = Packets, Layer 4 = Segments (TCP) / Datagrams (UDP), Layers 5-7 = Data / Messages. Routers operate up to Layer 3; standard switches operate at Layer 2.",
+          "trap": "Exam Trap: Do not confuse Session and Presentation layers in TCP/IP. TCP/IP collapses OSI Layers 5, 6, and 7 into a single unified Application layer; Session and Presentation do not exist as independent layers in the TCP/IP stack.",
+          "example": "When accessing a web application, HTTP data from Layer 7 is converted into ASCII/TLS syntax at Layer 6, tracked across sessions at Layer 5, divided into TCP segments with sequence numbers at Layer 4, addressed with IP headers at Layer 3, packaged into Ethernet frames with MAC addresses at Layer 2, and transmitted as modulated electrical signals over Cat6 copper wire at Layer 1.",
+          "q": "What are the exact Protocol Data Units (PDUs) handled at Layers 1, 2, 3, and 4 of the OSI model?",
+          "a": "Layer 1 (Physical) = Bits; Layer 2 (Data Link) = Frames; Layer 3 (Network) = Packets; Layer 4 (Transport) = Segments (TCP) or Datagrams (UDP)."
+        },
+        {
+          "id": "cn_tcpip_vs_osi",
+          "cat": "Architecture",
+          "title": "OSI VS TCP/IP PROTOCOL SUITE",
+          "sub": "Theoretical Reference Model vs Practical Internet Architecture",
+          "plain": "OSI was developed by a standards committee before the code was written, resulting in a clean but rigid theoretical model. TCP/IP was built for ARPANET by researchers writing working software, resulting in a pragmatic 4-layer architecture with the Internet Protocol (IP) acting as the narrow waist connecting everything.",
+          "def": "The OSI model is a 7-layer formal reference framework maintaining a strict conceptual separation between services, interfaces, and protocols. The TCP/IP model is a 4-layer functional internetworking suite (Network Access, Internet, Transport, Application) characterized by a connectionless Internet layer (IP) and an end-to-end Transport layer supporting both connection-oriented (TCP) and connectionless (UDP) communication.",
+          "exam": "Key theoretical distinction: OSI supports BOTH connection-oriented and connectionless service at the Network layer, but ONLY connection-oriented service at the Transport layer. TCP/IP supports ONLY connectionless service at the Internet layer, but offers BOTH at the Transport layer.",
+          "trap": "Exam Trap: Many students confuse the pedagogical 5-layer model (Physical, Data Link, Network, Transport, Application) with RFC 1122 TCP/IP. The original TCP/IP specification defines exactly 4 layers, combining Physical and Data Link into the Network Access / Link layer.",
+          "example": "The global Internet runs on the TCP/IP stack: whether packets travel over Wi-Fi, Ethernet, or 5G, they all converge on IP at the Internet layer, demonstrating the architectural robustness of the IP narrow waist.",
+          "q": "How do the Network and Transport layers differ in their support for connection-oriented vs connectionless services between OSI and TCP/IP?",
+          "a": "The OSI Network layer supports both connection-oriented and connectionless services, but its Transport layer is strictly connection-oriented. Conversely, the TCP/IP Internet layer provides strictly connectionless service (IP), while its Transport layer provides both connection-oriented (TCP) and connectionless (UDP) services."
+        },
+        {
+          "id": "cn_encapsulation",
+          "cat": "Architecture",
+          "title": "DATA ENCAPSULATION AND DECAPSULATION",
+          "sub": "Header Addition, Header Stripping & Multiplexing Demultiplexing",
+          "plain": "Encapsulation is like nesting Russian dolls or putting an addressed letter inside progressively larger postal envelopes. As application data travels down the stack, each layer attaches its own header. Decapsulation strips each header off on the way back up at the receiving destination.",
+          "def": "Encapsulation is the process wherein each descending layer of the protocol stack wraps the incoming higher-layer Service Data Unit (SDU) with its own control information header (and trailer) to produce a Protocol Data Unit (PDU). Decapsulation is the complementary process executed in ascending order at the destination host to unpack the payload.",
+          "exam": "Encapsulation occurs during transmission (Layer 7 down to Layer 1); Decapsulation occurs during reception (Layer 1 up to Layer 7). The Data Link layer is unique because it appends BOTH a header (source/dest MAC) and a trailer (FCS/CRC).",
+          "trap": "Exam Trap: Intermediate store-and-forward routers do not decapsulate packets all the way to Layer 4; routers decapsulate incoming frames up to Layer 3, inspect the IP destination, rewrite the Layer 2 header for the next hop, and retransmit.",
+          "example": "An HTTP GET request (L7) is encapsulated with a 20-byte TCP header (L4) specifying destination port 80, wrapped in a 20-byte IP header (L3) with destination IP, and framed by an Ethernet header (L2) with next-hop MAC and 4-byte CRC-32 trailer.",
+          "q": "Why is the Data Link layer unique among all OSI layers during the encapsulation process?",
+          "a": "The Data Link layer is the only layer in the OSI stack that attaches both a header (containing source and destination physical MAC addresses) and a trailer (containing the Frame Check Sequence / CRC checksum for error detection) to the PDU."
+        },
+        {
+          "id": "cn_transmission_media",
+          "cat": "Physical Layer",
+          "title": "GUIDED VS UNGUIDED TRANSMISSION MEDIA",
+          "sub": "Twisted Pair, Coaxial Cable, Optical Fiber & Wireless Propagation",
+          "plain": "Guided media physically confines signals inside a cable: Twisted Pair cancels noise by twisting wires together, Coaxial uses a copper shield against radio interference, and Fiber Optics transmits pulses of light through glass. Unguided media broadcasts electromagnetic waves through air, vacuum, or water without physical conductors.",
+          "def": "Transmission media provide the physical communication channel between transmitter and receiver. Guided media constrain electromagnetic waves within solid physical boundaries: Twisted Pair (UTP/STP, subject to attenuation and crosstalk), Coaxial Cable (central conductor surrounded by dielectric and braided shield), and Optical Fiber (silica core and cladding operating via Total Internal Reflection, offering massive bandwidth and immunity to EMI). Unguided media radiate radio waves, microwaves, or infrared signals through open space.",
+          "exam": "Total Internal Reflection (TIR) in optical fiber requires two mandatory conditions: 1) The core refractive index (n1) must be strictly greater than the cladding refractive index (n2); 2) The angle of incidence must exceed the critical angle (theta > theta_c = arcsin(n2/n1)).",
+          "trap": "Exam Trap: Wires are twisted in twisted-pair cables not for mechanical tensile strength, but to ensure that external electromagnetic interference affects both wires equally, allowing differential receivers to cancel the common-mode noise.",
+          "example": "Intercontinental Internet backbones utilize single-mode fiber optic cables beneath the ocean, transmitting multi-terabit data streams across thousands of kilometers with optical erbium-doped fiber amplifiers (EDFAs) rather than electrical repeaters.",
+          "q": "What two physical conditions must be satisfied for light to propagate through an optical fiber via Total Internal Reflection?",
+          "a": "1) The refractive index of the core ($n_1$) must be greater than that of the cladding ($n_2$), i.e., $n_1 > n_2$. 2) The angle of incidence at the core-cladding boundary must be greater than the critical angle ($\\theta > \\theta_c = \\arcsin(n_2 / n_1)$)."
+        },
+        {
+          "id": "cn_network_topologies",
+          "cat": "Topology",
+          "title": "NETWORK TOPOLOGIES & SCOPE CLASSIFICATION",
+          "sub": "Mesh, Star, Bus, Ring, Tree, Hybrid; LAN, MAN, WAN",
+          "plain": "Topology is the geometrical map of network connections. Full Mesh connects every node directly to every other node for maximum reliability at high cost. Star connects all nodes to a central switch. Bus shares a single backbone cable. Ring routes data in a circular loop. Networks are also categorized by geographic span: LAN (room/building), MAN (city), and WAN (country/globe).",
+          "def": "Network topology defines the physical or logical arrangement of links and nodes. A fully connected Mesh requires $n(n-1)/2$ full-duplex physical channels for $n$ devices, providing dedicated links with zero traffic contention and high fault tolerance. Star topology connects all nodes via point-to-point links to a central multi-port hub or switch. Bus uses a multipoint shared cable terminated with resistors. Ring connects devices in a closed daisy chain with repeaters. Geographically: LAN covers < 1 km; MAN covers 5-50 km; WAN spans continental or global distances.",
+          "exam": "Formulas: Fully connected mesh links = $n(n - 1) / 2$; I/O ports per device = $n - 1$. For 10 nodes, links = $10 \\times 9 / 2 = 45$.",
+          "trap": "Exam Trap: In a Star topology, a failure of a single peripheral cable affects only that node, but failure of the central switch disables the entire network. In a Bus topology, a break anywhere in the backbone cable brings down the whole segment.",
+          "example": "Modern gigabit enterprise LANs utilize a physical Star topology with twisted-pair Cat6 cables connected to centralized managed switches, while high-availability data center backbones often deploy Clos or Spine-and-Leaf mesh fabrics.",
+          "q": "How many full-duplex physical links and how many I/O ports per computer are required to build a fully connected physical mesh topology for 12 workstations?",
+          "a": "Total links = $n(n - 1) / 2 = 12 \\times 11 / 2 = 66$ links. Each individual workstation requires $n - 1 = 11$ I/O ports."
+        },
+        {
+          "id": "cn_switching_techniques",
+          "cat": "Physical Layer",
+          "title": "CIRCUIT SWITCHING VS PACKET SWITCHING",
+          "sub": "Dedicated Paths vs Store-and-Forward Statistical Multiplexing",
+          "plain": "Circuit switching is like reserving a private telephone line: bandwidth is reserved in advance, guaranteed, but wasted if you stay silent. Packet switching chops messages into independent packets that share links on demand, maximizing efficiency through statistical multiplexing at the cost of slight queuing delays.",
+          "def": "Circuit switching establishes a dedicated, reserved end-to-end physical communication channel across intermediate switches for the entire duration of a session (phases: Setup, Data Transfer, Teardown), offering fixed bandwidth and zero queuing delay. Packet switching segments messages into discrete packets that traverse shared links via store-and-forward routing, employing statistical multiplexing for optimal link utilization but incurring queuing delay and jitter.",
+          "exam": "Circuit switching has zero queuing delay during data transfer, but requires initial call-setup delay. Packet switching has zero setup delay (in datagram mode), but introduces variable queuing delays at intermediate routers.",
+          "trap": "Exam Trap: Datagram packet switching does not guarantee packets arrive in order or follow the same physical route; Virtual Circuit packet switching establishes a pre-planned logical route (VCI) ensuring in-order delivery while still sharing link bandwidth.",
+          "example": "Traditional landline telephone networks (PSTN) employ circuit switching. The Internet, IP telephony (VoIP), and cellular data networks operate exclusively on packet switching.",
+          "q": "Why is packet switching fundamentally superior to circuit switching for bursty computer data communication?",
+          "a": "Packet switching uses statistical multiplexing to allocate link capacity dynamically on demand only when data is actively being sent. Circuit switching dedicates fixed bandwidth for the entire connection duration, wasting substantial capacity during idle periods."
+        },
+        {
+          "id": "cn_transmission_impairments",
+          "cat": "Physical Layer",
+          "title": "TRANSMISSION IMPAIRMENTS & SIGNAL DEGRADATION",
+          "sub": "Attenuation, Distortion, Thermal Noise & Signal-to-Noise Ratio",
+          "plain": "Signals lose quality over distance in three ways: Attenuation (signals get weaker like a fading whisper), Distortion (signals change shape because different frequencies travel at different speeds), and Noise (unwanted electrical hum or static added to the signal). We measure signal quality using the Signal-to-Noise Ratio (SNR).",
+          "def": "Transmission impairments degrade analog and digital signals propagating through physical communication channels: 1) Attenuation: exponential loss of signal amplitude over distance, expressed in decibels ($dB = 10 \\log_{10}(P_2 / P_1)$), compensated via amplifiers or repeaters. 2) Distortion: signal waveform shape alteration caused by frequency-dependent phase velocities in composite signals. 3) Noise: external or internal extraneous energy, including thermal noise (Johnson noise, $N = kTB$), crosstalk, and impulse noise. Signal-to-Noise Ratio is $SNR = P_{\\text{signal}} / P_{\\text{noise}}$, or $SNR_{dB} = 10 \\log_{10}(SNR)$.",
+          "exam": "Formulas: Decibels $dB = 10 \\log_{10}(P_{\\text{out}} / P_{\\text{in}})$. Halving power corresponds to a $-3\\text{ dB}$ change ($10 \\log_{10}(0.5) \\approx -3.01\\text{ dB}$). A drop to $1/10$ input power is a $-10\\text{ dB}$ loss.",
+          "trap": "Exam Trap: Thermal noise is intrinsic to all conductors operating above absolute zero due to thermal electron agitation and cannot be eliminated; impulse noise is episodic (e.g., machinery, lightning) and causes catastrophic burst errors.",
+          "example": "Ethernet specifications limit UTP copper cable runs to 100 meters because signal attenuation beyond 100 meters drops signal voltage below the threshold where receivers can reliably discriminate 1s from 0s.",
+          "q": "If a signal with a power of 50 mW is fed into a transmission line and the measured output power at the receiver is 0.5 mW, what is the attenuation in decibels?",
+          "a": "Attenuation in dB = $10 \\log_{10}(P_{\\text{out}} / P_{\\text{in}}) = 10 \\log_{10}(0.5 / 50) = 10 \\log_{10}(0.01) = 10 \\times (-2) = -20\\text{ dB}$ (a signal loss of 20 dB)."
+        },
+        {
+          "id": "cn_nyquist_shannon",
+          "cat": "Physical Layer",
+          "title": "NYQUIST BIT RATE & SHANNON CHANNEL CAPACITY",
+          "sub": "Theoretical Data Rates for Noiseless and Noisy Channels",
+          "plain": "Nyquist tells you how fast you can push bits through an ideal noiseless channel if you increase the number of signal voltage levels. Shannon tells you the strict physical speed limit of a noisy channel that no engineer can ever exceed, determined purely by channel bandwidth and signal-to-noise ratio.",
+          "def": "Nyquist's Bit Rate formula defines the maximum theoretical transmission rate for a noiseless channel of bandwidth $B$ (Hertz) with $V$ discrete signal levels: $C_{\\text{Nyquist}} = 2B \\log_2(V)$ bps. Shannon's Capacity theorem defines the theoretical maximum capacity of a channel perturbed by Gaussian white noise with bandwidth $B$ and signal-to-noise ratio $SNR$: $C_{\\text{Shannon}} = B \\log_2(1 + SNR)$ bps.",
+          "exam": "Formulas: $C = 2B \\log_2(V)$ (Nyquist) and $C = B \\log_2(1 + SNR)$ (Shannon). If $SNR$ is given in decibels ($dB$), you MUST convert to a linear power ratio before applying Shannon: $SNR = 10^{(SNR_{dB} / 10)}$.",
+          "trap": "Exam Trap: Never substitute $SNR_{dB}$ directly into Shannon's formula. If an exam problem states $SNR = 30\\text{ dB}$, the linear ratio is $10^{30/10} = 1000$, yielding $C = B \\log_2(1001)$.",
+          "example": "A traditional telephone line with bandwidth $B = 3100\\text{ Hz}$ and typical $SNR = 30\\text{ dB}$ ($SNR = 1000$) has maximum Shannon capacity $C = 3100 \\times \\log_2(1001) \\approx 3100 \\times 9.967 \\approx 30.9\\text{ kbps}$. Dial-up modems reached 56 kbps only by using digital connections at one end.",
+          "q": "Calculate the theoretical Shannon capacity of a communication channel having a bandwidth of 3 kHz and a Signal-to-Noise Ratio (SNR) of 31.",
+          "a": "Using Shannon's formula $C = B \\log_2(1 + SNR) = 3000 \\times \\log_2(1 + 31) = 3000 \\times \\log_2(32) = 3000 \\times 5 = 15,000\\text{ bps} = 15\\text{ kbps}$."
+        },
+        {
+          "id": "cn_delay_components",
+          "cat": "Performance",
+          "title": "NETWORK DELAY COMPONENTS & BANDWIDTH-DELAY PRODUCT",
+          "sub": "Transmission, Propagation, Queuing, Processing Delays & Link Capacity",
+          "plain": "Whenever a packet travels across the internet, its journey takes time due to 4 distinct delays: Processing (router reading the header), Queuing (waiting in router line), Transmission (pushing bits onto the wire like pushing cars through a toll booth), and Propagation (speed of light travel time through the cable).",
+          "def": "Total nodal delay is the sum of four components: $d_{\\text{nodal}} = d_{\\text{proc}} + d_{\\text{queue}} + d_{\\text{trans}} + d_{\\text{prop}}$. Transmission delay is the time required to push all packet bits onto the link: $d_{\\text{trans}} = L / R$ (where $L$ is packet size in bits and $R$ is transmission rate in bps). Propagation delay is the time required for one bit to travel from sender to receiver: $d_{\\text{prop}} = d / s$ (where $d$ is distance and $s$ is physical propagation velocity, $\\approx 2 \\times 10^8\\text{ m/s}$ in copper/fiber). Bandwidth-Delay Product ($BDP = R \\times d_{\\text{prop}}$) measures the maximum number of in-flight bits the link pipe can hold.",
+          "exam": "Key formula distinction: $d_{\\text{trans}} = L / R$ is determined by packet length and transmission speed. $d_{\\text{prop}} = d / s$ is determined by physical link distance and light velocity. They are completely independent!",
+          "trap": "Exam Trap: Upgrading a 10 Mbps link to 1 Gbps reduces transmission delay ($L/R$) by a factor of 100, but has zero effect on propagation delay ($d/s$). Bits do not move faster through the glass cable.",
+          "example": "A geostationary satellite link at 36,000 km altitude has one-way propagation delay $d_{\\text{prop}} = 36,000,000 / (3 \\times 10^8) = 120\\text{ ms}$ (round-trip 240 ms). Even on a 1 Gbps link, interactive voice chat suffers noticeable latency due to propagation delay.",
+          "q": "A host sends a 1500-byte packet over a 100 Mbps fiber optic link of length 200 km. If signal speed in fiber is $2 \\times 10^8$ m/s, what are the transmission and propagation delays?",
+          "a": "Transmission delay $d_{\\text{trans}} = (1500 \\times 8\\text{ bits}) / (100 \\times 10^6\\text{ bps}) = 12,000 / 10^8 = 0.00012\\text{ s} = 0.12\\text{ ms} = 120\\ \\mu\\text{s}$. Propagation delay $d_{\\text{prop}} = (200 \\times 10^3\\text{ m}) / (2 \\times 10^8\\text{ m/s}) = 0.001\\text{ s} = 1\\text{ ms}$."
+        },
+        {
+          "id": "cn_multiplexing",
+          "cat": "Physical Layer",
+          "title": "MULTIPLEXING: FDM, TDM, WDM & STATISTICAL TDM",
+          "sub": "Frequency, Time, Optical Wavelength Sharing & Statistical Multiplexing",
+          "plain": "Multiplexing is combining multiple low-speed data conversations onto a single high-speed shared cable. FDM splits the cable into separate radio frequencies (like FM radio stations). TDM gives each user a turn in a rotating time slot. WDM runs multiple different colors of light down an optical fiber. Statistical TDM dynamically allocates slots only to people who have data right now.",
+          "def": "Multiplexing is the simultaneous transmission of multiple information signals over a single shared data link: 1) Frequency-Division Multiplexing (FDM): divides analog bandwidth into discrete frequency bands separated by guard bands. 2) Synchronous Time-Division Multiplexing (TDM): assigns recurring fixed time slots to each input line; idle lines waste allocated time slots. 3) Wavelength-Division Multiplexing (WDM): combines optical carrier signals of different wavelengths onto a single optical fiber. 4) Statistical (Asynchronous) TDM: dynamically allocates time slots on demand based on buffer availability, maximizing link utilization for bursty traffic.",
+          "exam": "Synchronous TDM requires link capacity $C \\ge \\sum R_i$ (sum of all peak user rates). Statistical TDM allows link capacity $C < \\sum R_i$ by relying on the statistical unlikelihood of all bursty users transmitting simultaneously.",
+          "trap": "Exam Trap: WDM is conceptually identical to FDM, but operates strictly in the optical domain using light wavelengths measured in nanometers rather than electrical frequencies measured in Hertz.",
+          "example": "Dense Wavelength Division Multiplexing (DWDM) enables modern telecommunication providers to transmit 80 to 160 distinct optical wavelengths over a single pair of fiber strands, achieving aggregate throughputs exceeding 40 Terabits per second.",
+          "q": "What fundamental inefficiency of Synchronous TDM is resolved by Statistical Time-Division Multiplexing?",
+          "a": "In Synchronous TDM, if a user has no data to transmit, their assigned time slot is transmitted empty, wasting channel bandwidth. Statistical TDM dynamically assigns slots on demand only to active channels, achieving near 100% link utilization."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Which Protocol Data Unit (PDU) is correctly paired with its corresponding OSI reference model layer?",
+          "opts": [
+            "Layer 2: Packets; Layer 3: Frames",
+            "Layer 2: Frames; Layer 3: Packets",
+            "Layer 3: Segments; Layer 4: Packets",
+            "Layer 1: Frames; Layer 2: Bits"
+          ],
+          "ans": 1,
+          "cat": "Architecture",
+          "correctFb": "Layer 2 (Data Link Layer) exchanges Frames, while Layer 3 (Network Layer) exchanges Packets. Layer 1 exchanges Bits and Layer 4 exchanges Segments or Datagrams.",
+          "distractors": [
+            "Inverts the PDUs of Layer 2 and Layer 3.",
+            "Segments belong to Layer 4 (Transport) and Packets belong to Layer 3 (Network).",
+            "Bits belong to Layer 1 (Physical) and Frames belong to Layer 2 (Data Link)."
+          ]
+        },
+        {
+          "q": "Regarding support for connection-oriented and connectionless services, what is a fundamental architectural difference between the OSI and TCP/IP models?",
+          "opts": [
+            "OSI supports both connection-oriented and connectionless service at the Network layer, whereas TCP/IP supports only connectionless service (IP) at the Internet layer.",
+            "TCP/IP supports only connection-oriented service at both the Internet and Transport layers.",
+            "OSI supports only connectionless service at the Transport layer, whereas TCP/IP supports both.",
+            "TCP/IP requires connection-oriented virtual circuits at the Network Access layer for all traffic."
+          ],
+          "ans": 0,
+          "cat": "Architecture",
+          "correctFb": "The OSI model was designed to accommodate both connection-oriented (X.25 style) and connectionless services at Layer 3. The TCP/IP Internet layer was strictly designed around connectionless datagram delivery (IP), relying on the Transport layer (TCP) for connection-oriented reliability.",
+          "distractors": [
+            "TCP/IP Internet layer is strictly connectionless (IP); Transport supports both TCP and UDP.",
+            "OSI Transport layer is strictly connection-oriented (classes TP0 to TP4); it does not allow connectionless transport.",
+            "TCP/IP operates over connectionless media like standard Ethernet without requiring virtual circuits."
+          ]
+        },
+        {
+          "q": "What physical condition must be satisfied for an optical signal to propagate through the core of an optical fiber via Total Internal Reflection?",
+          "opts": [
+            "Core refractive index must be lower than cladding refractive index, and angle of incidence must be 90 degrees.",
+            "Core refractive index must be greater than cladding refractive index, and angle of incidence must exceed the critical angle.",
+            "Core and cladding must have identical refractive indices to prevent modal dispersion.",
+            "Light must enter perpendicular to the fiber axis with an angle of incidence less than Brewster's angle."
+          ],
+          "ans": 1,
+          "cat": "Physical Layer",
+          "correctFb": "Total Internal Reflection requires that light travel from a medium of higher refractive index to one of lower refractive index ($n_{\\text{core}} > n_{\\text{cladding}}$) and strike the boundary at an angle of incidence greater than the critical angle $\\theta_c = \\arcsin(n_{\\text{cladding}} / n_{\\text{core}})$.",
+          "distractors": [
+            "If the core refractive index were lower than cladding, light would refract out into the cladding and attenuate rapidly.",
+            "Identical refractive indices would eliminate reflection completely, causing light to leak directly out.",
+            "Brewster's angle pertains to polarization upon reflection, not guided optical fiber confinement."
+          ]
+        },
+        {
+          "q": "How many full-duplex physical links and how many I/O ports per device are required to connect 10 computers in a fully connected mesh topology?",
+          "opts": [
+            "45 physical links and 9 I/O ports per device",
+            "90 physical links and 10 I/O ports per device",
+            "45 physical links and 10 I/O ports per device",
+            "10 physical links and 2 I/O ports per device"
+          ],
+          "ans": 0,
+          "cat": "Topology",
+          "correctFb": "For $n$ devices in a full mesh, the total number of duplex links is $n(n - 1) / 2 = 10 \\times 9 / 2 = 45$. Each device must connect to all other $n - 1$ devices, requiring $10 - 1 = 9$ I/O ports.",
+          "distractors": [
+            "90 links would represent simplex directional links, and devices require $n-1=9$ ports, not 10.",
+            "Computers do not need an I/O port to connect to themselves, so each requires 9 ports, not 10.",
+            "10 links with 2 ports per device describes a Ring topology, not a fully connected Mesh."
+          ]
+        },
+        {
+          "q": "Which type of network delay is eliminated during the active data transfer phase in a circuit-switched network?",
+          "opts": [
+            "Propagation delay",
+            "Transmission delay",
+            "Queuing delay",
+            "Processing delay"
+          ],
+          "ans": 2,
+          "cat": "Physical Layer",
+          "correctFb": "In circuit switching, dedicated physical bandwidth is reserved end-to-end prior to transmission. Because buffers are not shared and no packet contention occurs at intermediate switches, queuing delay during data transfer is completely zero.",
+          "distractors": [
+            "Propagation delay is bounded by the speed of electromagnetic waves and is never zero.",
+            "Transmission delay is still required to modulate bits onto the communication line.",
+            "Processing delay occurs during initial setup, but queuing delay is the key delay eliminated during data transfer."
+          ]
+        },
+        {
+          "q": "A communication channel has a bandwidth of 4000 Hz and a signal-to-noise ratio (SNR) of 15. What is the maximum theoretical channel capacity according to Shannon's theorem?",
+          "opts": [
+            "16,000 bps",
+            "32,000 bps",
+            "60,000 bps",
+            "8,000 bps"
+          ],
+          "ans": 0,
+          "cat": "Physical Layer",
+          "correctFb": "Using Shannon's formula $C = B \\log_2(1 + SNR) = 4000 \\times \\log_2(1 + 15) = 4000 \\times \\log_2(16) = 4000 \\times 4 = 16,000\\text{ bps}$.",
+          "distractors": [
+            "32,000 bps erroneously multiplies by 8 instead of $\\log_2(16) = 4$.",
+            "60,000 bps erroneously multiplies bandwidth directly by SNR ($4000 \\times 15$).",
+            "8,000 bps erroneously computes $\\log_2(16) = 2$ instead of 4."
+          ]
+        },
+        {
+          "q": "A signal enters a 10-kilometer transmission cable with a power of 100 mW and exits at the receiver with 1 mW. What is the total attenuation of the cable in decibels (dB)?",
+          "opts": [
+            "-10 dB",
+            "-20 dB",
+            "-100 dB",
+            "-3 dB"
+          ],
+          "ans": 1,
+          "cat": "Physical Layer",
+          "correctFb": "Attenuation in dB is calculated as $10 \\log_{10}(P_{\\text{out}} / P_{\\text{in}}) = 10 \\log_{10}(1 / 100) = 10 \\log_{10}(10^{-2}) = 10 \\times (-2) = -20\\text{ dB}$.",
+          "distractors": [
+            "-10 dB corresponds to a power drop to 1/10 (10 mW), not 1/100.",
+            "-100 dB confuses the linear power ratio (100) with the decibel value.",
+            "-3 dB corresponds to halving the power (50 mW)."
+          ]
+        },
+        {
+          "q": "If the transmission bandwidth of a link is quadrupled while the physical cable length and packet size remain constant, what happens to the transmission delay and propagation delay?",
+          "opts": [
+            "Both transmission delay and propagation delay are reduced to one-fourth of their original values.",
+            "Transmission delay is reduced to one-fourth; propagation delay remains unchanged.",
+            "Propagation delay is reduced to one-fourth; transmission delay remains unchanged.",
+            "Transmission delay is quadrupled; propagation delay is reduced."
+          ],
+          "ans": 1,
+          "cat": "Performance",
+          "correctFb": "Transmission delay $d_{\\text{trans}} = L / R$ is inversely proportional to bandwidth $R$, so quadrupling bandwidth reduces it to $1/4$. Propagation delay $d_{\\text{prop}} = d / s$ depends solely on distance $d$ and medium speed $s$, remaining completely unaffected by bandwidth.",
+          "distractors": [
+            "Propagation delay depends purely on the speed of light in the physical medium, not bandwidth.",
+            "Bandwidth has zero influence on the physical transit speed of light through the cable.",
+            "Transmission delay decreases as bandwidth increases; it does not quadruple."
+          ]
+        },
+        {
+          "q": "According to Nyquist's theorem, what is the maximum data rate for a noiseless channel with a bandwidth of 3000 Hz using 4 discrete signaling levels?",
+          "opts": [
+            "6,000 bps",
+            "12,000 bps",
+            "24,000 bps",
+            "3,000 bps"
+          ],
+          "ans": 1,
+          "cat": "Physical Layer",
+          "correctFb": "Using Nyquist's theorem: $C = 2B \\log_2(V) = 2 \\times 3000 \\times \\log_2(4) = 6000 \\times 2 = 12,000\\text{ bps}$.",
+          "distractors": [
+            "6,000 bps calculates $2B$ but forgets to multiply by $\\log_2(4) = 2$.",
+            "24,000 bps mistakenly multiplies by 4 instead of $\\log_2(4) = 2$.",
+            "3,000 bps equals the bandwidth $B$ without applying the Nyquist factor $2 \\log_2(V)$."
+          ]
+        },
+        {
+          "q": "Which multiplexing technique combines multiple light signals of varying wavelengths onto a single optical fiber strand?",
+          "opts": [
+            "Frequency-Division Multiplexing (FDM)",
+            "Synchronous Time-Division Multiplexing (TDM)",
+            "Wavelength-Division Multiplexing (WDM)",
+            "Code-Division Multiple Access (CDMA)"
+          ],
+          "ans": 2,
+          "cat": "Physical Layer",
+          "correctFb": "Wavelength-Division Multiplexing (WDM) combines optical carrier signals of different wavelengths (colors of laser light) onto a single strand of optical fiber using optical prisms or diffraction gratings.",
+          "distractors": [
+            "FDM operates in the electrical/radio frequency domain, whereas optical fiber multiplexing is termed WDM.",
+            "Synchronous TDM divides time into distinct digital slots, not optical wavelengths.",
+            "CDMA uses orthogonal mathematical spreading codes, not wavelength separation."
+          ]
+        }
+      ],
+      "bossChallenges": [
+        {
+          "marks": 10,
+          "scenario": "[10 MARKS] University Exam Question: Provide an exhaustive theoretical and architectural breakdown of the OSI 7-Layer Reference Model versus the TCP/IP Protocol Architecture. Formally define both models, analyze how protocol data units (PDUs) and control headers transform during encapsulation and decapsulation, evaluate the transmission impairment differences across guided media (twisted pair, coaxial, and optical fiber), and calculate the Shannon channel capacity for a noisy 4 kHz band-limited channel with an SNR of 30 dB.",
+          "rubric": [
+            "Criterion 1 (2.5 Marks): Formal definitions and layer-by-layer architectural comparison between OSI (7 layers) and TCP/IP (4 layers), emphasizing service model divergences at the Network and Transport layers.",
+            "Criterion 2 (2.5 Marks): Comprehensive explanation of data encapsulation and decapsulation across all layers, specifying exact PDU terminology (Bits, Frames, Packets, Segments, Messages) and header/trailer operations.",
+            "Criterion 3 (2.5 Marks): In-depth comparison of guided transmission media (UTP/STP, Coaxial, and Optical Fiber) covering attenuation, electromagnetic immunity, and Total Internal Reflection conditions.",
+            "Criterion 4 (2.5 Marks): Rigorous mathematical derivation of Nyquist bit rate and Shannon channel capacity, including linear SNR conversion from 30 dB (ratio 1000) and step-by-step numerical calculation yielding ~39.87 kbps."
+          ]
+        },
+        {
+          "marks": 5,
+          "scenario": "[5 MARKS] Practical Problem-Solving Scenario: A multinational enterprise with 12 branch offices requires high-availability interconnectivity. The lead network engineer must evaluate whether to deploy a fully connected physical mesh topology versus a physical star topology with redundant core switches. Calculate the exact physical cabling and port requirements for both architectures, analyze single-point-of-failure risks, and formulate an engineering recommendation.",
+          "rubric": [
+            "Criterion 1 (1.25 Marks): Exact mathematical calculation of physical links and device I/O ports for a 12-node full mesh (66 full-duplex links, 11 ports per device) versus star topology (12 links, 1 port per device).",
+            "Criterion 2 (1.25 Marks): Rigorous failure analysis evaluating line-break resilience and blast radius in mesh networks versus switch controller failure in star networks.",
+            "Criterion 3 (1.25 Marks): Financial and operational trade-off evaluation covering installation complexity, cabling maintenance costs, and hardware port density limitations.",
+            "Criterion 4 (1.25 Marks): Concrete engineering recommendation proposing a hybrid or redundant dual-homed star/spine-leaf architecture for optimal reliability and cost."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m2",
+      "num": 2,
+      "title": "Data Link Layer & MAC Sublayer",
+      "topics": [
+        {
+          "id": "cn_framing_methods",
+          "cat": "Data Link",
+          "title": "FRAMING TECHNIQUES & BIT/BYTE STUFFING",
+          "sub": "Character Count, Byte Stuffing (ESC) & HDLC Bit Stuffing",
+          "plain": "Framing divides an endless stream of raw physical bits into distinct frames. To tell where a frame begins and ends, protocols use flag bytes or flag patterns like 01111110. If that pattern accidentally appears inside user data, the sender 'stuffs' an extra bit or escape byte so the receiver doesn't cut the frame short.",
+          "def": "Framing is the Data Link layer function of organizing raw bit streams into recognizable discrete data units (frames) with designated boundaries. Primary mechanisms: 1) Character Count: header specifies frame character length (fragile; a single bit error in count derails all subsequent frames). 2) Byte (Character) Stuffing: frame delimiter flags (e.g., DLE STX / DLE ETX) surround data; occurrences of flag or escape bytes in data are escaped with DLE/ESC bytes. 3) Bit Stuffing: frames begin and end with flag pattern 01111110; whenever the sender encounters five consecutive 1s in data, it unconditionally inserts a 0 bit, which the receiver strips.",
+          "exam": "Bit Stuffing Rule: Sender inserts a 0 bit after EVERY sequence of five consecutive 1s (011111 -> 0111110). Receiver checks after five consecutive 1s: if next bit is 0, it strips the 0 (it was stuffed); if next bit is 1 and followed by 0, it detects a frame flag (01111110).",
+          "trap": "Exam Trap: Bit stuffing is performed bit-by-bit regardless of byte boundaries; byte stuffing operates on full 8-bit character boundaries.",
+          "example": "High-Level Data Link Control (HDLC) and Point-to-Point Protocol (PPP) employ bit stuffing with 01111110 flags to transmit arbitrary binary files across serial communication links without premature framing termination.",
+          "q": "If the data stream 01111110111110 is to be transmitted using HDLC bit stuffing, what is the exact resulting bit pattern transmitted on the link?",
+          "a": "After every five consecutive 1s, a 0 is inserted: 011111[0]1011111[0]0."
+        },
+        {
+          "id": "cn_crc_error_detection",
+          "cat": "Error Control",
+          "title": "CYCLIC REDUNDANCY CHECK (CRC)",
+          "sub": "Modulo-2 Polynomial Arithmetic, Generator Polynomials & Error Coverage",
+          "plain": "CRC is mathematical division using XOR instead of subtraction. The sender appends $r$ zeroes to the data, divides by a pre-agreed generator code, and appends the remainder to the frame. The receiver divides the whole frame by the same generator—if the remainder is zero, the frame arrived intact!",
+          "def": "Cyclic Redundancy Check (CRC) is an error-detecting code based on polynomial division in Galois Field GF(2). Given a data block $M(x)$ and a generator polynomial $G(x)$ of degree $r$: 1) Append $r$ zero bits to $M(x)$ (computing $M(x) \\cdot x^r$). 2) Divide $M(x) \\cdot x^r$ by $G(x)$ using modulo-2 arithmetic (XOR without carries or borrows). 3) The $r$-bit remainder $R(x)$ is added to $M(x) \\cdot x^r$ to produce the transmitted codeword $T(x)$. The receiver divides $T(x)$ by $G(x)$; a non-zero remainder indicates transmission error.",
+          "exam": "Modulo-2 Arithmetic: $0 \\oplus 0 = 0$, $0 \\oplus 1 = 1$, $1 \\oplus 0 = 1$, $1 \\oplus 1 = 0$ (XOR). A generator polynomial $G(x)$ of degree $r$ detects all single-bit errors (if $G(x)$ has $>1$ term), all double-bit errors, all odd numbers of errors (if $(x+1)$ is a factor of $G(x)$), and all burst errors of length $\\le r$.",
+          "trap": "Exam Trap: If the generator polynomial has degree $r$, you must append exactly $r$ zero bits (not $r+1$ bits). A generator of degree 4 (e.g., $x^4 + x + 1$, 5 bits long: 10011) generates an $r = 4$-bit remainder.",
+          "example": "Ethernet frames append a 4-byte (32-bit) Frame Check Sequence (FCS) calculated using the IEEE 802.3 standard polynomial CRC-32: $x^{32} + x^{26} + x^{23} + x^{22} + x^{16} + x^{12} + x^{10} + x^8 + x^7 + x^5 + x^4 + x^2 + x + 1$.",
+          "q": "What binary bit sequence corresponds to the CRC generator polynomial $G(x) = x^4 + x^2 + 1$, and how many zero bits are appended to the data message prior to modulo-2 division?",
+          "a": "The polynomial $G(x) = 1\\cdot x^4 + 0\\cdot x^3 + 1\\cdot x^2 + 0\\cdot x^1 + 1\\cdot x^0$ corresponds to binary 10101. Because the degree of the polynomial is $r = 4$, exactly 4 zero bits are appended to the data message."
+        },
+        {
+          "id": "cn_checksum_parity",
+          "cat": "Error Control",
+          "title": "PARITY CHECKS & INTERNET CHECKSUM",
+          "sub": "Single/2D Parity, 1's Complement Addition & Checksum Algorithm",
+          "plain": "Simple parity adds a single bit to make the count of 1s even or odd—great for catching 1 flipped bit, but completely blind if 2 bits flip. The Internet Checksum adds up 16-bit binary words using 1's complement arithmetic and flips all bits (inverts) at the end.",
+          "def": "Linear error detection techniques: 1) Simple Parity: appends 1 bit making the total count of 1s even (Even Parity) or odd (Odd Parity); detects any odd number of bit errors, fails on even bit errors. 2) Two-Dimensional (2D) Parity: organizes data into a matrix, computing parity for each row and column; detects all 1-, 2-, and 3-bit errors and corrects single-bit errors (intersection of bad row and column). 3) Internet Checksum (RFC 1071): arranges data into 16-bit integers, sums them using 1's complement arithmetic (end-around carry: carry out from bit 15 is added back to bit 0), and takes the 1's complement (bitwise NOT) of the final sum.",
+          "exam": "1's complement addition: If adding two 16-bit words produces a carry-out bit beyond 16 bits, wrap the carry around and add 1 to the least significant bit (LSB). The checksum is the bitwise inverse of the final wrapped sum.",
+          "trap": "Exam Trap: The Internet Checksum does not detect reordering of 16-bit words or insertion of all-zero words, because addition is commutative ($A + B = B + A$) and adding zero does not alter the sum.",
+          "example": "IP, TCP, and UDP headers include a 16-bit checksum field. When the receiver computes the 1's complement sum over all 16-bit words including the received checksum, the result must be 0xFFFF (all 1s in 1's complement, representing +0).",
+          "q": "Why is the Internet Checksum unable to detect an accidental reordering of two 16-bit payload words in an IP packet?",
+          "a": "Because 1's complement addition is mathematically commutative and associative; the sum of $(A + B)$ is identical to $(B + A)$, so swapping the order of words yields the exact same checksum value."
+        },
+        {
+          "id": "cn_stop_and_wait",
+          "cat": "Flow Control",
+          "title": "STOP-AND-WAIT ARQ PROTOCOL",
+          "sub": "Mechanics, Sequence Numbers (0/1), Channel Utilization & Efficiency",
+          "plain": "Stop-and-Wait is the simplest flow and error control protocol: send one frame, freeze and wait. If an ACK arrives, send the next frame. If a timer expires without an ACK, resend the same frame. It uses 1-bit sequence numbers (0 and 1) to distinguish new frames from duplicates.",
+          "def": "Stop-and-Wait Automatic Repeat reQuest (ARQ) is a half-duplex sliding window protocol with sender window size $W_s = 1$ and receiver window size $W_r = 1$. The sender transmits a single frame with an alternating 1-bit sequence number ($0$ or $1$) and starts a retransmission timer. The receiver verifies frame integrity; if valid, it returns an ACK containing the expected next sequence number. Channel efficiency is $\\eta = \\frac{T_t}{T_t + 2T_p} = \\frac{1}{1 + 2a}$, where $T_t = L / R$ is transmission delay, $T_p$ is propagation delay, and $a = T_p / T_t$.",
+          "exam": "Efficiency formula: $\\eta = \\frac{1}{1 + 2a}$, where $a = T_p / T_t$. When propagation delay is much larger than transmission delay ($a \\gg 1$, e.g., satellite links), Stop-and-Wait efficiency approaches zero.",
+          "trap": "Exam Trap: If an ACK is lost or delayed, the sender times out and retransmits. Without 1-bit sequence numbers (0 and 1), the receiver would mistakenly treat the retransmitted frame as new data, causing data duplication.",
+          "example": "TFTP (Trivial File Transfer Protocol) over UDP operates on a Stop-and-Wait basis, sending 512-byte blocks and waiting for an individual ACK for each block before transmitting the next.",
+          "q": "A 1000-bit frame is transmitted over a 1 Mbps satellite link with a one-way propagation delay of 250 ms using Stop-and-Wait. Calculate the channel efficiency $\\eta$.",
+          "a": "$T_t = 1000 / 10^6 = 1\\text{ ms}$. $T_p = 250\\text{ ms}$. Parameter $a = T_p / T_t = 250 / 1 = 250$. Efficiency $\\eta = 1 / (1 + 2a) = 1 / (1 + 500) = 1 / 501 \\approx 0.2\\%$."
+        },
+        {
+          "id": "cn_go_back_n",
+          "cat": "Flow Control",
+          "title": "GO-BACK-N SLIDING WINDOW ARQ",
+          "sub": "Pipelined Transmission, Cumulative ACKs & Window Size Constraints",
+          "plain": "Go-Back-N lets the sender transmit up to $N$ frames without waiting for an ACK. But the receiver is completely stubborn: its window size is 1, so it only accepts frames in exact sequential order. If frame 3 is dropped in transit, the receiver discards frames 4, 5, and 6, forcing the sender to 'go back' and retransmit all of them from 3 onwards.",
+          "def": "Go-Back-N (GBN) ARQ is a pipelined sliding window protocol. The sender maintains a window of size $W_s \\le 2^m - 1$ (for $m$-bit sequence numbers), while the receiver maintains a fixed window of size $W_r = 1$. The receiver accepts only the next sequentially expected frame, discarding all out-of-order frames, and sends cumulative ACKs ($ACK_k$ acknowledges all frames up to and including $k$). If the sender's timer expires for the oldest unacknowledged frame, the sender retransmits all outstanding unacknowledged frames in the current window.",
+          "exam": "Maximum window size constraint: For an $m$-bit sequence number, $W_s \\le 2^m - 1$ and $W_r = 1$. Channel utilization $\\eta = \\frac{N}{1 + 2a}$ (capped at 100%), where $N$ is sender window size.",
+          "trap": "Exam Trap: If $W_s = 2^m$, the protocol fails! If an entire window of ACKs is lost, the sender retransmits, but the receiver cannot distinguish whether the retransmitted frames are duplicates from the previous cycle or new frames from the next cycle.",
+          "example": "If $W_s = 4$ and frames 0, 1, 2, 3 are transmitted, but frame 1 is corrupted, the receiver accepts frame 0, discards frames 2 and 3 upon arrival, and repeatedly ACKs frame 0. The sender's timer expires on frame 1, forcing retransmission of frames 1, 2, and 3.",
+          "q": "For a 3-bit sequence number field, what is the maximum sender window size in Go-Back-N ARQ, and what is the receiver window size?",
+          "a": "Maximum sender window size $W_s = 2^3 - 1 = 7$. The receiver window size is strictly $W_r = 1$."
+        },
+        {
+          "id": "cn_selective_repeat",
+          "cat": "Flow Control",
+          "title": "SELECTIVE REPEAT SLIDING WINDOW ARQ",
+          "sub": "Independent ACKs, Receiver Buffering & Window Sizing ($W_s = W_r = 2^{m-1}$)",
+          "plain": "Selective Repeat fixes the wastefulness of Go-Back-N. The receiver has its own buffer window, so it happily accepts and stores out-of-order frames. It tells the sender exactly which single frame was lost (via Negative ACK or timeout), so the sender retransmits ONLY the lost frame, saving huge amounts of bandwidth.",
+          "def": "Selective Repeat (SR) ARQ is a pipelined protocol where both sender and receiver maintain sliding windows of size $W_s = W_r \\le 2^{m-1}$ (for $m$-bit sequence numbers). The receiver accepts and buffers valid out-of-order frames falling within its window, acknowledging each frame individually with selective ACKs. The sender maintains an independent retransmission timer for each transmitted frame and retransmits only specifically unacknowledged frames upon timer expiration.",
+          "exam": "Window size constraint: In Selective Repeat, $W_s + W_r \\le 2^m$. Since $W_s = W_r$, the maximum window size is $W_s = W_r = 2^{m-1}$. For a 4-bit sequence number ($m=4$), maximum window size is $2^{4-1} = 8$.",
+          "trap": "Exam Trap: If $W_s > 2^{m-1}$ in Selective Repeat, the receiver's window overlaps with the sender's sequence numbers from the previous cycle, causing the receiver to misidentify old duplicate frames as fresh new frames.",
+          "example": "TCP Selective Acknowledgments (SACK, RFC 2018) adopts Selective Repeat mechanics: when packets are dropped on high-speed long-distance links, SACK blocks notify the sender of received non-contiguous byte ranges so only missing segments are retransmitted.",
+          "q": "Why must the sender and receiver window sizes in Selective Repeat ARQ satisfy the condition $W_s = W_r \\le 2^{m-1}$ for an $m$-bit sequence number?",
+          "a": "To prevent the receiver's window from overlapping with the sequence numbers of the previous window cycle. If $W_s + W_r > 2^m$, an unacknowledged duplicate frame could fall into the receiver's new window and be accepted as new data."
+        },
+        {
+          "id": "cn_aloha_protocols",
+          "cat": "MAC Sublayer",
+          "title": "PURE ALOHA VS SLOTTED ALOHA PROTOCOLS",
+          "sub": "Random Access, Vulnerable Time & Maximum Theoretical Throughput",
+          "plain": "ALOHA was created at the University of Hawaii for wireless island communications. In Pure ALOHA, anyone transmits whenever they feel like it; if two signals collide, both are ruined and retransmitted later. Slotted ALOHA forces everyone to wait for the tick of a clock before transmitting, cutting collision time in half and doubling throughput.",
+          "def": "Random access MAC protocols: 1) Pure ALOHA: stations transmit whenever they have data. Vulnerable time during which collisions can occur is $2T_{\\text{fr}}$ (where $T_{\\text{fr}}$ is frame transmission time). Throughput is $S = G e^{-2G}$ (where $G$ is traffic offered load); maximum throughput is $S_{\\max} = 1 / (2e) \\approx 0.184$ (18.4%) at $G = 0.5$. 2) Slotted ALOHA: time is discretized into synchronized slots of duration $T_{\\text{fr}}$; stations must transmit only at the start of a time slot. Vulnerable time is halved to $T_{\\text{fr}}$. Throughput is $S = G e^{-G}$; maximum throughput is $S_{\\max} = 1 / e \\approx 0.368$ (36.8%) at $G = 1.0$.",
+          "exam": "Vulnerable time formulas: Pure ALOHA = $2 \\times T_{\\text{fr}}$; Slotted ALOHA = $T_{\\text{fr}}$. Maximum throughput: Pure ALOHA = $1 / (2e) \\approx 18.4\\%$; Slotted ALOHA = $1 / e \\approx 36.8\\%$.",
+          "trap": "Exam Trap: Slotted ALOHA doubles throughput compared to Pure ALOHA, but requires strict global clock synchronization across all competing distributed stations.",
+          "example": "Satellite ground terminals and initial random access channels (RACH) in 4G/5G LTE cellular systems utilize slotted ALOHA variants to request initial connection setup.",
+          "q": "Why is the vulnerable collision time in Slotted ALOHA exactly half that of Pure ALOHA?",
+          "a": "In Pure ALOHA, a frame can be destroyed by another transmission starting up to one frame time before it or during its transmission, creating a vulnerable period of $2T_{\\text{fr}}$. In Slotted ALOHA, transmissions are restricted to discrete slot boundaries, so collisions occur only if two stations choose the exact same slot, reducing vulnerable time to $T_{\\text{fr}}$."
+        },
+        {
+          "id": "cn_csmacd",
+          "cat": "MAC Sublayer",
+          "title": "CSMA/CD & MINIMUM FRAME SIZE REQUIREMENT",
+          "sub": "Listen Before Talking, Collision Detection & $L_{\\min} \\ge 2 \\cdot R \\cdot T_p$",
+          "plain": "CSMA/CD is polite conversation: listen before speaking (Carrier Sense). If quiet, talk. If someone starts talking at the exact same time, stop immediately (Collision Detection), send a jam signal, wait a random backoff time, and try again. To guarantee you detect a collision before you finish sending, the frame must be longer than the round-trip wire travel time.",
+          "def": "Carrier Sense Multiple Access with Collision Detection (CSMA/CD, IEEE 802.3) governs shared media access: 1) Carrier Sense: station monitors medium; if busy, waits (1-persistent: transmits immediately upon sensing idle). 2) Collision Detection: station listens while transmitting; if signal voltage exceeds threshold, collision is detected. 3) Jam Signal & Backoff: immediately aborts transmission, broadcasts 32-48 bit jam signal, and executes Truncated Binary Exponential Backoff ($K \\in [0, 2^k - 1]$ slot times for collision $k \\le 10$). To ensure detection before transmission ends, minimum frame length is $L_{\\min} = 2 \\cdot R \\cdot T_p = 2 \\cdot R \\cdot (d / s)$.",
+          "exam": "Mandatory formula: $T_t \\ge 2 T_p \\implies L / R \\ge 2 \\cdot (d / s) \\implies L_{\\min} = 2 \\cdot R \\cdot T_p$. In standard 10 Mbps Ethernet over 2.5 km coaxial cable, $2T_p \\approx 51.2\\ \\mu\\text{s} \\implies L_{\\min} = 512\\text{ bits} = 64\\text{ bytes}$.",
+          "trap": "Exam Trap: If a frame is smaller than $L_{\\min}$, the transmitter completes transmission and assumes success before the collision echo returns from the distant end, leaving the error entirely undetected at Layer 2.",
+          "example": "Legacy 10BASE5 'Thicknet' and 10BASE2 'Thinnet' shared bus Ethernet networks relied directly on CSMA/CD and 64-byte minimum frames to detect collisions across 500-meter segments.",
+          "q": "A 1 Gbps CSMA/CD network has a cable length of 1 km with propagation speed $2 \\times 10^8$ m/s. What is the minimum frame size required for reliable collision detection?",
+          "a": "Propagation delay $T_p = 1000 / (2 \\times 10^8) = 5\\ \\mu\\text{s}$. Round-trip time $2T_p = 10\\ \\mu\\text{s} = 10^{-5}\\text{ s}$. Minimum frame size $L_{\\min} = 2 \\cdot R \\cdot T_p = (10^9\\text{ bps}) \\times (10^{-5}\\text{ s}) = 10,000\\text{ bits} = 1250\\text{ bytes}$."
+        },
+        {
+          "id": "cn_csmaca",
+          "cat": "MAC Sublayer",
+          "title": "CSMA/CA & THE HIDDEN TERMINAL PROBLEM",
+          "sub": "Collision Avoidance, RTS/CTS Handshake & IEEE 802.11 Wireless LANs",
+          "plain": "In wireless networks, radios cannot transmit and listen at the same time (their own transmission overpowers their receiver), so collision detection is impossible. Instead, CSMA/CA avoids collisions by using interframe spaces (IFS), random backoffs, and an RTS/CTS reservation handshake to solve the hidden terminal problem.",
+          "def": "CSMA/CA (Carrier Sense Multiple Access with Collision Avoidance, IEEE 802.11) manages half-duplex wireless links where RF energy dynamics preclude simultaneous collision detection: 1) Interframe Spaces (DIFS, SIFS, PIFS) establish prioritized transmission windows. 2) Network Allocation Vector (NAV) maintains virtual carrier sensing by reserving channel airtime. 3) RTS/CTS Handshake: sender transmits Request-to-Send (RTS); Access Point replies with Clear-to-Send (CTS). All listening stations set NAV to silence themselves for the duration of the data and ACK exchange.",
+          "exam": "Hidden Terminal Problem: Node A can hear AP, Node B can hear AP, but A and B cannot hear each other due to distance/obstacles. If both transmit to AP simultaneously, their signals collide at the AP. Solution: RTS/CTS handshake (CTS broadcast by AP is heard by both A and B).",
+          "trap": "Exam Trap: CSMA/CD detects collisions while transmitting; CSMA/CA avoids collisions before transmitting because wireless transceivers cannot reliably listen to incoming signals while broadcasting their own signal.",
+          "example": "In an office Wi-Fi network, laptops on opposite sides of a conference room wall cannot sense each other's radio transmissions, but the RTS/CTS exchange with the ceiling-mounted Access Point prevents packet collisions.",
+          "q": "Why is CSMA/CD replaced by CSMA/CA in wireless local area networks (IEEE 802.11)?",
+          "a": "Because wireless transceivers operate in half-duplex; the transmit power of a station's own antenna is orders of magnitude stronger than any incoming signal, making it physically impossible to detect collisions while transmitting. Therefore, collisions must be avoided before transmission using CSMA/CA."
+        },
+        {
+          "id": "cn_ethernet_standard",
+          "cat": "Data Link",
+          "title": "ETHERNET ARCHITECTURE & IEEE 802.3 FRAME FORMAT",
+          "sub": "MAC Addresses, Preamble, SFD, Payload Constraints & Collision Domains",
+          "plain": "Ethernet is the global standard for wired LANs. Every network card has a permanent 48-bit MAC address burned into its ROM. An Ethernet frame has a preamble for clock sync, destination and source MACs, an EtherType field, a payload between 46 and 1500 bytes, and a 4-byte CRC checksum at the end.",
+          "def": "IEEE 802.3 Ethernet defines the physical layer and Data Link MAC sublayer for wired LANs. Frame format: Preamble (7 bytes of 10101010 for clock synchronization), Start Frame Delimiter (SFD, 1 byte 10101011), Destination MAC (6 bytes), Source MAC (6 bytes), Type/Length (2 bytes), Data Payload (46 to 1500 bytes), and Frame Check Sequence (FCS, 4-byte CRC-32). MAC addresses are 48 bits (6 bytes) long, represented as 12 hexadecimal digits (e.g., 00:1A:2B:3C:4D:5E), where the first 24 bits represent the Organizationally Unique Identifier (OUI).",
+          "exam": "Ethernet frame sizing: Minimum frame length = 64 bytes (Header 14 + Payload 46 + FCS 4, excluding 8-byte preamble/SFD). Maximum frame length = 1518 bytes (Payload 1500 bytes, representing standard MTU).",
+          "trap": "Exam Trap: Switches break up collision domains (each switch port is its own private collision domain), but switches do NOT break up broadcast domains (broadcast frames are flooded to all ports). Routers break up broadcast domains.",
+          "example": "When an Ethernet switch receives a frame, it inspects the destination MAC: if known in its CAM table, it forwards out that single port; if unknown or broadcast (FF:FF:FF:FF:FF:FF), it floods the frame across all ports except the arrival port.",
+          "q": "What is the minimum and maximum allowable payload (data field) size in a standard IEEE 802.3 Ethernet frame?",
+          "a": "Minimum payload is 46 bytes (padded with zeroes if data is smaller to guarantee the 64-byte minimum frame size). Maximum payload is 1500 bytes (the standard Maximum Transmission Unit, MTU)."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "In High-Level Data Link Control (HDLC) bit stuffing, what does the sender insert whenever it encounters five consecutive 1s in the data stream?",
+          "opts": [
+            "A '1' bit unconditionally",
+            "A '0' bit unconditionally",
+            "An ASCII ESC character",
+            "A 01111110 flag byte"
+          ],
+          "ans": 1,
+          "cat": "Data Link",
+          "correctFb": "To prevent user data from mimicking the 01111110 frame delimiter flag, the sender unconditionally stuffs a '0' bit after any sequence of five consecutive 1s. The receiver automatically removes any '0' bit that follows five consecutive 1s.",
+          "distractors": [
+            "Inserting a '1' would generate six consecutive 1s, creating a false flag delimiter.",
+            "ESC characters are used in byte stuffing, not bit stuffing.",
+            "Inserting a flag byte would prematurely terminate the frame."
+          ]
+        },
+        {
+          "q": "If the generator polynomial for a CRC error-detection system is $G(x) = x^4 + x + 1$, how many zero bits must be appended to the data block prior to modulo-2 division?",
+          "opts": [
+            "4 bits",
+            "5 bits",
+            "3 bits",
+            "1 bit"
+          ],
+          "ans": 0,
+          "cat": "Error Control",
+          "correctFb": "The degree of polynomial $G(x) = x^4 + x + 1$ is 4. The number of appended zero bits equals the degree of the generator polynomial ($r = 4$).",
+          "distractors": [
+            "5 bits is the total number of coefficients in the polynomial (10011), not its degree.",
+            "3 bits is one less than the required degree.",
+            "1 bit corresponds to simple parity, not degree-4 CRC."
+          ]
+        },
+        {
+          "q": "What is the maximum sender window size in the Go-Back-N ARQ protocol when sequence numbers are represented using $m$ bits?",
+          "opts": [
+            "$2^m$",
+            "$2^m - 1$",
+            "$2^{m-1}$",
+            "$m$"
+          ],
+          "ans": 1,
+          "cat": "Flow Control",
+          "correctFb": "In Go-Back-N, the sender window cannot exceed $2^m - 1$. If it were $2^m$, the receiver could not distinguish whether an incoming frame is a duplicate retransmission or a new frame if all ACKs in a window were lost.",
+          "distractors": [
+            "$2^m$ causes catastrophic sequence ambiguity when an entire window of ACKs is lost.",
+            "$2^{m-1}$ is the maximum window size for Selective Repeat ARQ.",
+            "$m$ is merely the bit width of the sequence number field."
+          ]
+        },
+        {
+          "q": "For a 4-bit sequence number field ($m = 4$), what is the maximum sender window size in the Selective Repeat ARQ protocol?",
+          "opts": [
+            "15",
+            "16",
+            "8",
+            "7"
+          ],
+          "ans": 2,
+          "cat": "Flow Control",
+          "correctFb": "In Selective Repeat, window sizes must satisfy $W_s = W_r \\le 2^{m-1}$. For $m = 4$, the maximum sender window size is $2^{4-1} = 2^3 = 8$.",
+          "distractors": [
+            "15 ($2^m - 1$) is the window limit for Go-Back-N, which causes sequence overlap in Selective Repeat.",
+            "16 ($2^m$) would cause severe duplicate frame misidentification.",
+            "7 is $2^3 - 1$, which is unnecessary since $2^3 = 8$ is fully supported."
+          ]
+        },
+        {
+          "q": "In a Stop-and-Wait ARQ link, the transmission delay $T_t = 1\\text{ ms}$ and the one-way propagation delay $T_p = 2\\text{ ms}$. Assuming an error-free channel and negligible processing and ACK transmission times, what is the channel efficiency?",
+          "opts": [
+            "20%",
+            "50%",
+            "25%",
+            "33.3%"
+          ],
+          "ans": 0,
+          "cat": "Flow Control",
+          "correctFb": "Parameter $a = T_p / T_t = 2 / 1 = 2$. Channel efficiency $\\eta = 1 / (1 + 2a) = 1 / (1 + 2 \\times 2) = 1 / 5 = 0.20 = 20\\%$.",
+          "distractors": [
+            "50% incorrectly calculates $1 / (1 + a) = 1 / 3$ or assumes half-duplex splitting without round-trip.",
+            "25% corresponds to $a = 1.5$.",
+            "33.3% mistakenly omits the return propagation trip ($1 / (1 + a)$)."
+          ]
+        },
+        {
+          "q": "Why does the CSMA/CD protocol require that frame transmission time be at least twice the one-way propagation delay ($T_t \\ge 2 T_p$)?",
+          "opts": [
+            "To allow the receiver enough time to compute the CRC-32 checksum.",
+            "To ensure that the transmitting station is still sending when a collision signal from the farthest node returns.",
+            "To guarantee that the channel reaches 100% theoretical utilization.",
+            "To allow the station to transmit an acknowledgment frame immediately."
+          ],
+          "ans": 1,
+          "cat": "MAC Sublayer",
+          "correctFb": "In the worst-case scenario, a collision occurs at the far end of the cable just before the frame arrives ($t \\approx T_p$). The collision signal takes another $T_p$ to travel back to the sender. To detect this collision, the sender must still be actively transmitting when the collision fragment arrives at $t = 2T_p$.",
+          "distractors": [
+            "CRC computation occurs in hardware on the fly and is unrelated to link propagation time.",
+            "CSMA/CD channel utilization is strictly below 100% due to collisions and backoff.",
+            "Acknowledgments in CSMA/CD Ethernet are handled at higher layers, not in the CSMA/CD MAC loop."
+          ]
+        },
+        {
+          "q": "What are the maximum theoretical channel throughput values for Pure ALOHA and Slotted ALOHA, respectively?",
+          "opts": [
+            "18.4% and 36.8%",
+            "36.8% and 18.4%",
+            "50.0% and 100%",
+            "10.0% and 50.0%"
+          ],
+          "ans": 0,
+          "cat": "MAC Sublayer",
+          "correctFb": "Pure ALOHA has maximum throughput $S_{\\max} = 1 / (2e) \\approx 0.184$ (18.4%) at offered traffic $G = 0.5$. Slotted ALOHA halves the vulnerable period, yielding $S_{\\max} = 1 / e \\approx 0.368$ (36.8%) at $G = 1.0$.",
+          "distractors": [
+            "Inverts the throughputs of Pure and Slotted ALOHA.",
+            "50% and 100% are impossible under random access contention.",
+            "Arbitrary values that underestimate theoretical ALOHA bounds."
+          ]
+        },
+        {
+          "q": "In IEEE 802.11 wireless networks, which mechanism is specifically used to resolve the Hidden Terminal Problem?",
+          "opts": [
+            "Truncated Binary Exponential Backoff",
+            "RTS/CTS (Request-to-Send / Clear-to-Send) handshake",
+            "Manchester bit encoding",
+            "Cyclic Redundancy Check (CRC)"
+          ],
+          "ans": 1,
+          "cat": "MAC Sublayer",
+          "correctFb": "The RTS/CTS handshake resolves the hidden terminal problem because the Access Point's CTS broadcast reaches all stations within range, informing hidden nodes to set their Network Allocation Vector (NAV) and withhold transmissions.",
+          "distractors": [
+            "Exponential backoff resolves contention after collision, but cannot prevent collisions between hidden terminals.",
+            "Manchester encoding is a physical layer line coding technique.",
+            "CRC detects bit corruption, but cannot prevent collisions."
+          ]
+        },
+        {
+          "q": "In Ethernet CSMA/CD Binary Exponential Backoff, after 3 consecutive collisions ($k = 3$), from what range of slot times does the station randomly choose its backoff delay?",
+          "opts": [
+            "0 to 3 slot times",
+            "0 to 7 slot times",
+            "0 to 15 slot times",
+            "1 to 8 slot times"
+          ],
+          "ans": 1,
+          "cat": "MAC Sublayer",
+          "correctFb": "In Binary Exponential Backoff, after collision $k$, the delay is randomly chosen from $0 \\le K \\le 2^k - 1$. For $k = 3$, the range is $0$ to $2^3 - 1 = 0$ to $7$ slot times.",
+          "distractors": [
+            "0 to 3 corresponds to $k = 2$ ($2^2 - 1 = 3$).",
+            "0 to 15 corresponds to $k = 4$ ($2^4 - 1 = 15$).",
+            "The backoff algorithm includes 0 as a possible choice and caps at $2^k - 1$."
+          ]
+        },
+        {
+          "q": "What is the minimum total frame size required for a standard IEEE 802.3 Ethernet frame (including MAC headers and FCS, but excluding the preamble and SFD)?",
+          "opts": [
+            "46 bytes",
+            "64 bytes",
+            "1500 bytes",
+            "512 bytes"
+          ],
+          "ans": 1,
+          "cat": "Data Link",
+          "correctFb": "The minimum total Ethernet frame length is 64 bytes (consisting of 14 bytes MAC header, 46 bytes minimum payload, and 4 bytes FCS). If the payload is less than 46 bytes, pad bytes are added.",
+          "distractors": [
+            "46 bytes is the minimum payload size, not the total frame size.",
+            "1500 bytes is the maximum payload size (standard MTU).",
+            "512 bits (64 bytes) is the frame size in bits, but the option says 512 bytes."
+          ]
+        }
+      ],
+      "bossChallenges": [
+        {
+          "marks": 10,
+          "scenario": "[10 MARKS] University Exam Question: Formally analyze the principles of error detection and flow control at the Data Link Layer. Formulate the mathematical mechanics of Cyclic Redundancy Check (CRC) error detection using polynomial modulo-2 arithmetic, provide an exhaustive comparative analysis between Go-Back-N and Selective Repeat sliding window ARQ protocols with sequence number window constraints, and prove why CSMA/CD enforces the minimum frame size condition L_min >= 2 * R * T_p.",
+          "rubric": [
+            "Criterion 1 (2.5 Marks): Complete mathematical formulation of CRC generation and verification using Galois Field GF(2) XOR arithmetic, specifying degree r zeros appended and burst error detection capabilities.",
+            "Criterion 2 (2.5 Marks): Detailed architectural comparison of Go-Back-N versus Selective Repeat ARQ, including sender/receiver window sizes (2^m - 1 vs 2^(m-1)), cumulative vs independent ACKs, and receiver buffer requirements.",
+            "Criterion 3 (2.5 Marks): Rigorous analytical proof and space-time diagram derivation of the CSMA/CD minimum frame size condition (T_t >= 2 * T_p), explaining worst-case collision echo detection at t = 2 * T_p.",
+            "Criterion 4 (2.5 Marks): Analysis of collision resolution via Binary Exponential Backoff and explanation of how the RTS/CTS handshake in CSMA/CA resolves the hidden terminal problem in wireless LANs."
+          ]
+        },
+        {
+          "marks": 5,
+          "scenario": "[5 MARKS] Practical Problem-Solving Scenario: A 100 Mbps CSMA/CD Ethernet campus network spanning a 2 km cable run with signal propagation velocity of 2 * 10^8 m/s is experiencing undetected packet collisions and frequent silent data corruption. A network engineer suspects that undersized frames are escaping the collision detection window. Determine the absolute minimum frame size required to eliminate this defect, diagnose why 64-byte frames fail under these parameters, and formulate an architectural remedy.",
+          "rubric": [
+            "Criterion 1 (1.25 Marks): Accurate numerical computation of one-way propagation delay (10 microseconds) and round-trip collision window (20 microseconds).",
+            "Criterion 2 (1.25 Marks): Calculation of the required minimum frame size (2000 bits = 250 bytes) using the formula L_min = 2 * R * T_p.",
+            "Criterion 3 (1.25 Marks): Diagnostic justification explaining why standard 64-byte (512-bit) frames finish transmitting in 5.12 microseconds, leaving the transmitter unable to detect collisions occurring after that time.",
+            "Criterion 4 (1.25 Marks): Practical remediation strategy recommending packet padding, frame bursting / carrier extension, or segmenting the network into switched full-duplex collision domains."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m3",
+      "num": 3,
+      "title": "Network Layer & Routing",
+      "topics": [
+        {
+          "id": "cn_ipv4_addressing",
+          "cat": "Network Layer",
+          "title": "IPV4 ADDRESSING & CLASSFUL ARCHITECTURE",
+          "sub": "Classes A, B, C, D, E, Subnet Masks & Special Address Blocks",
+          "plain": "Every machine on the internet needs a 32-bit address written as 4 numbers separated by dots (like 192.168.1.1). Originally, IPs were divided into fixed classes based on the first few bits: Class A for huge corporations, Class B for universities, Class C for small businesses, Class D for multicasting, and Class E for scientific experiments.",
+          "def": "IPv4 addresses are 32-bit logical identifiers expressed in dotted-decimal notation ($4 \\times 8$ octets). Classful addressing partitions the $2^{32}$ address space into 5 classes: Class A (first octet 0-127, leading bit 0, default mask /8 or 255.0.0.0, 16M hosts), Class B (128-191, leading bits 10, default mask /16 or 255.255.0.0, 65k hosts), Class C (192-223, leading bits 110, default mask /24 or 255.255.255.0, 254 hosts), Class D (224-239, leading bits 1110, multicast), and Class E (240-255, leading bits 1111, experimental).",
+          "exam": "Recognize leading bits instantly: Class A = 0... (0-127), Class B = 10... (128-191), Class C = 110... (192-223), Class D = 1110... (224-239), Class E = 1111... (240-255). Loopback address 127.0.0.1 is reserved.",
+          "trap": "Exam Trap: Classful addressing wasted vast address space (e.g., getting a Class B block allocated 65,536 addresses even if an organization only needed 500), leading directly to CIDR adoption.",
+          "example": "RFC 1918 Private IP ranges: 10.0.0.0/8 (Class A private), 172.16.0.0/12 (Class B private), and 192.168.0.0/16 (Class C private) are non-routable on the public internet and translated via NAT.",
+          "q": "What are the first octet range, leading bit pattern, and default subnet mask for an IPv4 Class B network?",
+          "a": "First octet range: 128 to 191; leading bit pattern: binary 10; default subnet mask: 255.255.0.0 (or /16 prefix)."
+        },
+        {
+          "id": "cn_cidr_vlsm",
+          "cat": "Network Layer",
+          "title": "CLASSLESS INTER-DOMAIN ROUTING (CIDR) & VLSM",
+          "sub": "Prefix Notation, Subnet ID, Directed Broadcast & Usable Host Math",
+          "plain": "CIDR throws away rigid classes. Instead of fixed /8, /16, or /24 boundaries, a slash notation like /27 means the first 27 bits are the network ID, leaving 32 - 27 = 5 bits for hosts. This allows Variable Length Subnet Masking (VLSM) to carve networks to exact sizes without wasting IP addresses.",
+          "def": "Classless Inter-Domain Routing (CIDR, RFC 1519) replaces classful networks with arbitrary prefix lengths expressed as IP/n, where $n$ (0 to 32) indicates the count of contiguous network bits. For a prefix of length $n$, the number of available host bits is $h = 32 - n$. Total IP addresses = $2^h$; Usable assignable host addresses = $2^h - 2$ (subtracting the all-0s Network Address and all-1s Directed Broadcast Address). Subnet ID is computed via bitwise AND: $\\text{Subnet ID} = \\text{IP} \\ \\&\\ \\text{Subnet Mask}$.",
+          "exam": "Mandatory exam formulas: Host bits $h = 32 - n$. Total IPs = $2^h$. Usable hosts = $2^h - 2$. Subnet address: set all $h$ host bits to 0. Broadcast address: set all $h$ host bits to 1.",
+          "trap": "Exam Trap: Always remember to subtract 2 for usable hosts! If asked 'how many devices can be connected to a /28 subnet', the answer is $2^4 - 2 = 14$ devices, NOT 16.",
+          "example": "Given IP 192.168.10.75/26: $n = 26 \\implies h = 6$ host bits. Total IPs = $2^6 = 64$. Subnet mask = 255.255.255.192. Subnet ID = 192.168.10.64. Usable host range = 192.168.10.65 to 192.168.10.126. Broadcast address = 192.168.10.127.",
+          "q": "For the subnet 200.50.10.0/28, determine: 1) Subnet mask, 2) Total number of usable host IP addresses, 3) The directed broadcast address.",
+          "a": "1) Subnet mask = 255.255.255.240 (28 ones). 2) Host bits $h = 32 - 28 = 4 \\implies 2^4 - 2 = 14$ usable hosts. 3) Broadcast address = 200.50.10.15."
+        },
+        {
+          "id": "cn_ipv4_datagram_fragmentation",
+          "cat": "Network Layer",
+          "title": "IPV4 DATAGRAM HEADER & PACKET FRAGMENTATION",
+          "sub": "Header Fields, MTU, DF/MF Flags & Fragment Offset Calculations",
+          "plain": "An IPv4 datagram has a minimum 20-byte header containing source IP, destination IP, Time-to-Live (TTL), and fragmentation controls. If a packet is larger than the Maximum Transmission Unit (MTU) of an outgoing cable (e.g. 1500 bytes on Ethernet), intermediate routers chop it into smaller fragments and use the Fragment Offset to reassemble it at the destination.",
+          "def": "The IPv4 datagram header is 20 to 60 bytes long (standard 20 bytes when IHL = 5). Fragmentation fields: 1) Identification (16 bits): uniquely tags all fragments of an original datagram. 2) Flags (3 bits): Reserved (bit 0), Don't Fragment (DF, bit 1: if set and packet > MTU, router discards packet and returns ICMP 'Fragmentation Needed'), More Fragments (MF, bit 2: 1 for all fragments except the last, which has MF = 0). 3) Fragment Offset (13 bits): specifies the position of fragment data relative to the original unfragmented payload, measured strictly in 8-byte (64-bit) units.",
+          "exam": "Fragment Offset Formula: $\\text{Offset} = \\frac{\\text{Starting Payload Byte Index}}{8}$. Because the offset field is scaled by 8, each fragment's payload size (except the last) MUST be an exact multiple of 8 bytes!",
+          "trap": "Exam Trap: Intermediate routers fragment packets, but reassembly is performed EXCLUSIVELY at the final destination host. Intermediate routers never reassemble fragments.",
+          "example": "A 4000-byte datagram (20B header + 3980B data) reaches an MTU = 1500B link. Frag 1: 20B header, 1480B data (divisible by 8), MF=1, Offset=0. Frag 2: 20B header, 1480B data, MF=1, Offset = 1480/8 = 185. Frag 3: 20B header, 1020B data, MF=0, Offset = (1480+1480)/8 = 2960/8 = 370.",
+          "q": "An IPv4 datagram with 20 bytes header and 2400 bytes data enters a network with an MTU of 1000 bytes. What are the payload size, MF flag, and Fragment Offset for the second fragment?",
+          "a": "Max payload per 1000-byte MTU = $1000 - 20 = 980$ bytes; largest multiple of 8 $\\le 980$ is 976 bytes. Fragment 1 has 976 bytes (Offset 0, MF=1). Fragment 2 carries 976 bytes, MF=1, and Fragment Offset = $976 / 8 = 122$."
+        },
+        {
+          "id": "cn_arp_protocol",
+          "cat": "Network Layer",
+          "title": "ADDRESS RESOLUTION PROTOCOL (ARP)",
+          "sub": "Resolving Logical IP to Physical MAC, ARP Cache & Gratuitous ARP",
+          "plain": "Computers know the destination IP address, but physical network switches only understand MAC addresses. ARP is shouting into a crowded room: 'Who has IP 192.168.1.5? Tell me your MAC address!' The question is broadcast to everyone, but only the owner whispers back their MAC address in a private unicast reply.",
+          "def": "Address Resolution Protocol (ARP, RFC 826) maps a 32-bit logical IPv4 address to a 48-bit physical MAC address on a local broadcast domain. Operation: 1) Sender checks its local ARP Cache table; if absent, it broadcasts an ARP Request frame (Dest MAC: FF:FF:FF:FF:FF:FF, EtherType: 0x0806). 2) Every host on the subnet receives the frame, but only the host matching the Target IP sends an ARP Reply frame directly to the sender via unicast. 3) Sender updates its ARP cache with an expiration TTL timer. Gratuitous ARP is an unsolicited announcement used to detect duplicate IP addresses.",
+          "exam": "ARP message flow: ARP Request is BROADCAST (Layer 2 address FF:FF:FF:FF:FF:FF); ARP Reply is UNICAST directly to the requester's MAC address.",
+          "trap": "Exam Trap: ARP operates strictly within a single local broadcast domain (LAN). A host cannot send an ARP request across a router; to reach an external IP, the host resolves the MAC address of its Default Gateway.",
+          "example": "When typing `ping 192.168.1.1`, the OS first checks `arp -a`. If no entry exists for 192.168.1.1, the network stack pauses ICMP, broadcasts an ARP Request, learns `c0:25:e9:12:34:56`, caches it, and transmits the ICMP echo.",
+          "q": "Why is an ARP Request transmitted as a broadcast frame whereas the corresponding ARP Reply is sent as a unicast frame?",
+          "a": "An ARP Request is broadcast because the sender does not know which physical host owns the target IP address. The ARP Reply is unicast because the target host learned the requester's MAC address directly from the incoming ARP Request header."
+        },
+        {
+          "id": "cn_icmp_protocol",
+          "cat": "Network Layer",
+          "title": "INTERNET CONTROL MESSAGE PROTOCOL (ICMP)",
+          "sub": "Error Reporting, Query Messages, Ping & Traceroute Mechanics",
+          "plain": "IP is unreliable and doesn't complain when packets are dropped. ICMP is the diagnostic feedback system: it reports errors back to the sender when a destination is unreachable, a packet gets too old (TTL expires), or a redirect is needed. Tools like `ping` and `traceroute` rely entirely on ICMP.",
+          "def": "Internet Control Message Protocol (ICMP, RFC 792) provides feedback on network communication problems, encapsulated directly inside IPv4 datagrams (IP protocol field = 1). Two categories: 1) Error Reporting Messages: Type 3 (Destination Unreachable: host, network, or port unreachable), Type 4 (Source Quench / congestion), Type 11 (Time Exceeded: TTL drops to 0 in transit or fragment reassembly timeout), Type 12 (Parameter Problem). 2) Query Messages: Type 8 (Echo Request) and Type 0 (Echo Reply), utilized by the `ping` utility.",
+          "exam": "Traceroute mechanism: Sends packets with incrementally increasing TTL values: Packet 1 has TTL=1 (first router decrements to 0, drops packet, returns ICMP Type 11 Time Exceeded); Packet 2 has TTL=2, and so forth, mapping each router along the path.",
+          "trap": "Exam Trap: ICMP reports errors only to the original source IP; ICMP error messages are NEVER generated in response to an existing ICMP error message, to avoid infinite broadcast storms.",
+          "example": "When a router receives a packet with TTL = 1, it decrements TTL to 0, discards the packet, and generates an ICMP Type 11 Code 0 (Time-to-Live exceeded in transit) message back to the source IP.",
+          "q": "How does the `traceroute` command exploit the IPv4 Time-To-Live (TTL) field and ICMP messages to map the path to a destination host?",
+          "a": "`traceroute` sends packets starting with TTL = 1, then TTL = 2, and so on. Each successive router decrements the TTL by 1; when TTL hits 0, that router drops the packet and returns an ICMP Type 11 (Time Exceeded) message, revealing its IP address to the sender."
+        },
+        {
+          "id": "cn_distance_vector_rip",
+          "cat": "Routing",
+          "title": "DISTANCE VECTOR ROUTING & ROUTING INFORMATION PROTOCOL (RIP)",
+          "sub": "Bellman-Ford Algorithm, Periodic Vector Exchanges & RIP Characteristics",
+          "plain": "Distance Vector routing is 'routing by rumor'. Every router periodically tells its immediate neighbors its total estimated distance to every known network. Routers use the Bellman-Ford equation to update their tables if a neighbor offers a cheaper path.",
+          "def": "Distance Vector Routing is an asynchronous, iterative routing algorithm based on the distributed Bellman-Ford algorithm: $D_x(y) = \\min_v \\{c(x,v) + D_v(y)\\}$, where $D_x(y)$ is the least cost from router $x$ to destination $y$, $c(x,v)$ is the cost to neighbor $v$, and $D_v(y)$ is $v$'s advertised cost to $y$. Routing Information Protocol (RIP, RFC 1058/2453) is an Interior Gateway Protocol (IGP) implementing Distance Vector: uses hop count as metric (each link cost = 1), broadcasts routing tables every 30 seconds via UDP port 520, and defines infinity as 16 hops.",
+          "exam": "Key RIP parameters: Metric = Hop count (maximum 15 hops; 16 hops = infinity / unreachable). Update timer = 30 seconds. Transport = UDP port 520.",
+          "trap": "Exam Trap: Distance vector algorithms have slow convergence and suffer from the Count-to-Infinity problem when link costs increase or links fail.",
+          "example": "If router A has direct neighbor B (cost 1) and B advertises cost 3 to reach network Z, router A calculates cost to Z as $1 + 3 = 4$ through next-hop B.",
+          "q": "In the Routing Information Protocol (RIP), what is the maximum permissible hop count, and what specific hop count value signifies that a network is unreachable (infinity)?",
+          "a": "The maximum valid path metric is 15 hops. A hop count of 16 represents infinity, indicating that the destination network is unreachable."
+        },
+        {
+          "id": "cn_count_to_infinity",
+          "cat": "Routing",
+          "title": "COUNT-TO-INFINITY PROBLEM & ROUTING LOOP REMEDIES",
+          "sub": "Routing Loops, Split Horizon, Poison Reverse & Hold-Down Timers",
+          "plain": "When a network link breaks, distance vector routers can get caught in a vicious rumor cycle: Router A thinks Router B has a path, and Router B thinks Router A has a path. They keep adding 1 to each other's hop count, slowly counting up to infinity (16 in RIP) while packets loop forever.",
+          "def": "The Count-to-Infinity problem is a pathology in Distance Vector routing caused by delayed convergence following link failure, where adjacent nodes exchange stale routes forming a routing loop that increments hop counts until reaching infinity. Remedies include: 1) Maximum Metric: bounds infinity to a small integer (16 in RIP) to terminate loops. 2) Split Horizon: a router does not advertise a route back out the same interface from which it learned that route. 3) Poison Reverse: a router explicitly advertises a distance of infinity (metric 16) for a route back to the neighbor from whom it learned that route. 4) Hold-Down Timers: suppresses route updates for a period following failure notification.",
+          "exam": "Split Horizon Rule: Never tell a neighbor about a route you learned from that neighbor. Split Horizon with Poison Reverse: Tell the neighbor about that route, but set its metric to INFINITY (16).",
+          "trap": "Exam Trap: Split Horizon prevents 2-node routing loops, but CANNOT prevent loops involving 3 or more routers (e.g., A -> B -> C -> A loops).",
+          "example": "If link between B and network X fails, B sets cost to X = $\\infty$. But if Split Horizon is disabled, A tells B 'I can reach X with cost 2'. B updates table to cost 3 via A; A then updates to cost 4 via B, counting up to 16.",
+          "q": "What is the difference between standard Split Horizon and Split Horizon with Poison Reverse in distance vector routing?",
+          "a": "Standard Split Horizon completely suppresses advertising a route back out of the interface through which it was learned. Split Horizon with Poison Reverse actively advertises that route back to the source, but explicitly marks its cost as infinity (hop count 16) to immediately eliminate ambiguity."
+        },
+        {
+          "id": "cn_link_state_ospf",
+          "cat": "Routing",
+          "title": "LINK STATE ROUTING & OPEN SHORTEST PATH FIRST (OSPF)",
+          "sub": "Dijkstra's SPF Algorithm, LSA Flooding, Areas & Rapid Convergence",
+          "plain": "Instead of trading rumors, Link State routers build a complete, identical map of the entire network. Every router floods Link State Advertisements (LSAs) describing its immediate neighbors. Once every router has the full map, each independently runs Dijkstra's algorithm to find the absolute shortest path tree.",
+          "def": "Link State routing requires every node to discover its neighbors, measure link costs, construct Link State Packets (LSPs/LSAs), flood them reliably to all nodes in the routing domain, and execute Dijkstra's Shortest Path First (SPF) algorithm ($O(V^2)$ or $O(E + V \\log V)$) on the resulting global topology database. Open Shortest Path First (OSPF, RFC 2328) is an open-standard Link State IGP: runs directly over IP (protocol 89), uses 100 Mbps / bandwidth as cost metric, supports hierarchical Areas centered on Backbone Area 0, and converges within milliseconds with zero count-to-infinity risk.",
+          "exam": "OSPF characteristics: Protocol = IP protocol 89 (no TCP/UDP). Metric = Cost (inversely proportional to bandwidth: $\\text{Cost} = 10^8 / \\text{Bandwidth}$). Hierarchical design requires Area 0 (Backbone Area) connecting all non-backbone areas.",
+          "trap": "Exam Trap: Link State routers do not exchange entire routing tables like RIP; they flood Link State Advertisements (LSAs) only when a link state changes or on a long refresh timer (30 minutes).",
+          "example": "In an enterprise campus network, multiple OSPF areas connect to Area 0. When an optical fiber link is severed, the connected router floods an LSA within milliseconds, prompting all routers to recompute Dijkstra's tree without routing loops.",
+          "q": "What two fundamental advantages does Link State routing (such as OSPF) have over Distance Vector routing (such as RIP)?",
+          "a": "1) Rapid convergence without suffering from the Count-to-Infinity problem or routing loops; 2) Routers possess complete knowledge of the entire network topology rather than relying on second-hand distance vectors."
+        },
+        {
+          "id": "cn_bgp_routing",
+          "cat": "Routing",
+          "title": "BORDER GATEWAY PROTOCOL (BGP) & PATH VECTOR ROUTING",
+          "sub": "Autonomous Systems, AS-PATH Attribute, Policy Routing & EGP",
+          "plain": "BGP is the postal system that connects the entire global Internet. While OSPF routes traffic inside an organization, BGP routes packets between massive organizations and Internet Service Providers (called Autonomous Systems). It uses Path Vector routing, listing the exact list of countries/networks a packet will cross.",
+          "def": "Border Gateway Protocol (BGP-4, RFC 4271) is the de facto standard Exterior Gateway Protocol (EGP) routing traffic between distinct Autonomous Systems (AS) across the global Internet. Operating as a Path Vector protocol over reliable TCP connections (port 179), BGP advertises reachable network prefixes along with the full sequence of AS numbers traversed in the AS-PATH attribute. Loop prevention: if a BGP router receives an advertisement containing its own AS number in the AS-PATH, it immediately drops the route.",
+          "exam": "Key BGP attributes: Transport = TCP port 179 (connection-oriented, reliable). Algorithm = Path Vector. Loop detection = inspecting the AS-PATH attribute (discards route if local AS is listed). Primary routing criterion = commercial policies / agreements, not shortest hop count.",
+          "trap": "Exam Trap: BGP does NOT optimize for shortest physical delay or lowest cost; it routes based on commercial/political peering policies (e.g., 'never route US traffic through foreign carrier X').",
+          "example": "When an ISP (AS 13335) advertises route 1.1.1.0/24 to upstream providers, the AS-PATH lists [13335, 7018, 174]. If AS 7018 receives this path, it knows the packet must cross AS 13335 to reach the destination.",
+          "q": "How does the Border Gateway Protocol (BGP) guarantee the prevention of routing loops across Autonomous Systems?",
+          "a": "BGP includes the entire ordered list of Autonomous System numbers in the AS-PATH attribute of every route advertisement. If a border router inspects an incoming update and finds its own AS number already present in the AS-PATH, it discards the route."
+        },
+        {
+          "id": "cn_ipv6_architecture",
+          "cat": "Network Layer",
+          "title": "IPV6 ARCHITECTURE & TRANSITION MECHANISMS",
+          "sub": "128-Bit Addressing, Fixed 40-Byte Header, Extension Headers & Dual Stack",
+          "plain": "IPv4 ran out of addresses. IPv6 solves this forever by providing 128-bit addresses (enough to assign billions of IPs to every grain of sand on Earth). To make routers faster, IPv6 streamlined the header to a fixed 40 bytes, got rid of the checksum, eliminated router fragmentation, and uses colon-hex notation.",
+          "def": "IPv6 (RFC 8200) expands the network layer address space from 32 bits ($4.3 \\times 10^9$) to 128 bits ($3.4 \\times 10^{38}$ addresses), formatted as eight 16-bit hexadecimal blocks separated by colons (e.g., 2001:0db8:85a3::8a2e:0370:7334). Architecture improvements: 1) Fixed 40-byte base header (streamlines hardware routing table lookups). 2) Elimination of header checksum (relies on L2/L4 error checks). 3) Elimination of router fragmentation (replaced by Path MTU Discovery). 4) Extension Headers daisy-chained via 'Next Header' pointers. Transition mechanisms: Dual Stack (devices run both IPv4 and IPv6), Tunneling (encapsulating IPv6 inside IPv4 packets, e.g., 6to4), and Translation (NAT64).",
+          "exam": "IPv6 base header size is strictly FIXED at 40 bytes. Header fields: Version, Traffic Class, Flow Label, Payload Length, Next Header, Hop Limit (replaces TTL), Source Address (16 bytes), Destination Address (16 bytes).",
+          "trap": "Exam Trap: IPv6 routers NEVER fragment packets in transit! If an IPv6 packet exceeds the link MTU, the router discards it and returns an ICMPv6 'Packet Too Big' message to the sender, forcing the sender to perform Path MTU Discovery.",
+          "example": "IPv6 address compression rules: Leading zeros in a 16-bit block can be omitted (`:0042:` -> `:42:`), and one contiguous run of all-zero blocks can be replaced with double colons `::` exactly once per address (`fe80:0:0:0:0:0:0:1` -> `fe80::1`).",
+          "q": "Which field present in the IPv4 datagram header was completely eliminated from the IPv6 base header to optimize router processing speed?",
+          "a": "The Header Checksum field was completely eliminated in IPv6. Because modern Data Link layers (Ethernet CRC) and Transport layers (TCP/UDP checksums) already perform error checking, removing the IP checksum avoids recalculating it at every router hop when Hop Limit decrements."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "An organization is allocated the network block 200.10.20.0/27. What is the valid subnet mask and how many assignable host IP addresses are available per subnet?",
+          "opts": [
+            "255.255.255.224 and 30 usable hosts",
+            "255.255.255.240 and 14 usable hosts",
+            "255.255.255.192 and 62 usable hosts",
+            "255.255.255.224 and 32 usable hosts"
+          ],
+          "ans": 0,
+          "cat": "Network Layer",
+          "correctFb": "A /27 prefix has 27 ones, yielding mask 255.255.255.224 (128+64+32=224). The remaining host bits are $h = 32 - 27 = 5$. Total addresses = $2^5 = 32$; usable hosts = $2^5 - 2 = 30$.",
+          "distractors": [
+            "255.255.255.240 corresponds to a /28 subnet with 14 usable hosts.",
+            "255.255.255.192 corresponds to a /26 subnet with 62 usable hosts.",
+            "32 represents the total address block without subtracting the network ID and broadcast address."
+          ]
+        },
+        {
+          "q": "An IPv4 datagram of total length 4000 bytes (including a 20-byte IP header) must pass through a link with an MTU of 1500 bytes. What is the Fragment Offset value in the header of the second fragment?",
+          "opts": [
+            "185",
+            "1480",
+            "1500",
+            "370"
+          ],
+          "ans": 0,
+          "cat": "Network Layer",
+          "correctFb": "Max data payload per 1500-byte MTU fragment is $1500 - 20 = 1480$ bytes (divisible by 8). Fragment 1 carries bytes 0 to 1479 (Offset 0). Fragment 2 begins at data byte 1480. Fragment Offset = $1480 / 8 = 185$.",
+          "distractors": [
+            "1480 is the byte offset, which must be divided by 8 to yield the header field value.",
+            "1500 is the link MTU, not the scaled fragment offset.",
+            "370 is the offset for the third fragment ($2960 / 8 = 370$)."
+          ]
+        },
+        {
+          "q": "When a host sends an Address Resolution Protocol (ARP) Request and receives an ARP Reply, what transmission addressing modes are used?",
+          "opts": [
+            "ARP Request is Broadcast; ARP Reply is Unicast",
+            "Both ARP Request and ARP Reply are Broadcast",
+            "Both ARP Request and ARP Reply are Unicast",
+            "ARP Request is Unicast; ARP Reply is Multicast"
+          ],
+          "ans": 0,
+          "cat": "Network Layer",
+          "correctFb": "The ARP Request must be broadcast (destination MAC FF:FF:FF:FF:FF:FF) because the sender does not know which host holds the target IP. The target host replies directly via unicast to the sender's known MAC address.",
+          "distractors": [
+            "ARP Reply does not need to be broadcast; broadcasting it would waste LAN bandwidth.",
+            "The sender cannot unicast the Request because the target MAC is unknown.",
+            "ARP does not use multicast in standard IPv4 resolution."
+          ]
+        },
+        {
+          "q": "Which field in the IPv4 datagram header is systematically manipulated by the `traceroute` utility to provoke ICMP Time Exceeded messages?",
+          "opts": [
+            "Time To Live (TTL)",
+            "Differentiated Services / ToS",
+            "Identification",
+            "Header Checksum"
+          ],
+          "ans": 0,
+          "cat": "Network Layer",
+          "correctFb": "`traceroute` sends packets starting with TTL = 1, then increments TTL by 1 with each probe. When TTL reaches 0 at an intermediate hop, the router drops the packet and responds with an ICMP Type 11 (Time Exceeded) message.",
+          "distractors": [
+            "ToS / DSCP governs QoS packet priority, not hop expiration.",
+            "Identification is used for assembling fragmented packets.",
+            "Header Checksum is recalculated at every hop, but cannot intentionally trigger ICMP messages."
+          ]
+        },
+        {
+          "q": "In the Routing Information Protocol (RIP), what is the maximum valid hop count, and what value represents network unreachability (infinity)?",
+          "opts": [
+            "Maximum valid hop count is 15; infinity is represented by 16",
+            "Maximum valid hop count is 16; infinity is represented by 32",
+            "Maximum valid hop count is 255; infinity is represented by 256",
+            "Maximum valid hop count is 7; infinity is represented by 8"
+          ],
+          "ans": 0,
+          "cat": "Routing",
+          "correctFb": "RIP limits network diameters to prevent endless loops: valid hop counts range from 1 to 15. A hop count of 16 signifies infinity (unreachable).",
+          "distractors": [
+            "16 is unreachable/infinity, not a valid operating metric in RIP.",
+            "255 is the hop limit for IGRP or IP TTL, not RIP.",
+            "7 and 8 are arbitrary numbers not used in RIP standard specifications."
+          ]
+        },
+        {
+          "q": "What action does a router take under the 'Split Horizon with Poison Reverse' rule in Distance Vector routing?",
+          "opts": [
+            "It suppresses sending any update for that destination back to the neighbor.",
+            "It advertises the route back to the neighbor from whom it learned it, but with a metric set to infinity (16).",
+            "It doubles the metric before sending the route back to the neighbor.",
+            "It immediately shuts down the physical interface where the route was learned."
+          ],
+          "ans": 1,
+          "cat": "Routing",
+          "correctFb": "Under Split Horizon with Poison Reverse, the router explicitly sends an advertisement for the route back to the neighbor from whom it learned it, but sets the cost to infinity (metric 16 in RIP) to immediately break potential 2-node loops.",
+          "distractors": [
+            "Suppressing the update describes simple Split Horizon without Poison Reverse.",
+            "Doubling the metric does not guarantee infinity and allows temporary loops.",
+            "Poison Reverse is a protocol signaling mechanism, not a physical interface shutdown."
+          ]
+        },
+        {
+          "q": "In Link State routing protocols like OSPF, what mathematical algorithm is independently executed by every router after receiving all Link State Advertisements (LSAs)?",
+          "opts": [
+            "Bellman-Ford Algorithm",
+            "Dijkstra's Shortest Path First Algorithm",
+            "Floyd-Warshall All-Pairs Algorithm",
+            "Kruskal's Minimum Spanning Tree Algorithm"
+          ],
+          "ans": 1,
+          "cat": "Routing",
+          "correctFb": "OSPF routers compile all flooded LSAs into an identical Link State Database (LSDB) representing the complete network graph, then independently execute Dijkstra's SPF algorithm to calculate the shortest path tree from themselves to all destinations.",
+          "distractors": [
+            "Bellman-Ford is used in Distance Vector protocols like RIP.",
+            "Floyd-Warshall computes all-pairs shortest paths, which is computationally prohibitive for routing tables ($O(V^3)$).",
+            "Kruskal's algorithm computes a Minimum Spanning Tree across all nodes, not a single-source shortest path tree."
+          ]
+        },
+        {
+          "q": "How does the Border Gateway Protocol (BGP) detect and prevent routing loops between Autonomous Systems (AS)?",
+          "opts": [
+            "By discarding any route advertisement whose AS-PATH attribute contains the router's own AS number.",
+            "By strictly capping the maximum hop count at 15 hops.",
+            "By running Dijkstra's algorithm across all global Autonomous Systems.",
+            "By exchanging full link-state database maps every 30 seconds."
+          ],
+          "ans": 0,
+          "cat": "Routing",
+          "correctFb": "BGP is a path-vector protocol that includes the AS-PATH attribute (list of all AS numbers traversed) in every update. If a border router receives an update containing its own AS number in the AS-PATH, a loop exists, and the route is discarded.",
+          "distractors": [
+            "Capping hop counts at 15 is RIP's mechanism, not BGP's.",
+            "Dijkstra's algorithm is not used inter-domain because AS interior topologies are hidden.",
+            "Periodic 30-second table flooding is characteristic of RIP, whereas BGP uses triggered incremental updates over TCP."
+          ]
+        },
+        {
+          "q": "Which header field present in the IPv4 datagram header was completely eliminated from the IPv6 base header to accelerate router processing?",
+          "opts": [
+            "Header Checksum",
+            "Source Address",
+            "Hop Limit",
+            "Payload Length"
+          ],
+          "ans": 0,
+          "cat": "Network Layer",
+          "correctFb": "The Header Checksum was eliminated in the IPv6 base header because Layer 2 (Ethernet CRC) and Layer 4 (TCP/UDP checksums) already detect errors, eliminating the overhead of recomputing the checksum at every hop.",
+          "distractors": [
+            "Source Address is fundamental to routing and was expanded to 128 bits in IPv6.",
+            "Hop Limit replaced the IPv4 TTL field and is present in IPv6.",
+            "Payload Length replaced the IPv4 Total Length field and is present in IPv6."
+          ]
+        },
+        {
+          "q": "Which class of IPv4 addresses is officially reserved for multicast communication, spanning the address range 224.0.0.0 to 239.255.255.255?",
+          "opts": [
+            "Class A",
+            "Class B",
+            "Class C",
+            "Class D"
+          ],
+          "ans": 3,
+          "cat": "Network Layer",
+          "correctFb": "Class D addresses have leading bits 1110 (range 224.0.0.0 to 239.255.255.255) and are designated exclusively for multicast group communication.",
+          "distractors": [
+            "Class A spans 0.0.0.0 to 127.255.255.255 for large unicast networks.",
+            "Class B spans 128.0.0.0 to 191.255.255.255 for medium unicast networks.",
+            "Class C spans 192.0.0.0 to 223.255.255.255 for small unicast networks."
+          ]
+        }
+      ],
+      "bossChallenges": [
+        {
+          "marks": 10,
+          "scenario": "[10 MARKS] University Exam Question: Provide an exhaustive theoretical and mathematical analysis of IPv4 Subnetting, Datagram Fragmentation, and Dynamic Routing Algorithms. Explain Classless Inter-Domain Routing (CIDR) and Variable-Length Subnet Masking (VLSM), trace the fragmentation of an oversized IPv4 packet through MTU-constrained links detailing Identification, Flags, and Offset fields, and contrast the Bellman-Ford Distance Vector algorithm with Dijkstra's Link State algorithm while analyzing solutions to the Count-to-Infinity problem.",
+          "rubric": [
+            "Criterion 1 (2.5 Marks): Comprehensive explanation of CIDR and VLSM prefix aggregation, demonstrating mathematical subnet calculations for network ID, broadcast address, and assignable host ranges (2^h - 2).",
+            "Criterion 2 (2.5 Marks): Step-by-step numerical packet fragmentation trace detailing IP header field transformations (Total Length, DF, MF, and Fragment Offset in 8-byte units) and final host reassembly.",
+            "Criterion 3 (2.5 Marks): Mathematical and algorithmic comparison between Bellman-Ford (Distance Vector, RIP) and Dijkstra's Shortest Path First (Link State, OSPF), highlighting convergence velocity, memory complexity, and LSA flooding.",
+            "Criterion 4 (2.5 Marks): In-depth analysis of the Count-to-Infinity failure mode, evaluating the effectiveness and limitations of Split Horizon, Poison Reverse, and BGP AS-PATH loop prevention."
+          ]
+        },
+        {
+          "marks": 5,
+          "scenario": "[5 MARKS] Practical Problem-Solving Scenario: A regional engineering institute is allocated the public IPv4 block 198.51.100.0/24 and must partition it into 4 distinct department subnets: Computer Science (60 hosts), Electronics (28 hosts), Mechanical (28 hosts), and Administration (12 hosts). Design a Variable-Length Subnet Mask (VLSM) allocation scheme that satisfies all host requirements while conserving maximum address space for future expansion.",
+          "rubric": [
+            "Criterion 1 (1.25 Marks): Correct CIDR prefix sizing based on host needs: CSE (/26 for 62 usable hosts), ECE (/27 for 30 usable hosts), ME (/27 for 30 usable hosts), Admin (/28 for 14 usable hosts).",
+            "Criterion 2 (1.25 Marks): Systematic subnet block allocation specifying starting Subnet IDs, Subnet Masks, and Directed Broadcast Addresses without overlapping address space.",
+            "Criterion 3 (1.25 Marks): Explicit documentation of usable IP address ranges for each department gateway and client workstations.",
+            "Criterion 4 (1.25 Marks): Address conservation analysis detailing unallocated spare address blocks remaining in the /24 pool for future departmental expansion."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m4",
+      "num": 4,
+      "title": "Transport Layer & Congestion Control",
+      "topics": [
+        {
+          "id": "cn_transport_services",
+          "cat": "Transport",
+          "title": "TRANSPORT LAYER SERVICES & PORT MULTIPLEXING",
+          "sub": "Process-to-Process Delivery, Sockets, Port Ranges & Multiplexing",
+          "plain": "The Network layer delivers packets from machine to machine (using IP addresses). The Transport layer takes those packets and delivers them to the specific application running on that machine (using Port numbers like port 80 for web, port 22 for SSH). A Socket is the combination of an IP address and a port number.",
+          "def": "The Transport layer provides logical end-to-end process-to-process communication between application processes running on distinct hosts. Key mechanisms: 1) Multiplexing: combining data from multiple application sockets into transport segments by attaching source and destination port numbers (16-bit fields, range 0 to 65535). 2) Demultiplexing: delivering incoming segments to the correct socket based on port numbers (and source IP/port for connection-oriented TCP). Port categories (IANA): Well-Known Ports (0-1023, privileged system services like HTTP 80, HTTPS 443, DNS 53), Registered Ports (1024-49151), Dynamic/Private/Ephemeral Ports (49152-65535, assigned temporarily to clients).",
+          "exam": "Socket Address = IP Address + Port Number (e.g., 192.168.1.10:8080). TCP demultiplexing uses a 4-tuple: (Source IP, Source Port, Dest IP, Dest Port). UDP demultiplexing uses a 2-tuple: (Dest IP, Dest Port).",
+          "trap": "Exam Trap: Two distinct clients connecting to the exact same web server port (e.g., port 80) do NOT collide because TCP sockets are uniquely identified by the full 4-tuple, not just the destination port.",
+          "example": "A user opening multiple browser tabs to the same website has distinct ephemeral client ports (e.g., 52140 and 52141) connecting to server port 443, enabling the OS kernel to route incoming packets to the exact right browser tab.",
+          "q": "What four fields constitute the 4-tuple used by an operating system to demultiplex incoming TCP segments to the correct socket?",
+          "a": "Source IP Address, Source Port Number, Destination IP Address, and Destination Port Number."
+        },
+        {
+          "id": "cn_udp_protocol",
+          "cat": "Transport",
+          "title": "USER DATAGRAM PROTOCOL (UDP)",
+          "sub": "Connectionless Service, 8-Byte Minimal Header & Streaming Applications",
+          "plain": "UDP is a no-frills, lightweight delivery service. It has no handshake, no acknowledgments, no retransmissions, and no congestion control. It just slaps an 8-byte header onto application data and sends it immediately, making it ideal for live video, audio, and fast DNS queries where speed matters more than perfection.",
+          "def": "User Datagram Protocol (UDP, RFC 768) is a minimal, connectionless, unreliable transport protocol. It provides process-to-process communication and optional error detection without connection establishment, acknowledgments, retransmission, flow control, or congestion control. The UDP header is fixed at exactly 8 bytes (64 bits), comprising four 16-bit fields: Source Port (16 bits), Destination Port (16 bits), Length (16 bits, minimum 8 bytes), and Checksum (16 bits, calculated over a pseudo-header, UDP header, and payload).",
+          "exam": "UDP Header = Exactly 8 bytes (4 fields $\\times$ 2 bytes each). UDP advantages: zero connection setup delay, no connection state on servers, minimal packet overhead, and unconstrained sending rate.",
+          "trap": "Exam Trap: While UDP checksum calculation is mandatory in IPv6, it is optional in IPv4 (if unused in IPv4, the checksum field is set to all zeros).",
+          "example": "DNS queries use UDP port 53 because the client query fits in a single 50-byte packet and the response fits in a single packet; re-querying on timeout is faster than establishing a 3-way TCP handshake.",
+          "q": "What are the four fields of the standard UDP header, and what is the total header length in bytes?",
+          "a": "The four fields are: Source Port (16 bits), Destination Port (16 bits), Length (16 bits), and Checksum (16 bits). Total header length is exactly 8 bytes."
+        },
+        {
+          "id": "cn_tcp_segment_format",
+          "cat": "Transport",
+          "title": "TCP SEGMENT STRUCTURE & CONTROL FLAGS",
+          "sub": "Header Fields, Sequence/ACK Numbers, Window Size & Control Bits",
+          "plain": "A TCP header is a sophisticated 20-byte control passport. Sequence numbers count bytes (not packets) so the receiver can put scrambled data back in order. Acknowledgments tell the sender which byte is expected next. Flags like SYN, ACK, and FIN control connections.",
+          "def": "Transmission Control Protocol (TCP, RFC 793) provides a reliable, full-duplex, connection-oriented byte-stream abstraction. Base header is 20 bytes (up to 60 bytes with options, indicated by 4-bit Data Offset in 32-bit words). Key fields: 1) Sequence Number (32 bits): byte-stream position of the first data byte in this segment. 2) Acknowledgment Number (32 bits): cumulative next byte expected by the receiver. 3) Control Flags (6 bits): URG (Urgent pointer valid), ACK (ACK number valid), PSH (Push data to app immediately), RST (Reset aborted connection), SYN (Synchronize sequence numbers during handshake), FIN (Finish connection teardown). 4) Window Size (16 bits): advertised receive window (rwnd) for flow control.",
+          "exam": "TCP Sequence numbers count BYTES, not packets! If segment 1 has sequence number 1000 and carries 500 bytes of data, segment 2 will have sequence number 1500, and the receiver's ACK number will be 1500.",
+          "trap": "Exam Trap: Data Offset is expressed in 32-bit (4-byte) words. If Data Offset = 5, the header is $5 \\times 4 = 20$ bytes. If Data Offset = 8, the header is $8 \\times 4 = 32$ bytes (including 12 bytes of options).",
+          "example": "When downloading a 10 MB image, TCP breaks the byte stream into ~1460-byte Maximum Segment Size (MSS) chunks, numbering each byte sequentially so lost chunks can be identified and re-requested.",
+          "q": "If a TCP sender transmits a segment with Sequence Number = 5001 containing 1000 bytes of payload data, what will be the Acknowledgment Number sent back by the receiver upon successful receipt?",
+          "a": "The segment carries bytes 5001 through 6000. The receiver sends an ACK containing Acknowledgment Number = 6001, indicating that it has received all bytes up to 6000 and now expects byte 6001 next."
+        },
+        {
+          "id": "cn_tcp_connection_mgmt",
+          "cat": "Transport",
+          "title": "TCP CONNECTION MANAGEMENT & 3-WAY HANDSHAKE",
+          "sub": "SYN, SYN-ACK, ACK Setup, 4-Way FIN/ACK Teardown & TIME_WAIT State",
+          "plain": "Before TCP sends a single byte of data, client and server introduce themselves via a 3-way handshake: Client: 'Can we talk? (SYN)'. Server: 'Yes, I hear you, can you hear me? (SYN-ACK)'. Client: 'Yes, let's talk! (ACK)'. Closing uses a 4-way teardown with FIN and ACK packets, ending in a TIME_WAIT state to ensure clean termination.",
+          "def": "TCP connection lifecycle: 1) 3-Way Handshake (Establishment): Step 1: Client sends SYN segment (SYN=1, ACK=0, seq=x, initial sequence number ISN). Step 2: Server allocates buffers, responds with SYN-ACK (SYN=1, ACK=1, seq=y, ack=x+1). Step 3: Client sends ACK (SYN=0, ACK=1, seq=x+1, ack=y+1, may contain data). 2) Connection Teardown (4-Way Handshake): Step 1: Initiator sends FIN (FIN=1, seq=u). Step 2: Responder sends ACK (ack=u+1). Step 3: Responder finishes sending pending data, sends FIN (FIN=1, seq=v). Step 4: Initiator sends ACK (ack=v+1) and enters TIME_WAIT state for 2MSL (Maximum Segment Lifetime, typically 60-120 seconds).",
+          "exam": "Handshake flags: Packet 1 = SYN; Packet 2 = SYN + ACK; Packet 3 = ACK. Teardown flags: FIN -> ACK -> FIN -> ACK. Purpose of TIME_WAIT: ensures final ACK reached server and old stray duplicate segments dissipate from the network.",
+          "trap": "Exam Trap: A SYN segment consumes 1 sequence number even though it carries zero payload data! Same applies to FIN segments. Pure ACK segments carrying no data consume 0 sequence numbers.",
+          "example": "A web browser connecting to google.com sends SYN -> receives SYN-ACK -> returns ACK + HTTP GET request, all within one round-trip time (1 RTT) of network delay.",
+          "q": "Why does the active closer of a TCP connection remain in the TIME_WAIT state for a duration of 2MSL (Maximum Segment Lifetime)?",
+          "a": "1) To retransmit the final ACK if it was lost, preventing the peer from remaining trapped in the LAST_ACK state; 2) To allow all old duplicate segments from the connection to dissipate from intermediate network routers, preventing them from corrupting a future connection reusing the same socket ports."
+        },
+        {
+          "id": "cn_tcp_flow_control",
+          "cat": "Transport",
+          "title": "TCP FLOW CONTROL & SILLY WINDOW SYNDROME",
+          "sub": "Receive Window (rwnd), Buffer Overflow Protection & Zero-Window Probes",
+          "plain": "Flow control protects the receiver from drowning. If a fast computer sends files to a slow phone, the phone's buffer fills up. The phone advertises a smaller Receive Window (rwnd) in its headers, telling the sender: 'Slow down! I only have room for 2000 more bytes.' If buffer is full, rwnd drops to 0, pausing the sender.",
+          "def": "TCP Flow Control matches the sender's transmission rate to the receiving application's processing capacity to prevent receiver buffer overflow. Receiver advertises its available buffer space in the 16-bit Window Size header field: $rwnd = \\text{RcvBuffer} - [\\text{LastByteRcvd} - \\text{LastByteRead}]$. Sender ensures in-flight unacknowledged bytes satisfy: $\\text{LastByteSent} - \\text{LastByteAcked} \\le rwnd$. If receiver advertises $rwnd = 0$, sender pauses and starts a Persistence Timer, periodically transmitting 1-byte Zero-Window Probe segments to detect when the receiver's window reopens.",
+          "exam": "Flow Control vs Congestion Control: Flow control protects the RECEIVER's buffer from overflowing ($rwnd$). Congestion control protects the intermediate NETWORK routers from overflowing ($cwnd$). Effective window = $\\min(rwnd, cwnd)$.",
+          "trap": "Exam Trap: Silly Window Syndrome occurs when data is exchanged in tiny 1-byte chunks with 40 bytes of header overhead. Solved on sender side via Nagle's Algorithm (buffer small writes until full MSS or ACK arrives) and on receiver side via Clark's Solution (do not advertise window until space $\\ge \\min(\\text{MSS}, \\text{Buffer}/2)$).",
+          "example": "If a video player process pauses on a laptop, its OS buffer stops draining; the TCP stack sends an ACK with $rwnd = 0$, causing the media streaming server to halt packet transmission immediately.",
+          "q": "How does TCP resolve the deadlock scenario that occurs when a receiver advertises a Receive Window of zero ($rwnd = 0$) and its subsequent window-update ACK is lost in transit?",
+          "a": "The sender runs a Persistence Timer. When the timer expires, the sender transmits a 1-byte Zero-Window Probe segment. The receiver is forced to respond with an ACK containing its current Receive Window size, breaking the deadlock."
+        },
+        {
+          "id": "cn_tcp_retransmission_rtt",
+          "cat": "Transport",
+          "title": "TCP RELIABILITY & ADAPTIVE RTT ESTIMATION",
+          "sub": "Jacobson's Algorithm, SRTT, DevRTT, Retransmission Timeout (RTO) & Karn's Rule",
+          "plain": "If a packet is lost, TCP resends it when a timer expires. But how long should the timer wait? If it waits too long, speed drops; if it waits too short, it wastes bandwidth resending packets that are just slightly delayed. TCP uses Jacobson's adaptive algorithm to measure round-trip times on the fly.",
+          "def": "TCP uses adaptive Retransmission Timeout (RTO, RFC 6298) based on continuous Round-Trip Time (RTT) measurements: 1) SampleRTT: measured time from segment transmission to ACK arrival. 2) Smoothed RTT (SRTT): exponentially weighted moving average: $SRTT = (1 - \\alpha) \\cdot SRTT + \\alpha \\cdot SampleRTT$ (typically $\\alpha = 0.125$). 3) RTT Variation (DevRTT): $DevRTT = (1 - \\beta) \\cdot DevRTT + \\beta \\cdot |SampleRTT - SRTT|$ (typically $\\beta = 0.25$). 4) Retransmission Timeout: $RTO = SRTT + 4 \\cdot DevRTT$. Karn's Algorithm mandates: never measure SampleRTT for retransmitted segments (avoids retransmission ambiguity), and double RTO (exponential backoff) upon each timeout.",
+          "exam": "RTO formula: $RTO = SRTT + 4 \\cdot DevRTT$. Karn's Algorithm rule: Do not update RTT estimates for retransmitted segments. Exponential timer backoff: on timeout, $RTO_{\\text{new}} = 2 \\times RTO_{\\text{old}}$.",
+          "trap": "Exam Trap: Without Karn's rule, if a packet is delayed, retransmitted, and an ACK arrives, the sender cannot tell if the ACK is for the original packet or the retransmission (Retransmission Ambiguity).",
+          "example": "On a mobile connection shifting from 5G to 3G, RTT jumps from 20 ms to 150 ms. TCP's EWMA gradually raises SRTT and expands RTO from 50 ms to 300 ms, preventing spurious premature retransmissions.",
+          "q": "What core operational rule does Karn's Algorithm establish regarding RTT estimation and timer management in TCP?",
+          "a": "Karn's Algorithm mandates that SampleRTT measurements must NEVER be calculated for retransmitted segments (to avoid retransmission ambiguity), and that the retransmission timeout (RTO) must double exponentially with each consecutive timeout."
+        },
+        {
+          "id": "cn_tcp_congestion_phases",
+          "cat": "Congestion Control",
+          "title": "TCP CONGESTION CONTROL: SLOW START & AIMD",
+          "sub": "Congestion Window (cwnd), ssthresh, Exponential Growth & Linear Avoidance",
+          "plain": "Congestion control protects the routers in the middle of the internet. TCP starts cautiously with a small window (Slow Start), doubling its window size every round trip (1, 2, 4, 8...). When it hits a threshold (ssthresh), it taps the brakes and grows slowly by just 1 packet per round trip (Congestion Avoidance / Additive Increase). If a packet drops, it cuts the window in half (Multiplicative Decrease).",
+          "def": "TCP Congestion Control (RFC 5681) regulates traffic injected into the network based on the Congestion Window ($cwnd$). The sender limits unacknowledged data to $W = \\min(cwnd, rwnd)$. Key phases: 1) Slow Start: starts with $cwnd = 1\\text{ MSS}$. For each ACK received, $cwnd$ increases by 1 MSS (effectively doubling $cwnd$ every RTT, exponential growth $2^k$). Continues until $cwnd \\ge ssthresh$ (slow start threshold). 2) Congestion Avoidance: once $cwnd \\ge ssthresh$, $cwnd$ increases by $1\\text{ MSS}$ per RTT ($cwnd = cwnd + 1/cwnd$ per ACK, linear growth: Additive Increase). 3) Multiplicative Decrease: on packet loss, $ssthresh$ is set to $\\max(cwnd/2, 2\\text{ MSS})$.",
+          "exam": "Growth rates: Slow Start = EXPONENTIAL growth (doubles each RTT). Congestion Avoidance = LINEAR growth (adds 1 MSS per RTT, Additive Increase Multiplicative Decrease - AIMD).",
+          "trap": "Exam Trap: Don't let the name 'Slow Start' fool you: its growth is actually EXPONENTIAL ($1, 2, 4, 8, 16...$), making it the fastest growth phase in TCP!",
+          "example": "A TCP connection begins with $cwnd = 1\\text{ MSS}$ and $ssthresh = 16\\text{ MSS}$. After 4 RTTs in Slow Start, $cwnd$ reaches $16\\text{ MSS}$. From RTT 5 onward, Congestion Avoidance takes over, growing linearly: 17, 18, 19 MSS.",
+          "q": "If a TCP connection starts with $cwnd = 1\\text{ MSS}$ and $ssthresh = 8\\text{ MSS}$, what will be the value of $cwnd$ after 5 successful round-trip times (RTTs) assuming no packet loss?",
+          "a": "RTT 0: 1 MSS. RTT 1: 2 MSS. RTT 2: 4 MSS. RTT 3: 8 MSS (hits ssthresh, switches to Congestion Avoidance). RTT 4: 9 MSS (+1 MSS). RTT 5: 10 MSS (+1 MSS). Value after 5 RTTs = 10 MSS."
+        },
+        {
+          "id": "cn_fast_retransmit_recovery",
+          "cat": "Congestion Control",
+          "title": "FAST RETRANSMIT & FAST RECOVERY (TAHOE VS RENO)",
+          "sub": "3 Duplicate ACKs Detection, Immediate Retransmit & TCP Reno vs Tahoe",
+          "plain": "Waiting for a timer to expire takes too long. If a receiver gets packets out of order, it sends a duplicate ACK for the missing packet. When the sender sees 3 duplicate ACKs in a row, it knows a packet was dropped, retransmits it immediately (Fast Retransmit), halves its window, and keeps sending without dropping to zero (Fast Recovery).",
+          "def": "Loss recovery mechanisms in TCP: 1) Fast Retransmit: arrival of 3 duplicate ACKs (4 identical ACKs total for the same sequence number) signals that a single segment was lost while subsequent segments arrived safely. The sender immediately retransmits the missing segment before the retransmission timer expires. 2) TCP Tahoe (legacy): on either timeout or 3 duplicate ACKs, sets $ssthresh = cwnd / 2$ and collapses $cwnd = 1\\text{ MSS}$ (re-entering Slow Start). 3) TCP Reno: distinguishes loss types: on timeout, collapses $cwnd = 1\\text{ MSS}$. On 3 duplicate ACKs, enters Fast Recovery: sets $ssthresh = cwnd / 2$, sets $cwnd = ssthresh + 3\\text{ MSS}$, increments $cwnd$ by 1 MSS for each additional duplicate ACK, and resumes Congestion Avoidance when the new ACK arrives.",
+          "exam": "3 Duplicate ACKs handling: TCP Tahoe resets $cwnd = 1\\text{ MSS}$ (Slow Start). TCP Reno halves $ssthresh = cwnd / 2$, sets $cwnd = ssthresh$ (Fast Recovery), avoiding the slow-start collapse.",
+          "trap": "Exam Trap: A retransmission timeout indicates severe congestion (the pipeline is completely dry); 3 duplicate ACKs indicate mild congestion (packets are still getting through, prompting duplicate ACKs). Reno treats them differently; Tahoe treats them identically.",
+          "example": "During a massive file download over high-speed fiber, segment 42 is dropped due to momentary buffer overflow. The server receives 3 duplicate ACKs for byte 42, triggers Fast Retransmit, resends segment 42, and maintains high throughput via Fast Recovery.",
+          "q": "What fundamental difference distinguishes TCP Reno from TCP Tahoe when packet loss is signaled by 3 duplicate ACKs?",
+          "a": "TCP Tahoe unconditionally collapses $cwnd$ back to 1 MSS and restarts Slow Start. TCP Reno avoids the severe drop by setting $ssthresh = cwnd / 2$ and entering Fast Recovery with $cwnd \\approx ssthresh$, continuing linear Congestion Avoidance."
+        },
+        {
+          "id": "cn_traffic_shaping",
+          "cat": "Traffic Management",
+          "title": "TRAFFIC SHAPING: LEAKY BUCKET VS TOKEN BUCKET",
+          "sub": "Constant Bit Rate Smoothing vs Bursty Traffic with Accumulated Tokens",
+          "plain": "Traffic shaping controls packet surges so they don't jam router queues. Leaky Bucket is a funnel with a tiny hole: no matter how much water you pour in at once, it drips out at a steady, fixed speed. Token Bucket gives you virtual tokens: if you wait, you accumulate tokens, allowing you to burst at full wire speed when you have a large file to send.",
+          "def": "Traffic shaping and policing algorithms: 1) Leaky Bucket: models a bucket with a fixed-capacity buffer and a constant-rate leak hole at the bottom. Input traffic may be bursty, but output traffic is strictly smoothed to a constant bit rate (CBR). If incoming packets overflow the bucket capacity, excess packets are dropped or marked. 2) Token Bucket: tokens are generated and deposited into a bucket of capacity $C$ at a constant rate of $r$ tokens/sec. A packet can transmit only if enough tokens exist in the bucket, consuming tokens proportional to packet length. If tokens have accumulated, the sender can transmit at full link capacity ($R$) in a burst of maximum duration $T_{\\text{burst}} = \\frac{C}{R - r}$.",
+          "exam": "Comparison: Leaky Bucket produces CONSTANT output rate (zero bursts allowed). Token Bucket allows CONTROLLED BURSTS up to bucket capacity $C$, with long-term average rate capped at token generation rate $r$.",
+          "trap": "Exam Trap: Leaky bucket completely eliminates traffic bursts; token bucket permits bursty traffic up to the accumulated token limit while bounding the average long-term rate.",
+          "example": "Cloud API rate limiters (like AWS API Gateway or GitHub API) utilize Token Bucket algorithms, allowing developers to make quick bursts of 50 requests while capping long-term usage to 5 requests per second.",
+          "q": "What is the primary operational difference between the Leaky Bucket and Token Bucket algorithms regarding bursty network traffic?",
+          "a": "The Leaky Bucket algorithm enforces a strict, constant output rate, completely smoothing out and disallowing traffic bursts. The Token Bucket algorithm allows bursty transmissions at full line rate as long as accumulated tokens are available in the bucket, while bounding the long-term average transmission rate to the token generation rate."
+        },
+        {
+          "id": "cn_qos_techniques",
+          "cat": "QoS",
+          "title": "QUALITY OF SERVICE (QOS) & PACKET SCHEDULING",
+          "sub": "Delay, Jitter, Packet Loss, IntServ (RSVP), DiffServ (DSCP) & WFQ",
+          "plain": "Best-effort delivery treats all internet packets equally, which is fine for emails, but disastrous for Zoom calls and online gaming. Quality of Service (QoS) gives VIP treatment to real-time voice and video packets by prioritizing them in router queues so they don't stutter or drop.",
+          "def": "Quality of Service (QoS) guarantees network performance metrics: Bandwidth, Delay, Jitter (delay variation), and Packet Loss. Architectures: 1) Integrated Services (IntServ, RFC 1633): flow-based hard QoS using Resource Reservation Protocol (RSVP); routers maintain per-flow state and reserve bandwidth end-to-end (suffers from poor scalability in core routers). 2) Differentiated Services (DiffServ, RFC 2475): class-based scalable QoS; edge routers classify packets by marking the 6-bit Differentiated Services Code Point (DSCP) in the IPv4 ToS / IPv6 Traffic Class byte. Core routers apply Per-Hop Behaviors (PHB: Expedited Forwarding EF for voice, Assured Forwarding AF for video). Scheduling mechanisms: FIFO, Priority Queuing, and Weighted Fair Queuing (WFQ).",
+          "exam": "IntServ = Per-flow state reservation using RSVP (unscalable in internet core). DiffServ = Class-based packet marking using DSCP bits in the IP header (highly scalable).",
+          "trap": "Exam Trap: Priority Queuing can lead to total starvation of lower-priority traffic if high-priority packets continuously arrive; Weighted Fair Queuing (WFQ) prevents starvation by giving each queue a guaranteed percentage of link bandwidth.",
+          "example": "VoIP audio streams are tagged with DSCP EF (Expedited Forwarding, binary 101110 / decimal 46), ensuring router queues forward audio packets ahead of heavy web download traffic (Best Effort / DSCP 0).",
+          "q": "Why has Differentiated Services (DiffServ) largely replaced Integrated Services (IntServ) in large-scale enterprise and ISP backbones?",
+          "a": "IntServ requires intermediate core routers to store per-flow state tables and signal reservations for every individual connection via RSVP, causing massive scalability bottlenecks. DiffServ classifies packets into classes using DSCP header bits at the network edge, allowing core routers to forward traffic without maintaining per-flow state."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "In the TCP 3-Way Handshake, which control flags are set to 1 in the second packet transmitted from the server to the client?",
+          "opts": [
+            "SYN = 1, ACK = 0",
+            "SYN = 1, ACK = 1",
+            "SYN = 0, ACK = 1",
+            "SYN = 1, FIN = 1"
+          ],
+          "ans": 1,
+          "cat": "Transport",
+          "correctFb": "The server responds to the client's initial SYN request by acknowledging it (ACK = 1) and simultaneously initiating its own sequence number synchronization (SYN = 1), forming the SYN-ACK segment.",
+          "distractors": [
+            "SYN = 1, ACK = 0 describes the initial client SYN packet.",
+            "SYN = 0, ACK = 1 describes the third packet (client's final ACK).",
+            "SYN and FIN are never set simultaneously during valid connection setup."
+          ]
+        },
+        {
+          "q": "Which window variable in TCP is specifically used to prevent the sender from overflowing the physical memory buffer of the destination receiving host?",
+          "opts": [
+            "Congestion Window (cwnd)",
+            "Receive Window (rwnd)",
+            "Threshold Window (ssthresh)",
+            "Maximum Segment Size (MSS)"
+          ],
+          "ans": 1,
+          "cat": "Transport",
+          "correctFb": "The Receive Window (rwnd) is advertised by the receiver in its TCP header to inform the sender of available buffer space, implementing Flow Control. Congestion Window (cwnd) protects intermediate network routers.",
+          "distractors": [
+            "cwnd prevents congestion inside intermediate network links and routers.",
+            "ssthresh is the threshold transitioning TCP between Slow Start and Congestion Avoidance.",
+            "MSS specifies the maximum payload size of an individual TCP segment."
+          ]
+        },
+        {
+          "q": "During the TCP Slow Start phase, if the current congestion window is $cwnd = 8\\text{ MSS}$ and all 8 segments are successfully acknowledged within one round-trip time, what is the new $cwnd$?",
+          "opts": [
+            "9 MSS",
+            "16 MSS",
+            "12 MSS",
+            "64 MSS"
+          ],
+          "ans": 1,
+          "cat": "Congestion Control",
+          "correctFb": "In Slow Start, $cwnd$ increases by 1 MSS for each acknowledged segment. Acknowledging all 8 segments increases $cwnd$ by 8 MSS, doubling it from 8 MSS to 16 MSS within that RTT.",
+          "distractors": [
+            "9 MSS reflects linear growth (+1 MSS per RTT), which occurs during Congestion Avoidance.",
+            "12 MSS corresponds to a 1.5x increase, not standard TCP doubling.",
+            "64 MSS squares the window, which is not how exponential doubling operates."
+          ]
+        },
+        {
+          "q": "How many duplicate ACKs must a TCP sender receive for the same sequence number to trigger the Fast Retransmit algorithm?",
+          "opts": [
+            "1 duplicate ACK",
+            "2 duplicate ACKs",
+            "3 duplicate ACKs",
+            "5 duplicate ACKs"
+          ],
+          "ans": 2,
+          "cat": "Congestion Control",
+          "correctFb": "Standard TCP (RFC 5681) mandates that the receipt of exactly 3 duplicate ACKs (4 identical ACKs in total) triggers Fast Retransmit, as 1 or 2 duplicate ACKs could simply result from minor packet reordering in the network.",
+          "distractors": [
+            "1 duplicate ACK frequently occurs due to transient out-of-order packet arrival.",
+            "2 duplicate ACKs are insufficient to rule out packet reordering.",
+            "5 duplicate ACKs would introduce unnecessary delay before retransmitting."
+          ]
+        },
+        {
+          "q": "When packet loss is detected via 3 duplicate ACKs, what does TCP Reno do that distinguishes it from TCP Tahoe?",
+          "opts": [
+            "It resets $cwnd$ to 1 MSS and enters Slow Start.",
+            "It halves $ssthresh$ and enters Fast Recovery with $cwnd \\approx ssthresh$, avoiding the collapse to 1 MSS.",
+            "It increases $cwnd$ exponentially to recover lost time.",
+            "It terminates the TCP connection and re-establishes via a new 3-way handshake."
+          ],
+          "ans": 1,
+          "cat": "Congestion Control",
+          "correctFb": "TCP Reno implements Fast Recovery: upon 3 duplicate ACKs, it sets $ssthresh = cwnd / 2$ and keeps $cwnd$ inflated around $ssthresh$, continuing linear growth without dropping back to $cwnd = 1\\text{ MSS}$ like Tahoe.",
+          "distractors": [
+            "Resetting $cwnd$ to 1 MSS describes the legacy TCP Tahoe algorithm.",
+            "TCP never increases $cwnd$ exponentially upon detecting packet loss.",
+            "Packet loss triggers retransmission, not connection termination."
+          ]
+        },
+        {
+          "q": "What is the exact header length of the User Datagram Protocol (UDP) in bytes?",
+          "opts": [
+            "4 bytes",
+            "8 bytes",
+            "20 bytes",
+            "16 bytes"
+          ],
+          "ans": 1,
+          "cat": "Transport",
+          "correctFb": "The standard UDP header is fixed at exactly 8 bytes (64 bits), consisting of four 16-bit fields: Source Port, Destination Port, Length, and Checksum.",
+          "distractors": [
+            "4 bytes is only two 16-bit fields.",
+            "20 bytes is the minimum size of an IPv4 or TCP base header.",
+            "16 bytes would double the standard UDP header size."
+          ]
+        },
+        {
+          "q": "How does the Token Bucket traffic shaping algorithm handle a sudden burst of packets when the bucket is full of accumulated tokens?",
+          "opts": [
+            "It discards all burst packets exceeding the average rate.",
+            "It transmits the burst packets immediately at the full physical link rate up to the bucket capacity.",
+            "It delays all packets to strictly enforce a constant bit rate.",
+            "It converts the burst into ICMP Source Quench messages."
+          ],
+          "ans": 1,
+          "cat": "Traffic Management",
+          "correctFb": "Unlike the Leaky Bucket, the Token Bucket allows accumulated tokens to be spent immediately, permitting traffic to burst at the maximum line rate until the token bucket is emptied.",
+          "distractors": [
+            "Packets are transmitted, not discarded, because valid tokens are available.",
+            "Enforcing a constant bit rate is the definition of the Leaky Bucket algorithm.",
+            "ICMP Source Quench is an obsolete IP congestion mechanism, not part of Token Bucket shaping."
+          ]
+        },
+        {
+          "q": "Why does a TCP endpoint that initiates active connection termination remain in the TIME_WAIT state for 2MSL (Maximum Segment Lifetime)?",
+          "opts": [
+            "To wait for the user to confirm application shutdown.",
+            "To ensure the final ACK reached the remote peer and allow stray segments to dissipate from the network.",
+            "To allow DNS caches to refresh the hostname mapping.",
+            "To measure the final round-trip time for TCP telemetry."
+          ],
+          "ans": 1,
+          "cat": "Transport",
+          "correctFb": "The TIME_WAIT duration of 2MSL ensures that if the final ACK was lost, the resulting retransmitted FIN can be answered, and guarantees that any stray packets from the connection expire in transit before a new connection reuses the same port pair.",
+          "distractors": [
+            "TIME_WAIT is an automated kernel state and does not involve user interaction.",
+            "DNS cache refreshing operates independently at the Application layer.",
+            "RTT measurements are not collected during connection closure."
+          ]
+        },
+        {
+          "q": "What rule does Karn's Algorithm establish regarding Round-Trip Time (RTT) estimation in TCP?",
+          "opts": [
+            "SampleRTT must never be measured for retransmitted segments.",
+            "RTT must be calculated using simple arithmetic averages rather than exponential smoothing.",
+            "RTO must remain constant regardless of network variations.",
+            "Retransmission timers must be disabled over wireless networks."
+          ],
+          "ans": 0,
+          "cat": "Transport",
+          "correctFb": "Karn's Algorithm prohibits incorporating RTT measurements from retransmitted segments into the Smoothed RTT (SRTT) calculation, because the sender cannot determine whether the received ACK corresponds to the initial transmission or the retransmission.",
+          "distractors": [
+            "TCP uses Jacobson's exponentially weighted moving average, not simple arithmetic averages.",
+            "RTO is dynamically updated; it is not held constant.",
+            "Retransmission timers are vital on all networks, especially lossy wireless links."
+          ]
+        },
+        {
+          "q": "Which field in the IPv4 datagram header is repurposed by Differentiated Services (DiffServ) for Class of Service (CoS) packet classification?",
+          "opts": [
+            "Type of Service (ToS) / Differentiated Services (DS) field",
+            "Time To Live (TTL) field",
+            "Identification field",
+            "Total Length field"
+          ],
+          "ans": 0,
+          "cat": "QoS",
+          "correctFb": "DiffServ repurposes the 8-bit Type of Service (ToS) byte in IPv4 (and Traffic Class in IPv6) as the Differentiated Services (DS) field, using 6 bits for the Differentiated Services Code Point (DSCP).",
+          "distractors": [
+            "TTL field prevents packets from circulating indefinitely.",
+            "Identification field is used for packet fragmentation and reassembly.",
+            "Total Length field indicates the aggregate byte length of the datagram."
+          ]
+        }
+      ],
+      "bossChallenges": [
+        {
+          "marks": 10,
+          "scenario": "[10 MARKS] University Exam Question: Provide an exhaustive breakdown of the Transmission Control Protocol (TCP) reliability, flow control, and congestion control mechanisms. Detail the sequence of packet exchanges, header flags, and state transitions during connection establishment (3-Way Handshake) and termination (4-Way Teardown), contrast Flow Control (rwnd) with Congestion Control (cwnd), and mathematically model the four phases of TCP Reno Congestion Control (Slow Start, Congestion Avoidance, Fast Retransmit, and Fast Recovery).",
+          "rubric": [
+            "Criterion 1 (2.5 Marks): Detailed sequence diagram and state machine trace of the 3-Way Handshake (SYN, SYN-ACK, ACK) and 4-Way Teardown, explaining ISN selection and the 2MSL TIME_WAIT rationale.",
+            "Criterion 2 (2.5 Marks): Clear architectural distinction between Receiver Buffer Protection (Flow Control via rwnd, persistence timers, zero-window probes) and Network Protection (Congestion Control via cwnd).",
+            "Criterion 3 (2.5 Marks): Mathematical formulation of TCP congestion phases: exponential doubling in Slow Start, Additive Increase Multiplicative Decrease (AIMD) in Congestion Avoidance, and ssthresh threshold transitions.",
+            "Criterion 4 (2.5 Marks): Operational mechanics of Fast Retransmit (3 duplicate ACKs) and Fast Recovery in TCP Reno, contrasting its performance against TCP Tahoe timeout resets and analyzing Jacobson's adaptive RTO estimation with Karn's rule."
+          ]
+        },
+        {
+          "marks": 5,
+          "scenario": "[5 MARKS] Practical Problem-Solving Scenario: A video streaming provider experiences severe packet jitter and buffering on user clients. System analysis reveals that heavy bulk file uploaders are saturating edge routers, causing packet drops for real-time video streams. How should a network architect deploy traffic shaping (Leaky Bucket vs Token Bucket) and Quality of Service (QoS / DiffServ) packet scheduling to guarantee smooth streaming while maintaining high overall network utilization?",
+          "rubric": [
+            "Criterion 1 (1.25 Marks): Technical comparison between Leaky Bucket (strict constant bit rate smoothing) and Token Bucket (permitting controlled bursts with token accumulation) for video traffic.",
+            "Criterion 2 (1.25 Marks): Differentiated Services (DiffServ) classification architecture using IP header DSCP markings (e.g., Expedited Forwarding for real-time video vs Best Effort for bulk uploads).",
+            "Criterion 3 (1.25 Marks): Packet scheduling deployment at router egress queues comparing Priority Queuing against Weighted Fair Queuing (WFQ) to prevent traffic starvation.",
+            "Criterion 4 (1.25 Marks): Comprehensive synthesis proposing an end-to-end policy configuration guaranteeing SLA latency bounds for video without dropping non-priority data."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m5",
+      "num": 5,
+      "title": "Application Layer, Network Security & Sockets",
+      "topics": [
+        {
+          "id": "cn_dns_architecture",
+          "cat": "Application",
+          "title": "DOMAIN NAME SYSTEM (DNS) ARCHITECTURE",
+          "sub": "Hierarchical Hierarchy, Iterative/Recursive Queries & Resource Records",
+          "plain": "DNS is the internet's phone book. Humans remember domain names like 'astu.ac.in', but routers only understand IP addresses like '14.139.222.18'. DNS uses a global tree of servers (Root -> TLD -> Authoritative) to translate names into numbers in milliseconds.",
+          "def": "The Domain Name System (DNS, RFC 1034/1035) is a hierarchical, decentralized application-layer naming service mapping human-readable hostnames to IP addresses. Architecture: 1) Root Nameservers (13 logical root server IP addresses worldwide, managed via Anycast). 2) Top-Level Domain (TLD) Servers: manage generic (.com, .org, .edu) and country-code (.in, .uk) domains. 3) Authoritative Nameservers: hold the actual definitive records for an organization. Query modes: Recursive (local DNS resolver takes full responsibility for returning the answer to client) vs Iterative (queried server returns a referral to the next nameserver in the hierarchy). Key Resource Records (RRs): A (IPv4), AAAA (IPv6), CNAME (canonical alias), MX (mail exchange server), NS (authoritative name server), and PTR (reverse lookup IP-to-name).",
+          "exam": "DNS Transport: Uses UDP port 53 for standard client queries (< 512 bytes) for speed. Uses TCP port 53 for Zone Transfers between master/slave DNS servers or responses exceeding 512 bytes (EDNS0).",
+          "trap": "Exam Trap: Recursive query means 'get the answer for me'; Iterative query means 'if you don't know, tell me who to ask next'. Clients issue recursive queries to local resolvers; resolvers issue iterative queries to root/TLD servers.",
+          "example": "When querying `www.astu.ac.in`, the local resolver asks Root (`.`), which points to `.in` TLD nameserver, which points to `ac.in` server, which points to ASTU's authoritative nameserver, which returns the Type A record containing the web server's IPv4 address.",
+          "q": "Why does DNS use UDP port 53 for standard name resolutions, but switch to TCP port 53 for DNS zone transfers?",
+          "a": "Standard queries are small and require low latency without the overhead of a 3-way connection handshake, making UDP ideal. Zone transfers replicate entire domain databases between primary and secondary servers, requiring the reliability, congestion control, and large payload handling of TCP."
+        },
+        {
+          "id": "cn_http_evolution",
+          "cat": "Application",
+          "title": "HYPERTEXT TRANSFER PROTOCOL (HTTP) & EVOLUTION",
+          "sub": "HTTP/1.0, HTTP/1.1 Persistent Pipelining, HTTP/2 Binary Streams & HTTP/3",
+          "plain": "HTTP is the language of the World Wide Web. HTTP/1.0 opened a brand new TCP connection for every single image (painfully slow). HTTP/1.1 introduced persistent connections (Keep-Alive) so multiple files share one connection. HTTP/2 multiplexed multiple requests simultaneously over a single connection using binary frames. HTTP/3 replaced TCP with UDP (QUIC) to eliminate head-of-line blocking.",
+          "def": "Hypertext Transfer Protocol (HTTP) is an application-layer client-server protocol. Evolution: 1) HTTP/1.0 (RFC 1945): Non-persistent; opens a separate TCP connection for every object ($2 \\times \\text{RTT}$ per file), causing high latency and server socket exhaustion. 2) HTTP/1.1 (RFC 2616): Persistent connections by default (`Connection: keep-alive`), allowing sequential requests over one TCP socket; introduced pipelining, chunked transfer encoding, and Host header for virtual hosting. 3) HTTP/2 (RFC 7540): Binary framing layer, single TCP connection per origin with bi-directional multiplexed streams (solves HTTP head-of-line blocking), HPACK header compression, and Server Push. 4) HTTP/3 (RFC 9114): Runs over QUIC (UDP), eliminating transport-layer TCP head-of-line blocking and providing 0-RTT handshakes.",
+          "exam": "Common HTTP Status Codes: 200 (OK), 301 (Moved Permanently), 302 (Found / Temporary Redirect), 304 (Not Modified / Cached), 400 (Bad Request), 401 (Unauthorized), 403 (Forbidden), 404 (Not Found), 500 (Internal Server Error), 502 (Bad Gateway), 503 (Service Unavailable).",
+          "trap": "Exam Trap: HTTP is inherently STATELESS (each request is processed independently without memory of previous requests). State persistence is achieved using application-level mechanisms like Cookies and JWT Session Tokens.",
+          "example": "A modern web page with 50 images loads in HTTP/1.1 by making 50 requests over 6 parallel TCP connections. In HTTP/2, all 50 images are requested concurrently over a single TCP connection using interleaved binary streams.",
+          "q": "What major performance problem in HTTP/1.1 was resolved by the introduction of binary stream multiplexing in HTTP/2?",
+          "a": "HTTP/1.1 suffered from Application-layer Head-of-Line (HoL) blocking, where a slow or stalled response blocked all subsequent requests on that persistent TCP connection. HTTP/2 breaks messages into independent binary frames and interleaves them across multiple streams on a single TCP connection."
+        },
+        {
+          "id": "cn_email_protocols",
+          "cat": "Application",
+          "title": "ELECTRONIC MAIL PROTOCOLS: SMTP, POP3, IMAP & MIME",
+          "sub": "Push vs Pull Architecture, Mail Servers (MTA/MUA), Mailboxes & MIME",
+          "plain": "Email uses a two-part architecture: a push protocol to send mail, and a pull protocol to read mail. SMTP is the mail truck that pushes letters from your laptop to mail servers across the internet. POP3 downloads letters to your phone and deletes them from the server. IMAP synchronizes folders across all your devices so everything stays in sync.",
+          "def": "Electronic mail architecture separates message submission/transfer from message retrieval: 1) Simple Mail Transfer Protocol (SMTP, RFC 5321): connection-oriented PUSH protocol operating over TCP port 25 (server-to-server) or port 587 (client-to-server submission with STARTTLS). Uses ASCII command-response transactions (`HELO`, `MAIL FROM`, `RCPT TO`, `DATA`, `QUIT`). 2) Post Office Protocol v3 (POP3, RFC 1939): simple PULL protocol over TCP port 110; downloads messages from server mailbox to local client and typically deletes them from the server, precluding multi-device synchronization. 3) Internet Message Access Protocol (IMAP, RFC 3501): advanced PULL protocol over TCP port 143; keeps messages on server and synchronizes folder states, flags, and headers across multiple concurrent devices. 4) Multipurpose Internet Mail Extensions (MIME, RFC 2045): encodes non-ASCII data (images, audio, attachments) into 7-bit ASCII using Base64 or Quoted-Printable encoding.",
+          "exam": "Protocol roles: SMTP is strictly a PUSH protocol (client-to-server and server-to-server). POP3 and IMAP are strictly PULL protocols (client-to-server retrieval only). You CANNOT use SMTP to retrieve emails from a mailbox!",
+          "trap": "Exam Trap: Base64 encoding in MIME increases data size by approximately 33% (every 3 binary bytes are mapped into 4 ASCII printable characters).",
+          "example": "When Bob sends an email to Alice: Bob's email client pushes message via SMTP (port 587) to Bob's Mail Transfer Agent (MTA). Bob's MTA uses DNS MX records to find Alice's mail server and transfers message via SMTP (port 25). Alice retrieves the message from her server using IMAP (port 993 with SSL/TLS).",
+          "q": "Why can SMTP not be used by an end user to retrieve incoming email messages from their mailbox server?",
+          "a": "SMTP is strictly a push-based delivery protocol designed for transferring mail forward from client to server or between intermediate servers. Retrieving mail from a mailbox requires a pull protocol (such as POP3 or IMAP) that authenticates the user, inspects mailbox contents, and fetches messages on demand."
+        },
+        {
+          "id": "cn_ftp_architecture",
+          "cat": "Application",
+          "title": "FILE TRANSFER PROTOCOL (FTP) ARCHITECTURE",
+          "sub": "Out-of-Band Control vs Data Connections, Active (PORT) vs Passive (PASV)",
+          "plain": "FTP is unusual because it uses two separate connections at the same time: an 'out-of-band' control connection on port 21 for typing commands (like login and directory listings), and a separate data connection on port 20 that opens only when you upload or download a file.",
+          "def": "File Transfer Protocol (FTP, RFC 959) is a stateful client-server protocol using two separate, parallel TCP connections: 1) Control Connection (Port 21): established first, remains open throughout the entire session; carries ASCII commands (`USER`, `PASS`, `LIST`, `RETR`, `STOR`) and 3-digit status responses ('out-of-band' signaling). 2) Data Connection: dynamic connection opened and closed for every individual file transfer or directory listing. Modes: Active Mode (client listens on port $N$ and sends `PORT` command; server initiates data connection from port 20 to client port $N$; frequently blocked by client firewalls/NAT) vs Passive Mode (client sends `PASV`; server opens random high port $P$ and client initiates connection to port $P$, working seamlessly across firewalls).",
+          "exam": "FTP Ports: Port 21 = Control connection (commands/responses, out-of-band). Port 20 = Data connection (in Active mode). In-band vs Out-of-band: HTTP is in-band (headers and data share the same connection); FTP is out-of-band (control and data use separate connections).",
+          "trap": "Exam Trap: In Active Mode FTP, the server initiates the inbound TCP data connection back to the client, which client firewalls typically block as unsolicited incoming traffic. Passive mode (PASV) was invented specifically to fix this firewall traversal issue.",
+          "example": "When downloading a file via FTP, the user types `get file.iso` on the port 21 control connection. The FTP server and client spin up a temporary TCP connection on port 20, stream the file, and terminate that data connection once the file transfer is complete.",
+          "q": "What is meant by stating that the File Transfer Protocol (FTP) uses an 'out-of-band' control connection?",
+          "a": "FTP uses two separate parallel TCP connections: control commands and server responses are exchanged on a dedicated control connection (port 21), while file contents are transmitted across a completely separate data connection (port 20). Because control information does not share the data stream, it is out-of-band."
+        },
+        {
+          "id": "cn_client_server_p2p",
+          "cat": "Architecture",
+          "title": "CLIENT-SERVER VS PEER-TO-PEER (P2P) ARCHITECTURES",
+          "sub": "Centralized Bottlenecks vs Self-Scaling Distributed Peer Architectures",
+          "plain": "In Client-Server, everyone asks one central boss (the server) for data. If 1 million users download at once, the server crashes. In Peer-to-Peer (P2P), every user downloading a file is also uploading pieces of that file to other users. The more users join, the more bandwidth the network has—it scales automatically!",
+          "def": "Network application paradigms: 1) Client-Server Architecture: centralized, asymmetric model where an always-on host with a static IP (server) services requests from arbitrarily connected ephemeral hosts (clients). Clients communicate only with the server, creating a single point of failure and bandwidth bottleneck as client count $N$ scales ($T_{\\text{dist}} = \\max(N \\cdot F / d_s, F / d_{\\min})$). 2) Peer-to-Peer (P2P) Architecture: decentralized, symmetric model where arbitrary end systems (peers) communicate directly with equal privileges. Peers act as both clients (consumers) and servers (distributors / 'servents'), enabling self-scalability: total upload capacity increases linearly with peer population ($T_{\\text{dist}} = \\max(F / u_s, F / d_{\\min}, N \\cdot F / (u_s + \\sum u_i))$).",
+          "exam": "Scalability math: In client-server, file distribution time grows linearly with $N$ ($O(N)$). In P2P, distribution time is bounded and self-scaling because every new leecher adds upload capacity to the swarm.",
+          "trap": "Exam Trap: P2P reduces server hardware costs, but introduces severe challenges in churn (peers joining/leaving abruptly), security/malware distribution, and ISP uplink congestion.",
+          "example": "BitTorrent organizes file distribution into swarms of peers exchanging 256 KB pieces using a 'tit-for-tat' incentive algorithm, allowing Linux distributions (e.g., Ubuntu ISOs) to distribute terabytes of data with minimal origin server bandwidth.",
+          "q": "Why does file distribution time scale linearly with the number of clients in a Client-Server architecture, but remain bounded in a Peer-to-Peer (P2P) network?",
+          "a": "In Client-Server, the server's upload link must transmit a copy of the file to each of the $N$ clients ($N \\times F$), so server upload capacity becomes a linear bottleneck. In P2P, each peer that downloads parts of the file simultaneously uploads those parts to other peers, increasing aggregate system upload bandwidth as the peer population grows."
+        },
+        {
+          "id": "cn_tls_ssl_handshake",
+          "cat": "Security",
+          "title": "TRANSPORT LAYER SECURITY (TLS/SSL) & HTTPS",
+          "sub": "Asymmetric Key Exchange, Symmetric Session Keys, Digital Certificates & HTTPS",
+          "plain": "Plain HTTP sends passwords in cleartext for anyone on the Wi-Fi to read. HTTPS wraps HTTP inside TLS encryption. During the TLS handshake, the server proves its identity with an SSL certificate, and uses asymmetric public-key cryptography (RSA or Diffie-Hellman) to safely agree on a temporary symmetric key (like AES) for ultra-fast, encrypted data transfer.",
+          "def": "Transport Layer Security (TLS 1.2/1.3, successor to SSL) provides end-to-end cryptographic confidentiality, data integrity, and authentication between application processes. HTTPS is HTTP layered over TLS on TCP port 443. Handshake workflow: 1) ClientHello: client sends supported cipher suites and random nonce $R_c$. 2) ServerHello: server selects cipher suite, sends random nonce $R_s$, and sends its X.509 digital certificate signed by a trusted Certificate Authority (CA). 3) Key Exchange: client verifies certificate validity against built-in root CAs, generates Pre-Master Secret, encrypts it with server's public key (or performs ECDHE), and sends it to server. 4) Session Key Derivation: both parties independently derive symmetric encryption keys (e.g., AES-256-GCM) and MAC keys from Master Secret. 5) Finished: encrypted verification hashes confirm handshake integrity; all subsequent HTTP traffic is encrypted with symmetric session keys.",
+          "exam": "Cryptographic roles: Asymmetric cryptography (RSA/ECC) is used ONLY during the handshake to authenticate the server and securely exchange the secret key. Symmetric cryptography (AES-GCM) is used for bulk data transfer because it is orders of magnitude faster in hardware.",
+          "trap": "Exam Trap: TLS operates above the Transport layer (TCP) and below the Application layer; TCP headers (IP addresses and port numbers) are NEVER encrypted by TLS—only the application payload is encrypted!",
+          "example": "When visiting your bank at `https://bank.com`, TLS verifies that the certificate was issued to `bank.com` by DigiCert, preventing Man-in-the-Middle impersonation, and encrypts login credentials with AES-256.",
+          "q": "Why does TLS use asymmetric public-key cryptography during the handshake, but switch to symmetric encryption for the actual application data transfer?",
+          "a": "Asymmetric cryptography allows secure key exchange and authentication between strangers without requiring a pre-shared secret, but is computationally intensive. Symmetric encryption is orders of magnitude faster and computationally efficient, making it ideal for encrypting high-volume application payload data once the shared secret key is established."
+        },
+        {
+          "id": "cn_firewalls_types",
+          "cat": "Security",
+          "title": "FIREWALL ARCHITECTURES & DEMILITARIZED ZONES (DMZ)",
+          "sub": "Packet Filters, Stateful Inspection, Application Proxy Gateways & DMZ",
+          "plain": "A firewall is a network security guard inspecting traffic at the border. Packet filters inspect individual envelopes (IP addresses and port numbers). Stateful inspection remembers if you initiated the conversation. Application proxies open the letter and read the contents to block malicious commands. A DMZ is a buffer zone between the dangerous internet and your safe internal network.",
+          "def": "A firewall is a network security system monitoring and controlling incoming and outgoing network traffic based on predetermined security rules. Categories: 1) Packet Filtering Firewall (Stateless, Layer 3/4): examines individual packet headers (Source/Dest IP, Source/Dest Port, Protocol); fast, but vulnerable to IP spoofing and cannot inspect payload. 2) Stateful Inspection Firewall (Stateful Packet Filtering, Layer 3/4/5): tracks the state of active network connections in a state table; automatically permits returning incoming traffic matching an established outgoing connection. 3) Application-Level Gateway (Proxy Firewall, Layer 7): acts as an intermediary, terminating incoming connections and inspecting the full application payload (e.g., filtering specific HTTP methods or detecting SQL injection). Demilitarized Zone (DMZ): an isolated physical or logical subnet exposing public-facing services (web, mail, DNS) to untrusted networks while shielding internal private enterprise LANs.",
+          "exam": "Firewall Layering: Packet Filter = Layers 3 & 4. Stateful Inspection = Layers 3, 4, & 5 (connection tracking). Application Gateway = Layer 7 (deep payload inspection, highest latency).",
+          "trap": "Exam Trap: A stateless packet filter cannot distinguish between an incoming packet initiating a malicious external connection and an incoming packet answering a legitimate internal request; stateful inspection solves this by tracking the TCP connection state table.",
+          "example": "An enterprise stateful firewall rule allows internal employees to browse external websites (`outgoing TCP port 80/443`); the firewall creates an entry in its state table and automatically permits incoming HTTP response packets from those external web servers while blocking unsolicited external scans.",
+          "q": "How does a Stateful Inspection firewall prevent unauthorized external inbound connections while permitting legitimate incoming replies to internal user requests?",
+          "a": "A Stateful Inspection firewall maintains a dynamic state table tracking all active outbound TCP/UDP sessions initiated by internal users. When an inbound packet arrives, the firewall checks its state table; if the packet matches an established outbound connection, it is allowed through; unsolicited incoming connection attempts are blocked."
+        },
+        {
+          "id": "cn_socket_programming",
+          "cat": "Sockets",
+          "title": "BERKELEY SOCKET PROGRAMMING API",
+          "sub": "Client-Server System Calls: socket, bind, listen, accept, connect",
+          "plain": "A socket is a software door through which programs push data into the network and pull data out. For a TCP server, you create a door (`socket`), assign it an address and port (`bind`), put it in waiting mode (`listen`), and sleep until a client knocks (`accept`). Clients just create a door and knock (`connect`).",
+          "def": "The Berkeley Sockets API (POSIX socket library) is the standard software interface for network inter-process communication: 1) TCP Server Workflow: `socket()` creates endpoint descriptor (AF_INET for IPv4, SOCK_STREAM for TCP). `bind()` associates socket with local IP address and port number. `listen()` transitions socket into passive listening state, specifying connection backlog queue size. `accept()` blocks until a client connects, returning a NEW connected socket descriptor specifically for that client session. `read()`/`write()` or `recv()`/`send()` exchange byte streams. `close()` terminates connection. 2) TCP Client Workflow: `socket()` creates endpoint, `connect()` initiates 3-way handshake with remote server IP/port, followed by `send()`/`recv()`. 3) UDP Workflow: uses `SOCK_DGRAM`; connectionless, communicating directly via `sendto()` and `recvfrom()` without `listen()` or `accept()`.",
+          "exam": "TCP Server call sequence: `socket()` -> `bind()` -> `listen()` -> `accept()` -> `recv()`/`send()` -> `close()`. Notice that `accept()` creates a SECOND socket descriptor dedicated to that specific client, freeing the listening socket to accept more connections.",
+          "trap": "Exam Trap: In a TCP server, `listen()` does NOT block; it merely configures the socket to receive incoming SYN packets. It is `accept()` that blocks execution until an incoming connection arrives.",
+          "example": "A simple Python TCP echo server executes `s = socket(AF_INET, SOCK_STREAM)`, `s.bind(('0.0.0.0', 8080))`, `s.listen(5)`, and inside an infinite loop calls `conn, addr = s.accept()`, handling each client on `conn` while `s` remains open for new callers.",
+          "q": "In a TCP server application using Berkeley sockets, what is the exact chronological sequence of system calls required to prepare for and accept incoming client connections?",
+          "a": "1) `socket()` (create the endpoint); 2) `bind()` (bind to local IP and port); 3) `listen()` (enter passive listening mode with a backlog queue); 4) `accept()` (block and wait to extract an incoming connection from the queue)."
+        },
+        {
+          "id": "cn_cdn_cloud",
+          "cat": "Application",
+          "title": "CONTENT DELIVERY NETWORKS (CDN) & CLOUD NETWORKING",
+          "sub": "Edge Caching, Points of Presence (PoPs), Anycast Routing & Origin Shielding",
+          "plain": "If a website's server is in California, a student in Guwahati has to wait 250 milliseconds for every image to cross the Pacific Ocean. A Content Delivery Network (CDN) copies images to hundreds of 'edge servers' around the world (including Guwahati or Kolkata). When you open the site, Anycast BGP routes you to the server 5 miles away, loading the page instantly.",
+          "def": "A Content Delivery Network (CDN) is a geographically distributed network of proxy servers and data centers (Points of Presence, PoPs) deployed at the edge of the Internet close to end users. Architecture principles: 1) Edge Caching: static assets (images, CSS, JS, video) are cached on local reverse-proxy edge nodes; origin servers are contacted only on cache misses. 2) Anycast BGP Routing: edge nodes in dozens of worldwide data centers advertise the exact same IP prefix via BGP; the Internet routing fabric naturally routes each user's packets to the topologically nearest PoP. 3) Origin Shielding & DDoS Mitigation: CDNs absorb massive traffic spikes and distributed denial-of-service volumetric attacks at the edge, shielding origin application infrastructure.",
+          "exam": "Key CDN technologies: Anycast Routing (same IP advertised from multiple locations via BGP), Reverse Proxy Caching (Nginx/Varnish at edge), and DNS-based Request Redirection (resolving domain to closest regional edge IP).",
+          "trap": "Exam Trap: CDNs excel at caching static assets and read-heavy media; dynamic personalized content (e.g., user account dashboards, bank balances) requires origin execution or edge computing workers.",
+          "example": "Cloudflare, Akamai, and AWS CloudFront terminate TLS connections at local Indian edge data centers in Mumbai, Chennai, and Kolkata, reducing Round-Trip Times for Indian internet users from 250 ms down to under 15 ms.",
+          "q": "How does BGP Anycast routing enable Content Delivery Networks (CDNs) to direct users automatically to the nearest geographic edge server?",
+          "a": "With Anycast, multiple geographically dispersed edge servers announce the exact same IP address block via BGP. Routers across the global Internet route packets along the shortest AS-PATH, naturally steering each client to the topologically closest edge data center."
+        },
+        {
+          "id": "cn_network_threats_attacks",
+          "cat": "Security",
+          "title": "NETWORK ATTACKS & DEFENSIVE MECHANISMS",
+          "sub": "SYN Flood DoS, IP Spoofing, ARP Poisoning, DNS Poisoning & DDoS",
+          "plain": "Networks face constant attacks: SYN Floods drown servers with half-open handshakes; IP Spoofing sends packets with fake return addresses; ARP Poisoning tricks local switches into sending your passwords to a hacker's laptop; and DNS Cache Poisoning redirects you from your real bank to a fake phishing website.",
+          "def": "Core network-layer attacks and defenses: 1) TCP SYN Flood: volumetric DoS attack where attacker sends floods of TCP SYN packets with forged source IPs; server allocates TCB buffers and responds with SYN-ACKs that are never completed, exhausting the half-open connection backlog queue. Defense: SYN Cookies (encodes connection state cryptographically into the initial sequence number without allocating memory buffers). 2) ARP Cache Poisoning (ARP Spoofing): attacker sends forged gratuitous ARP replies on a LAN associating their MAC address with the Default Gateway's IP, facilitating Man-in-the-Middle (MitM) eavesdropping. Defense: Dynamic ARP Inspection (DAI) and static ARP tables. 3) DNS Cache Poisoning: forging UDP DNS replies with malicious IP mappings before legitimate nameserver replies arrive. Defense: DNSSEC (cryptographically signed DNS resource records). 4) Distributed Denial of Service (DDoS): overwhelming network links using botnet amplification (e.g., NTP/DNS reflection attacks).",
+          "exam": "SYN Cookies defense: Server does NOT allocate state memory for incoming SYNs; instead, it hashes the client IP, port, and timestamp into the server's initial sequence number (ISN). Buffer memory is allocated ONLY when client returns the final valid ACK.",
+          "trap": "Exam Trap: A SYN Flood does not consume link bandwidth; it exhausts the target operating system's internal kernel memory table (the connection backlog queue).",
+          "example": "An attacker on a university Wi-Fi sends forged ARP packets claiming IP 192.168.1.1 (router) is at MAC `de:ad:be:ef:00:01` (attacker). All students' web traffic routes through the attacker's laptop, enabling packet sniffing.",
+          "q": "What mechanism allows a web server running SYN Cookies to defend against a TCP SYN Flood attack without crashing?",
+          "a": "When a SYN packet arrives, the server encodes all connection state parameters into the Initial Sequence Number (ISN) of the SYN-ACK response using a cryptographic hash, without allocating any memory in its half-open connection backlog queue. Memory is allocated only when the client returns a valid ACK carrying that encoded sequence number."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "What is the fundamental difference between an iterative DNS query and a recursive DNS query?",
+          "opts": [
+            "A recursive query forces the queried server to obtain the complete answer, while an iterative query returns the best referral nameserver.",
+            "An iterative query is used for IPv4, while a recursive query is used for IPv6.",
+            "A recursive query uses TCP, while an iterative query uses UDP.",
+            "An iterative query requires client authentication, while a recursive query is anonymous."
+          ],
+          "ans": 0,
+          "cat": "Application",
+          "correctFb": "In a recursive query, the contacted nameserver takes full responsibility for contacting other servers until it obtains the final IP answer. In an iterative query, the contacted server responds with the IP address of the next nameserver to ask if it does not know the answer.",
+          "distractors": [
+            "Both query types support IPv4 (A records) and IPv6 (AAAA records) equally.",
+            "Both iterative and recursive queries typically use UDP port 53.",
+            "Neither standard query requires authentication."
+          ]
+        },
+        {
+          "q": "Which HTTP header is utilized in HTTP/1.1 to keep an underlying TCP connection open for multiple sequential requests and responses?",
+          "opts": [
+            "Connection: keep-alive",
+            "Transfer-Encoding: chunked",
+            "Cache-Control: no-cache",
+            "Upgrade: websocket"
+          ],
+          "ans": 0,
+          "cat": "Application",
+          "correctFb": "`Connection: keep-alive` enables persistent connections in HTTP/1.1, allowing multiple HTTP requests and responses to traverse a single TCP socket connection without incurring repeated 3-way handshakes.",
+          "distractors": [
+            "Transfer-Encoding: chunked is used for streaming dynamic content whose total length is initially unknown.",
+            "Cache-Control: no-cache manages browser and proxy cache validation.",
+            "Upgrade: websocket is used to transition an HTTP connection to a full-duplex WebSocket."
+          ]
+        },
+        {
+          "q": "In standard Active Mode FTP, what port does the client connect to for control commands, and what port does the server use to initiate the data connection?",
+          "opts": [
+            "Port 21 for Control, Port 20 for Data",
+            "Port 20 for Control, Port 21 for Data",
+            "Port 80 for Control, Port 443 for Data",
+            "Port 25 for Control, Port 110 for Data"
+          ],
+          "ans": 0,
+          "cat": "Application",
+          "correctFb": "In Active FTP, the client initiates the control connection to server port 21. When a file transfer is requested, the server initiates the data connection from its port 20 back to the client's specified data port.",
+          "distractors": [
+            "Inverts the roles of Port 20 and Port 21.",
+            "Port 80 and 443 are for HTTP and HTTPS.",
+            "Port 25 is for SMTP and Port 110 is for POP3."
+          ]
+        },
+        {
+          "q": "Why is the Simple Mail Transfer Protocol (SMTP) unsuitable for retrieving incoming email messages from a central mailbox server to a user client?",
+          "opts": [
+            "SMTP is exclusively a push protocol designed for sending mail; retrieving mail requires a pull protocol like POP3 or IMAP.",
+            "SMTP does not support password authentication.",
+            "SMTP only operates over optical fiber links.",
+            "SMTP can only transmit binary files, not text."
+          ],
+          "ans": 0,
+          "cat": "Application",
+          "correctFb": "SMTP is strictly a push-based protocol designed to forward messages from a client to a server or between servers. It contains no commands to inspect or pull messages from a mailbox, which requires pull protocols like POP3 or IMAP.",
+          "distractors": [
+            "Modern SMTP supports authentication via SASL / AUTH commands.",
+            "SMTP is an application layer protocol operating over any IP network.",
+            "SMTP was originally 7-bit ASCII text only; binary attachments require MIME encoding."
+          ]
+        },
+        {
+          "q": "During the Transport Layer Security (TLS) handshake, what is the primary purpose of the asymmetric public-key cryptography step?",
+          "opts": [
+            "To authenticate the server's digital certificate and securely exchange a shared symmetric session key.",
+            "To encrypt all user application payload data throughout the entire web session.",
+            "To generate a 48-bit MAC address for the client.",
+            "To eliminate the need for TCP sequence numbers."
+          ],
+          "ans": 0,
+          "cat": "Security",
+          "correctFb": "Asymmetric cryptography verifies the identity of the server (using its Certificate Authority signature) and allows both parties to agree securely on a shared secret (Pre-Master Secret) without eavesdroppers learning it. That secret generates symmetric session keys for fast bulk encryption.",
+          "distractors": [
+            "Bulk application data is encrypted using symmetric cryptography (e.g., AES-GCM) because asymmetric encryption is far too slow.",
+            "MAC addresses belong to Layer 2 physical network hardware and are unrelated to TLS.",
+            "TCP sequence numbers are required by the transport layer regardless of TLS encryption."
+          ]
+        },
+        {
+          "q": "Which type of firewall operates at Layer 7 of the OSI model, inspecting the entire application payload including HTTP methods and SQL command strings?",
+          "opts": [
+            "Application-Level Gateway (Proxy Firewall)",
+            "Stateless Packet Filtering Firewall",
+            "Circuit-Level Gateway",
+            "Dynamic Packet Filter"
+          ],
+          "ans": 0,
+          "cat": "Security",
+          "correctFb": "An Application-Level Gateway (Proxy Firewall) terminates connections at Layer 7, inspecting application-specific commands, request headers, and payload contents to detect attacks like SQL injection and cross-site scripting.",
+          "distractors": [
+            "Stateless packet filters operate at Layers 3 and 4, inspecting only IP addresses and port numbers.",
+            "Circuit-level gateways operate at Layer 5, validating TCP handshakes without inspecting application payloads.",
+            "Dynamic packet filters track transport connection states, but do not parse Layer 7 application data."
+          ]
+        },
+        {
+          "q": "In a TCP server application implemented using the Berkeley sockets API, what is the exact chronological sequence of system calls executed prior to exchanging data?",
+          "opts": [
+            "socket() -> bind() -> listen() -> accept()",
+            "socket() -> listen() -> bind() -> accept()",
+            "socket() -> connect() -> bind() -> listen()",
+            "bind() -> socket() -> accept() -> listen()"
+          ],
+          "ans": 0,
+          "cat": "Sockets",
+          "correctFb": "The server must first create the socket endpoint with `socket()`, bind it to a local IP address and port with `bind()`, turn it into a passive listening socket with `listen()`, and then call `accept()` to wait for and accept incoming client connections.",
+          "distractors": [
+            "`listen()` cannot be called before the socket is bound to a specific port via `bind()`.",
+            "`connect()` is called by the TCP client, not the TCP server.",
+            "`socket()` must be called first to obtain a socket descriptor before calling `bind()`."
+          ]
+        },
+        {
+          "q": "Why does the Domain Name System (DNS) use UDP port 53 for standard lookups, but switch to TCP port 53 for Zone Transfers?",
+          "opts": [
+            "UDP offers low latency and minimal overhead for small single-packet queries, while Zone Transfers require TCP reliability for large database replication.",
+            "UDP is secure against eavesdropping, while TCP is unencrypted.",
+            "Root nameservers support only TCP, while TLD servers support only UDP.",
+            "TCP is faster than UDP for single-packet lookups under 512 bytes."
+          ],
+          "ans": 0,
+          "cat": "Application",
+          "correctFb": "Standard DNS lookups fit in a single packet and benefit from UDP's zero-handshake speed. Zone transfers replicate entire DNS zone files between primary and secondary servers, requiring TCP's reliability, segmentation, and congestion control.",
+          "distractors": [
+            "Standard UDP and standard TCP are both unencrypted; security requires DoH/DoT or DNSSEC.",
+            "Root and TLD servers support both UDP and TCP on port 53.",
+            "TCP requires a 3-way handshake, making it slower than UDP for small single-packet transactions."
+          ]
+        },
+        {
+          "q": "Which routing technique allows a Content Delivery Network (CDN) to announce the identical IP address from multiple edge data centers across the globe, directing users to the topologically closest server?",
+          "opts": [
+            "BGP Anycast Routing",
+            "OSPF Multicast Routing",
+            "Unicast Reverse Path Forwarding",
+            "RIP Broadcast Routing"
+          ],
+          "ans": 0,
+          "cat": "Application",
+          "correctFb": "BGP Anycast allows multiple data centers across the globe to advertise the same IP block. Internet routers naturally route packets along the shortest path in the global BGP routing graph, steering each user to the closest edge server.",
+          "distractors": [
+            "OSPF is an interior gateway protocol used inside single private autonomous systems, not across global CDNs.",
+            "Unicast RPF is an anti-spoofing security check, not a content distribution routing method.",
+            "RIP Broadcast routing is a legacy internal routing protocol restricted to 15 hops."
+          ]
+        },
+        {
+          "q": "What specific operating system resource is exhausted by an attacker during a TCP SYN Flood Denial of Service (DoS) attack?",
+          "opts": [
+            "The server's half-open connection backlog queue memory",
+            "The physical bandwidth of the network interface card",
+            "The client's dynamic ephemeral port pool",
+            "The server's local DNS resolution cache"
+          ],
+          "ans": 0,
+          "cat": "Security",
+          "correctFb": "A TCP SYN Flood sends floods of SYN packets with spoofed source IPs. The server allocates a Transmission Control Block (TCB) for each SYN in its connection backlog queue; because the 3-way handshake is never finished, the queue fills completely, causing the server to reject all new legitimate connections.",
+          "distractors": [
+            "A SYN flood can incapacitate a server with relatively low packet volume without saturating physical line bandwidth.",
+            "The client's ephemeral port pool is unaffected because the attacker uses spoofed IP addresses.",
+            "DNS cache is not involved in handling inbound TCP connection setup."
+          ]
+        }
+      ],
+      "bossChallenges": [
+        {
+          "marks": 10,
+          "scenario": "[10 MARKS] University Exam Question: Formally analyze the architecture, security protocols, and programming interfaces of the Application Layer. Compare iterative versus recursive DNS resolution along with DNS resource record types, trace the evolution of HTTP from HTTP/1.0 non-persistent connections to HTTP/2 multiplexed binary streams and HTTP/3 QUIC, detail the cryptographic handshake of TLS 1.3 establishing an HTTPS session, and trace the lifecycle of a multi-threaded TCP server using the Berkeley Sockets API.",
+          "rubric": [
+            "Criterion 1 (2.5 Marks): Comprehensive explanation of DNS hierarchical namespace resolution (Root, TLD, Authoritative, Iterative vs Recursive queries) and core Resource Records (A, AAAA, CNAME, MX, NS).",
+            "Criterion 2 (2.5 Marks): Technical analysis of HTTP evolution covering HTTP/1.0 latency bottlenecks, HTTP/1.1 persistent connections with pipelining, HTTP/2 binary framing and multiplexing, and HTTP/3 QUIC UDP foundations.",
+            "Criterion 3 (2.5 Marks): Step-by-step cryptographic trace of the TLS handshake, detailing certificate authentication, asymmetric key exchange (RSA/ECDHE), Pre-Master Secret derivation, and symmetric bulk encryption (AES-GCM).",
+            "Criterion 4 (2.5 Marks): Complete Berkeley Sockets client-server programming lifecycle, detailing the chronological system call sequence (socket, bind, listen, accept, connect, send, recv) and socket descriptor management."
+          ]
+        },
+        {
+          "marks": 5,
+          "scenario": "[5 MARKS] Practical Problem-Solving Scenario: A major university web portal experiences a sustained TCP SYN Flood attack and intermittent DNS Cache Poisoning attempts, causing complete service outages during semester exam registration. How would a network security engineer diagnose the attack vectors, harden the server kernel against half-open connection exhaustion using SYN Cookies, and implement DNSSEC and stateful firewall filtering to restore and safeguard service availability?",
+          "rubric": [
+            "Criterion 1 (1.25 Marks): Root cause diagnosis of TCP SYN Flood mechanics explaining half-open connection backlog queue exhaustion and forged source IP spoofing.",
+            "Criterion 2 (1.25 Marks): Deep technical explanation of SYN Cookies defense, detailing cryptographic encoding of connection state parameters into the Initial Sequence Number (ISN) without allocating server TCB memory.",
+            "Criterion 3 (1.25 Marks): Mitigation of DNS Cache Poisoning through deployment of Domain Name System Security Extensions (DNSSEC), cryptographic RRSIG validation, and randomized source ports.",
+            "Criterion 4 (1.25 Marks): Stateful firewall policy configuration establishing Demilitarized Zone (DMZ) isolation, rate limiting inbound SYN packets, and dropping unsolicited external connection states."
+          ]
+        }
+      ]
+    }
+  ]
+}

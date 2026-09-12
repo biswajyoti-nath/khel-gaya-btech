@@ -6,7 +6,13 @@
   "scripts": {
     "dev": "npx -y serve . -l 3000",
     "start": "npx -y serve . -l 3000",
-    "test": "node -e \"console.log('Validating project files...'); require('fs').readFileSync('index.html'); require('fs').readFileSync('js/curriculum.js'); console.log('All files intact!')\"",
+    "test": "node --test tests/**/*.test.js",
+    "validate": "node scripts/validate-curriculum.js",
+    "sync": "node scripts/sync-curriculum.js",
+    "test:schema": "node --test tests/curriculum-schema.test.js",
+    "test:coverage": "node --test tests/curriculum-coverage.test.js",
+    "test:boss": "node --test tests/boss-rubric.test.js",
+    "test:sync": "node --test tests/app-sync.test.js",
     "engine": "python3 gamify_engine.py --interactive",
     "list-syllabus": "python3 gamify_engine.py --list"
   },

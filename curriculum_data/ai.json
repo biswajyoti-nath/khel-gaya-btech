@@ -1,0 +1,1663 @@
+{
+  "id": "ai",
+  "code": "CS241501",
+  "title": "Artificial Intelligence",
+  "icon": "🤖",
+  "modules": [
+    {
+      "id": "m1",
+      "num": 1,
+      "title": "Introduction to Artificial Intelligence and Intelligent Agents",
+      "topics": [
+        {
+          "id": "ai_turing_test",
+          "cat": "Foundations",
+          "title": "THE TURING TEST & CHINESE ROOM ARGUMENT",
+          "sub": "Operational Intelligence vs Intentionality & Semantics",
+          "plain": "Alan Turing proposed that if a human interrogator cannot distinguish between a machine and a human via text-only chat, the machine is intelligent. John Searle countered with the Chinese Room thought experiment: an English speaker following rulebooks to translate Chinese symbols outputs correct answers without understanding Chinese, proving syntax is not semantics.",
+          "def": "The Turing Test (1950) is an operational behavioral test for machine intelligence based on whether an evaluator can reliably distinguish natural language responses of a machine from a human. John Searle's Chinese Room argument (1980) refutes Strong AI by proving that purely syntactic symbol manipulation cannot produce semantic intentionality or consciousness.",
+          "exam": "Turing Test = Operational test for behavioral equivalence. Chinese Room = Syntax alone does NOT constitute semantics (refutes Strong AI).",
+          "trap": "Exam Trap: Passing the Turing Test does NOT prove consciousness or intentionality; it only demonstrates indistinguishable behavioral imitation.",
+          "example": "Modern Large Language Models generating fluent conversational answers without conscious comprehension illustrate the syntax-without-semantics premise of Searle's Chinese Room.",
+          "q": "What core philosophical limitation of the Turing Test does John Searle's Chinese Room thought experiment demonstrate?",
+          "a": "It demonstrates that syntactic manipulation of formal symbols does not produce semantic understanding or intentionality; behavioral imitation does not equal genuine mental comprehension."
+        },
+        {
+          "id": "ai_rationality_peas",
+          "cat": "Agents",
+          "title": "RATIONALITY & PEAS SPECIFICATION",
+          "sub": "Maximizing Expected Performance vs Omniscience",
+          "plain": "A rational agent always chooses the action that gives the best expected score based on what it has sensed so far and its background knowledge. Rationality is not omniscience—it maximizes expected performance, not lucky hindsight. PEAS formally defines the task: Performance measure, Environment, Actuators, and Sensors.",
+          "def": "A rational agent is an entity that selects actions to maximize its expected performance measure given its percept sequence history and built-in knowledge. Rationality depends on: (1) performance measure, (2) prior knowledge, (3) available actions, and (4) percept sequence. PEAS defines: Performance measure, Environment, Actuators, and Sensors.",
+          "exam": "PEAS acronym: Performance measure (evaluation standard), Environment (world), Actuators (output devices), Sensors (input devices). Rationality maximizes EXPECTED performance.",
+          "trap": "Exam Trap: Never define performance measures in terms of the agent's internal behavior; performance must measure desired effects in the external environment.",
+          "example": "Automated Taxi: Performance = Safe, quick, legal trip, maximum profits; Environment = Roads, traffic, pedestrians, weather; Actuators = Steering, accelerator, brake, horn; Sensors = Video cameras, LiDAR, GPS, speedometer.",
+          "q": "What are the four components of a PEAS agent specification, and why is rationality distinct from omniscience?",
+          "a": "PEAS defines Performance measure, Environment, Actuators, and Sensors. Rationality maximizes EXPECTED performance based on current percept history, whereas omniscience requires knowing the actual future outcome."
+        },
+        {
+          "id": "ai_agent_architectures",
+          "cat": "Agents",
+          "title": "AGENT ARCHITECTURES & CLASSIFICATION",
+          "sub": "Simple Reflex, Model-Based, Goal-Based, Utility-Based, Learning Agents",
+          "plain": "Agents range from simple to sophisticated: Simple Reflex reacts directly to the immediate percept (if-then rules). Model-Based tracks the unseen world using internal state. Goal-Based acts to achieve a specific target. Utility-Based balances conflicting goals by maximizing a happiness score. Learning Agents improve their performance over time.",
+          "def": "AI agents are organized into five primary architectural paradigms: (1) Simple Reflex Agents (condition-action rules on current percept); (2) Model-Based Reflex Agents (maintain internal state capturing unobserved environmental dynamics); (3) Goal-Based Agents (incorporate goal descriptions to guide action selection); (4) Utility-Based Agents (use utility functions to evaluate tradeoffs among competing goals); (5) Learning Agents (separate learning and performance elements).",
+          "exam": "Simple Reflex = Condition-action rules on current percept. Model-Based = Internal state tracking history. Goal-Based = Search/planning toward target. Utility-Based = Tradeoff optimization.",
+          "trap": "Exam Trap: A simple reflex agent cannot operate rationally in partially observable environments because it lacks memory of unobserved environmental changes.",
+          "example": "A household thermostat switching heating on when temperature < 18C is a simple reflex agent; an autonomous rover balancing battery life against rock sample collection is a utility-based agent.",
+          "q": "Why is a Model-Based Reflex Agent capable of rational behavior in partially observable environments where a Simple Reflex Agent fails?",
+          "a": "A Model-Based agent maintains an internal state using a transition model of the world, allowing it to remember past percepts and infer unobserved aspects of the current world state."
+        },
+        {
+          "id": "ai_environment_properties",
+          "cat": "Environment",
+          "title": "ENVIRONMENT CLASSIFICATIONS & TAXONOMY",
+          "sub": "Observable, Deterministic, Episodic, Static, Discrete, Multi-Agent",
+          "plain": "Environments dictate the difficulty of designing an AI agent. They are classified along six axes: Fully vs Partially Observable (can you see all states?), Deterministic vs Stochastic (does an action guarantee the next state?), Episodic vs Sequential (do past actions affect future steps?), Static vs Dynamic (does the world change while thinking?), Discrete vs Continuous, and Single vs Multi-agent.",
+          "def": "Agent task environments are formally classified across six orthogonal dimensions: (1) Fully observable vs Partially observable (sensor access to complete state); (2) Single-agent vs Multi-agent (competitive/cooperative entities); (3) Deterministic vs Stochastic (next state completely determined by current state and action); (4) Episodic vs Sequential (current decision affects future decisions); (5) Static vs Dynamic (world changes during deliberation); (6) Discrete vs Continuous (finite states and percepts).",
+          "exam": "Hardest environment: Partially observable, multi-agent, stochastic, sequential, dynamic, continuous (e.g. urban autonomous vehicle driving).",
+          "trap": "Exam Trap: Semidynamic means the environment itself does not change over time, but the agent's performance score does (e.g. chess with a timed clock).",
+          "example": "Crossword puzzle: Fully observable, deterministic, sequential, static, discrete, single-agent. Automated taxi driving: Partially observable, stochastic, sequential, dynamic, continuous, multi-agent.",
+          "q": "Classify the task environment of playing a standard tournament chess game with a time clock across the six standard dimensions.",
+          "a": "Fully observable (board visible), multi-agent (competitive opponent), deterministic (moves have exact rules), sequential (each move impacts future game), semidynamic (clock ticks while thinking), and discrete (finite board squares and moves)."
+        },
+        {
+          "id": "ai_state_space_formulation",
+          "cat": "Problem Formulation",
+          "title": "STATE SPACE SEARCH & PROBLEM FORMULATION",
+          "sub": "5-Tuple Problem Formulation: Initial State, Actions, Transition, Goal, Cost",
+          "plain": "To solve a problem with AI, you turn it into a graph where each node is a situation (state) and edges are moves (actions). You define: where you start, what moves are allowed, where each move leads, how to tell if you won, and the cost of each step. A solution is a path of actions leading from start to goal.",
+          "def": "A problem in state space search is formally defined as a 5-tuple: (1) Initial State $s_0$; (2) Actions$(s)$ returning legal actions in state $s$; (3) Transition Model $\\text{Result}(s, a)$ returning the successor state; (4) Goal Test predicate determining whether a state satisfies objective criteria; (5) Path Cost function $c(s, a, s')$ assigning numeric step costs, with path cost being the sum of step costs.",
+          "exam": "Problem Formulation 5-Tuple: Initial State, Actions, Transition Model, Goal Test, Path Cost. Solution = sequence of actions from initial state to goal state.",
+          "trap": "Exam Trap: Do not confuse the state space with the search tree; the state space is the graph of distinct physical configurations, while the search tree can contain infinite redundant nodes due to loops.",
+          "example": "Route finding from Arad to Bucharest: Initial State = In(Arad), Actions = {Go(Zerind), Go(Sibiu), Go(Timisoara)}, Transition Model = Result(Arad, Go(Sibiu)) = Sibiu, Goal Test = State == Bucharest, Path Cost = road distance in kilometers.",
+          "q": "What are the five formal components required to formulate a problem as a state space search in Artificial Intelligence?",
+          "a": "Initial state, set of valid actions, transition model (Result function), goal test predicate, and step/path cost function."
+        },
+        {
+          "id": "ai_8_puzzle_problem",
+          "cat": "Problem Formulation",
+          "title": "8-PUZZLE PROBLEM & INVERSION PARITY",
+          "sub": "State Representation, Solvability & Heuristic Evaluation",
+          "plain": "The 8-puzzle is a 3x3 grid with 8 numbered tiles and one blank space. You slide tiles to reach a goal. Out of 9! = 362,880 possible tile arrangements, exactly half (181,440) are solvable because sliding tiles preserves the even/odd parity of tile inversions. Common heuristics include misplaced tiles and Manhattan distance.",
+          "def": "The 8-puzzle is a classical benchmark state space search problem consisting of a $3 \\times 3$ board with 8 numbered tiles and an empty space. Operators slide an adjacent tile into the blank position (Up, Down, Left, Right). The state space partitions into two disjoint sets of size $9!/2 = 181,440$ reachable states, governed by the invariant parity of inversions.",
+          "exam": "8-puzzle state space size = $9!/2 = 181,440$ reachable states. Inversions: pair of tiles $(a, b)$ where $a > b$ but $a$ appears before $b$ in row-major order.",
+          "trap": "Exam Trap: An 8-puzzle state cannot be solved if its inversion parity does not match the goal state's inversion parity; horizontal moves preserve inversions, and vertical moves change inversions by $\\pm 2$.",
+          "example": "State [1, 2, 3, 4, 5, 6, 8, 7, _] has 1 inversion (8 before 7); if the goal has 0 inversions, this state is mathematically unsolvable.",
+          "q": "Why is exactly half of the 9! (362,880) total configurations of the 8-puzzle unreachable from a given start state?",
+          "a": "Because legal tile movements preserve the inversion parity of the board (horizontal moves leave inversions unchanged, vertical moves change inversions by 0, +2, or -2), splitting the state space into two disconnected graphs."
+        },
+        {
+          "id": "ai_water_jug_problem",
+          "cat": "Problem Formulation",
+          "title": "WATER JUG PROBLEM & DIOPHANTINE SOLVABILITY",
+          "sub": "Production Rules, State Constraints & GCD Solvability",
+          "plain": "You have two unmarked jugs of capacities X and Y and a tap. You want to measure exactly Z liters. You can fill a jug, empty it, or pour from one to another until full or empty. By number theory (Bézout's identity), you can measure Z liters if and only if Z is less than or equal to the larger jug and Z is a multiple of gcd(X, Y).",
+          "def": "The Water Jug Problem is a state space search problem represented by ordered pairs $(x, y)$ constrained by $0 \\le x \\le X$ and $0 \\le y \\le Y$. Production rules model filling, emptying, and pouring operations. By Bézout's identity for linear Diophantine equations, a target volume $Z$ is measurable if and only if $Z \\le \\max(X, Y)$ and $Z \\pmod{\\gcd(X, Y)} = 0$.",
+          "exam": "Solvability condition: $Z \\le \\max(X, Y)$ AND $Z \\pmod{\\gcd(X, Y)} == 0$. If $\\gcd(4, 2) = 2$, measuring 3 liters is mathematically impossible.",
+          "trap": "Exam Trap: You cannot partially pour arbitrary volumes; pouring only ceases when the target jug becomes completely full or the source jug becomes completely empty.",
+          "example": "Measuring 2 liters using a 4-liter jug and 3-liter jug: (0,0) -> Fill 3L (0,3) -> Pour into 4L (3,0) -> Fill 3L (3,3) -> Pour into 4L until full (4,2) -> exactly 2 liters remain in the 3L jug.",
+          "q": "State the necessary and sufficient mathematical condition under which a Water Jug problem with capacities X and Y can measure target volume Z.",
+          "a": "A target volume $Z$ can be measured if and only if $Z \\le \\max(X, Y)$ and $Z$ is an exact integer multiple of the greatest common divisor of $X$ and $Y$ ($Z \\pmod{\\gcd(X, Y)} == 0$)."
+        },
+        {
+          "id": "ai_missionaries_cannibals",
+          "cat": "Problem Formulation",
+          "title": "MISSIONARIES & CANNIBALS PROBLEM",
+          "sub": "State Constraint Satisfaction & Dead-End Pruning",
+          "plain": "Three missionaries and three cannibals must cross a river using a two-person boat. If cannibals ever outnumber missionaries on either bank, the missionaries get eaten! The AI must search the state space while immediately pruning any state where missionaries are outnumbered and eaten.",
+          "def": "The Missionaries and Cannibals problem is a constraint-satisfaction state space search problem. States are represented as tuples $\\langle M_L, C_L, B \\rangle$ denoting missionaries on left bank, cannibals on left bank, and boat position. The core constraint is: if $M_L > 0$, then $M_L \\ge C_L$; and if $M_R > 0$, then $M_R \\ge C_R$. Unsafe states are immediately pruned.",
+          "exam": "Constraint: $M \\ge C$ on either bank whenever $M > 0$. Minimal solution requires exactly 11 boat crossings.",
+          "trap": "Exam Trap: Cannibals CAN outnumber missionaries on a bank if the number of missionaries on that bank is ZERO (since there are no missionaries to be eaten).",
+          "example": "State (3, 1, 0) is valid because 3 missionaries >= 1 cannibal on the left bank, and 0 missionaries on the right bank cannot be harmed by the 2 cannibals there.",
+          "q": "What is the safety constraint in the Missionaries and Cannibals problem, and under what condition may cannibals outnumber missionaries on a bank?",
+          "a": "Missionaries must never be outnumbered by cannibals on either bank of the river unless the missionary count on that bank is zero (since zero missionaries cannot be eaten)."
+        },
+        {
+          "id": "ai_vacuum_world",
+          "cat": "Problem Formulation",
+          "title": "VACUUM CLEANER WORLD & ABSTRACTION",
+          "sub": "State Abstraction, Table-Driven Failure & Reflex Rules",
+          "plain": "In a simple 2-room vacuum cleaner world, there are 2 locations and 2 dirt states per room, giving $2 \\times 2^2 = 8$ possible states. But if you try to build a table storing every possible sequence of percepts over time, the table size grows exponentially ($4^T$), proving that lookup tables fail and state abstraction is essential.",
+          "def": "The Vacuum Cleaner World is a canonical discrete AI environment defined by agent location and cleanliness of $n$ rooms, yielding $n \\times 2^n$ total world states. Table-driven agents mapping percept sequences to actions require exponential space $\\sum_{t=1}^T |P|^t$, demonstrating why reflex rules and state abstraction are necessary in intelligent agent design.",
+          "exam": "State space size for n rooms = $n \\times 2^n$. Percept: [Location, Status] e.g. [A, Dirty]. Legal actions: {Left, Right, Suck, NoOp}.",
+          "trap": "Exam Trap: A table-driven agent can implement any rational agent function over finite horizons, but is utterly impractical due to combinatorial explosion of table entries.",
+          "example": "For an 8-room vacuum world, there are $8 \\times 2^8 = 8 \\times 256 = 2,048$ distinct states. A simple reflex rule: 'if [current_room == Dirty] then Suck else move_next' requires almost zero memory.",
+          "q": "Calculate the total number of distinct world states for a vacuum cleaner agent operating in a world with 4 discrete rooms, where each room can be clean or dirty.",
+          "a": "The total number of states is $4 \\times 2^4 = 4 \\times 16 = 64$ states (4 possible agent locations multiplied by $2^4 = 16$ cleanliness permutations)."
+        },
+        {
+          "id": "ai_state_space_explosion",
+          "cat": "Complexity",
+          "title": "STATE SPACE EXPLOSION & BRANCHING FACTOR",
+          "sub": "Combinatorial Explosion, Branching Factor b & Search Depth d",
+          "plain": "In search trees, every step branches out into multiple choices. If an agent has an average of $b$ moves at each state and the solution is at depth $d$, the search tree generates roughly $O(b^d)$ nodes. This exponential growth is called combinatorial explosion and makes blind search impossible for complex games like chess.",
+          "def": "State space explosion is the exponential growth of the search tree size as a function of branching factor $b$ (average number of successors per node) and depth $d$, generating $1 + b + b^2 + \\dots + b^d = O(b^d)$ nodes. This exponential time and space complexity necessitates heuristic search algorithms, pruning techniques, and problem decomposition.",
+          "exam": "Total nodes generated in search tree of uniform branching factor $b$ and depth $d$: $O(b^d)$. For chess, $b \\approx 35, d \\approx 80 \\implies 10^{120}$ states (Shannon number).",
+          "trap": "Exam Trap: Effective branching factor $b^*$ measures heuristic pruning efficiency; an ideal heuristic reduces $b^*$ close to 1.",
+          "example": "In a game with branching factor $b = 4$ and solution depth $d = 10$, blind search explores $4^{10} \\approx 1,048,576$ nodes; at depth 20, it requires over $10^{12}$ nodes.",
+          "q": "In state space search complexity analysis, what does the branching factor 'b' represent and what is the total node count at depth 'd'?",
+          "a": "The branching factor 'b' represents the average number of successor nodes generated per state. The number of nodes at depth $d$ is $b^d$, and the cumulative tree size is $O(b^d)$."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "What core philosophical argument did John Searle advance through the Chinese Room thought experiment regarding the Turing Test?",
+          "opts": [
+            "Computers can never process human natural languages correctly",
+            "Syntactic symbol manipulation according to rules does not constitute semantic understanding",
+            "The Turing Test can only evaluate non-deterministic machines",
+            "Machines cannot store enough data to imitate human conversations"
+          ],
+          "ans": 1,
+          "cat": "Foundations",
+          "correctFb": "Searle proved that executing formal syntactic rules to manipulate symbols does not create genuine semantic understanding or intentionality.",
+          "distractors": [
+            "Computers routinely process natural languages effectively via statistical and grammatical parsers.",
+            "The Turing Test is independent of whether the underlying machine is deterministic or probabilistic.",
+            "Storage capacity is an engineering constraint, not the philosophical limitation highlighted by Searle."
+          ]
+        },
+        {
+          "q": "Under standard AI definitions, why is an intelligent agent's rationality strictly distinguished from omniscience?",
+          "opts": [
+            "Rationality maximizes expected performance given past percepts, whereas omniscience requires knowing actual future outcomes",
+            "Rational agents must be completely deterministic whereas omniscient agents are stochastic",
+            "Omniscient agents only follow simple reflex condition-action rules",
+            "Rationality requires infinite computing resources whereas omniscience operates with zero memory"
+          ],
+          "ans": 0,
+          "cat": "Agents",
+          "correctFb": "Rationality evaluates action selection based on expected success given the available percept sequence and knowledge, not impossible future perfection.",
+          "distractors": [
+            "Rational agents can be deterministic or stochastic depending on the environment.",
+            "Omniscient agents possess complete truth, whereas simple reflex agents have minimal memory.",
+            "Rational agents operate under finite computing constraints; omniscience is an epistemological concept."
+          ]
+        },
+        {
+          "q": "In the PEAS specification framework for an automated hospital patient diagnosis system, what constitutes the Performance Measure?",
+          "opts": [
+            "Keyboard, mouse, and patient sensor telemetry",
+            "Display screen, printed prescription, and medicine dispenser",
+            "Patient health recovery rate, diagnostic accuracy, and minimal treatment costs",
+            "Patient, hospital rooms, nursing staff, and pharmacy"
+          ],
+          "ans": 2,
+          "cat": "Agents",
+          "correctFb": "The Performance Measure defines the external success criteria: maximizing patient recovery and diagnosis accuracy while minimizing costs and complications.",
+          "distractors": [
+            "Keyboard and sensor telemetry are Sensors, not the Performance Measure.",
+            "Display screen and medicine dispenser are Actuators, not the Performance Measure.",
+            "Patient, hospital rooms, and staff form the Environment, not the Performance Measure."
+          ]
+        },
+        {
+          "q": "Which agent architecture maintains an internal state to track unobserved aspects of a partially observable environment?",
+          "opts": [
+            "Simple Reflex Agent",
+            "Model-Based Reflex Agent",
+            "Table-Driven Agent",
+            "Pure Reactive Agent"
+          ],
+          "ans": 1,
+          "cat": "Agents",
+          "correctFb": "Model-based reflex agents maintain internal state using a model of how the environment evolves and how actions affect the world.",
+          "distractors": [
+            "Simple reflex agents operate strictly on the current percept, ignoring history.",
+            "Table-driven agents store brute-force lookup tables that fail due to combinatorial explosion.",
+            "Pure reactive agents lack internal memory and state representations."
+          ]
+        },
+        {
+          "q": "How is the task environment of playing a tournament game of chess with a time clock classified along standard dimensions?",
+          "opts": [
+            "Partially observable, stochastic, episodic, dynamic, continuous, single-agent",
+            "Fully observable, deterministic, sequential, static, continuous, multi-agent",
+            "Partially observable, deterministic, episodic, static, discrete, single-agent",
+            "Fully observable, deterministic, sequential, semidynamic, discrete, multi-agent"
+          ],
+          "ans": 3,
+          "cat": "Environment",
+          "correctFb": "Chess with a clock is fully observable (board seen), deterministic (moves have exact rules), sequential, semidynamic (clock runs while thinking), discrete, and multi-agent.",
+          "distractors": [
+            "Chess is fully observable and deterministic, not partially observable or stochastic.",
+            "Tournament chess with a clock is semidynamic because the clock ticks while deliberating, and is discrete, not continuous.",
+            "Chess is sequential and competitive multi-agent, not episodic or single-agent."
+          ]
+        },
+        {
+          "q": "Which of the following is NOT one of the five formal components of an AI state space problem formulation?",
+          "opts": [
+            "Initial State",
+            "Transition Model",
+            "Hardware Clock Speed",
+            "Goal Test Predicate"
+          ],
+          "ans": 2,
+          "cat": "Problem Formulation",
+          "correctFb": "The 5-tuple problem formulation consists of Initial State, Actions, Transition Model, Goal Test, and Path Cost; hardware clock speed is an implementation detail.",
+          "distractors": [
+            "Initial State is a mandatory component of the 5-tuple.",
+            "Transition Model defines the Result function and is mandatory.",
+            "Goal Test Predicate determines if a state achieves the objective and is mandatory."
+          ]
+        },
+        {
+          "q": "Why is a given 8-puzzle configuration mathematically guaranteed to be unsolvable if its inversion count parity is odd and the goal parity is even?",
+          "opts": [
+            "Horizontal moves alter the parity by +1",
+            "The blank space cannot slide into corners",
+            "Legal tile moves can only change the inversion count by 0, +2, or -2, preserving parity",
+            "The heuristic Manhattan distance becomes negative"
+          ],
+          "ans": 2,
+          "cat": "Problem Formulation",
+          "correctFb": "Sliding a tile horizontally does not change inversions; sliding vertically jumps two positions, changing inversions by 0 or +/-2, strictly preserving inversion parity.",
+          "distractors": [
+            "Horizontal moves leave tile order unchanged, changing inversions by exactly 0, not 1.",
+            "The blank space can freely move into corner squares if adjacent.",
+            "Manhattan distance is a non-negative geometric metric and never becomes negative."
+          ]
+        },
+        {
+          "q": "Under what condition can two unmarked water jugs of capacities X and Y measure exactly Z liters of water?",
+          "opts": [
+            "Z must equal (X + Y) / 2",
+            "Z <= max(X, Y) and Z must be an integer multiple of gcd(X, Y)",
+            "X and Y must both be prime numbers",
+            "Z must be strictly greater than X * Y"
+          ],
+          "ans": 1,
+          "cat": "Problem Formulation",
+          "correctFb": "By Bézout's identity for linear Diophantine equations, water jug operations can only produce multiples of gcd(X, Y) bounded by jug capacity.",
+          "distractors": [
+            "Z does not need to equal the arithmetic mean of X and Y.",
+            "X and Y do not need to be prime; composite numbers like 4 and 6 can measure 2 liters.",
+            "Z cannot exceed the capacity of the largest jug, making Z > X*Y impossible."
+          ]
+        },
+        {
+          "q": "What primary advantage does a Utility-Based Agent have over a Goal-Based Agent?",
+          "opts": [
+            "It uses less memory than a goal-based agent",
+            "It can make rational tradeoffs when goals conflict or have varying probabilities of success",
+            "It never requires a transition model of the environment",
+            "It operates purely using condition-action reflex tables"
+          ],
+          "ans": 1,
+          "cat": "Agents",
+          "correctFb": "Utility functions map states to real numbers, allowing the agent to rationally trade off between conflicting goals and weigh risks against expected rewards.",
+          "distractors": [
+            "Utility-based agents typically require equal or more memory to compute utility functions.",
+            "Utility-based agents still rely on transition models to predict future states.",
+            "Reflex tables belong to simple reflex agents, not utility-based agents."
+          ]
+        },
+        {
+          "q": "If a search tree has a uniform branching factor of b and a goal state is located at depth d, what is the asymptotic time complexity of exhaustive Breadth-First Search?",
+          "opts": [
+            "O(b^d)",
+            "O(b * d)",
+            "O(d^b)",
+            "O(b + d)"
+          ],
+          "ans": 0,
+          "cat": "Complexity",
+          "correctFb": "Breadth-First Search generates all nodes level by level, producing 1 + b + b^2 + ... + b^d = O(b^d) nodes.",
+          "distractors": [
+            "O(b * d) is linear space complexity characteristic of Depth-First Search, not BFS time.",
+            "O(d^b) inverts the base and exponent, which is mathematically incorrect.",
+            "O(b + d) is linear and severely underestimates exponential search tree branching."
+          ]
+        }
+      ],
+      "bossChallenges": [
+        {
+          "marks": 10,
+          "scenario": "[10 MARKS] University Exam Question: Formulate the Missionaries and Cannibals problem as a formal State Space Search problem. Provide the 5-tuple specification, explicitly define the safety constraints, draw the reachable state space graph from start to goal, and explain how the agent prunes dead-end states.",
+          "rubric": [
+            "Criterion 1 (2.5 Marks): Formal 5-tuple problem formulation (Initial state <3,3,1>, Action set, Transition model, Goal test <0,0,0>, Step cost = 1).",
+            "Criterion 2 (2.5 Marks): Complete mathematical definition of the safety constraint on both banks (M_L = 0 or M_L >= C_L, and M_R = 0 or M_R >= C_R).",
+            "Criterion 3 (2.5 Marks): Accurate step-by-step state sequence showing all 11 minimal boat crossings without violating safety constraints.",
+            "Criterion 4 (2.5 Marks): Clear explanation of illegal state detection and graph cycle pruning to prevent infinite search loops."
+          ]
+        },
+        {
+          "marks": 5,
+          "scenario": "[5 MARKS] Practical Problem-Solving Scenario: An autonomous delivery drone must deliver medical supplies across a city. Specify the agent using the PEAS framework, analyze its environment across all six standard dimensions, and justify whether a simple reflex architecture suffices.",
+          "rubric": [
+            "Criterion 1 (1.25 Marks): Complete and precise PEAS specification (Performance, Environment, Actuators, Sensors).",
+            "Criterion 2 (1.25 Marks): Rigorous classification across all 6 environment dimensions with technical justification.",
+            "Criterion 3 (1.25 Marks): Clear theoretical refutation of Simple Reflex architecture due to partial observability and dynamic obstacles.",
+            "Criterion 4 (1.25 Marks): Recommendation of an appropriate architecture (Goal-based / Utility-based) with internal state tracking."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m2",
+      "num": 2,
+      "title": "Search Techniques",
+      "topics": [
+        {
+          "id": "ai_bfs_dfs_comparison",
+          "cat": "Uninformed Search",
+          "title": "BFS VS DFS: TIME & SPACE COMPLEXITY",
+          "sub": "Queue vs Stack, Completeness, O(b^d) Memory vs O(bm) Linear Space",
+          "plain": "Breadth-First Search (BFS) explores level-by-level using a FIFO queue, guaranteeing the shortest path for equal step costs, but suffers an exponential memory explosion O(b^d). Depth-First Search (DFS) dives deep using a LIFO stack, saving memory with linear O(bm) space, but can get trapped in infinite loops and is not optimal.",
+          "def": "BFS is an uninformed search exploring the shallowest unexpanded node first using a FIFO queue; it is complete and optimal for uniform step costs, with time and space complexity $O(b^d)$. DFS explores the deepest unexpanded node first using a LIFO stack; it has time complexity $O(b^m)$ and linear space complexity $O(bm)$, where $b$ is branching factor, $d$ is goal depth, and $m$ is maximum depth.",
+          "exam": "BFS: Complete = Yes, Optimal = Yes (unit cost), Time = $O(b^d)$, Space = $O(b^d)$ (memory bottleneck). DFS: Complete = No (in infinite graphs), Optimal = No, Space = $O(bm)$ (linear advantage).",
+          "trap": "Exam Trap: The fatal flaw of BFS is NOT time, but MEMORY; an exponential number of nodes must be held in RAM at depth $d$.",
+          "example": "In a web crawler, BFS discovers all links at depth 1 before depth 2; DFS would follow endless link chains down a single website rabbit hole.",
+          "q": "What is the primary operational bottleneck of Breadth-First Search, and how does Depth-First Search compare in space complexity?",
+          "a": "BFS is limited by exponential space complexity $O(b^d)$ because all frontier nodes must reside in memory. DFS requires only linear space $O(bm)$, storing only the single active path."
+        },
+        {
+          "id": "ai_uniform_cost_search",
+          "cat": "Uninformed Search",
+          "title": "UNIFORM COST SEARCH (UCS)",
+          "sub": "Dijkstra on Graphs: Expanding Lowest Path Cost g(n) First",
+          "plain": "When actions have different costs (e.g. highways vs dirt roads), BFS fails to find the cheapest path. Uniform Cost Search (UCS) fixes this by always expanding the node with the lowest cumulative path cost g(n) using a priority queue. It is guaranteed to find the optimal path as long as step costs are positive (>= epsilon > 0).",
+          "def": "Uniform Cost Search (UCS) is an uninformed search algorithm that expands the node $n$ with the lowest cumulative path cost $g(n)$ from the start node. It uses a priority queue ordered by $g(n)$. UCS is complete and optimal provided every step cost exceeds some positive threshold $\\epsilon > 0$, with time and space complexity $O(b^{1 + \\lfloor C^*/\\epsilon \\rfloor})$, where $C^*$ is the optimal solution cost.",
+          "exam": "UCS evaluates $f(n) = g(n)$. It is Dijkstra's algorithm generalized for infinite state spaces. Goal test must be applied when a node is SELECTED FOR EXPANSION, not when generated.",
+          "trap": "Exam Trap: Do NOT apply the goal test when generating a node in UCS; you must wait until the goal is popped from the priority queue to guarantee optimality.",
+          "example": "GPS navigation finding the cheapest toll route: UCS expands paths with lowest accumulated tolls first, ignoring the number of intermediate intersections.",
+          "q": "Why must Uniform Cost Search apply the goal test only when a node is selected for expansion from the priority queue, rather than when it is generated?",
+          "a": "Because a cheaper path to that goal state might be discovered later through another branch; testing at expansion guarantees that all paths with lower cost have already been explored."
+        },
+        {
+          "id": "ai_iterative_deepening",
+          "cat": "Uninformed Search",
+          "title": "ITERATIVE DEEPENING SEARCH (IDS)",
+          "sub": "Combining BFS Optimality with DFS Linear Memory O(bd)",
+          "plain": "Iterative Deepening Search (IDS) gives you the best of both worlds: the low linear memory of DFS and the completeness and optimality of BFS. It runs Depth-Limited Search repeatedly for depth limits 0, 1, 2, 3... until the goal is found. Even though it re-generates top levels, the recomputation overhead is surprisingly small because bottom levels dominate the tree.",
+          "def": "Iterative Deepening Search (IDS) is a search strategy that systematically combines BFS and DFS by invoking Depth-Limited Search (DLS) with progressively increasing depth limits $l = 0, 1, 2, \\dots, d$. It has linear space complexity $O(bd)$ and time complexity $O(b^d)$. The node regeneration overhead is bounded by $\\frac{b}{b-1}$, which is negligible for branching factors $b \\ge 2$.",
+          "exam": "IDS: Complete = Yes, Optimal = Yes (for unit costs), Time = $O(b^d)$, Space = $O(bd)$ (linear!). Preferred search method when search space is large and depth is unknown.",
+          "trap": "Exam Trap: Students assume regenerating top nodes wastes excessive time; in reality, the bottom layer $b^d$ contains the vast majority of nodes, making re-expansion overhead minimal.",
+          "example": "Searching a solution at depth $d=5$ with $b=10$: the top node is generated 6 times, but the bottom level ($100,000$ nodes) is generated only once, so overhead is under 11%.",
+          "q": "Why is Iterative Deepening Search preferred over BFS and DFS when searching large state spaces with unknown solution depth?",
+          "a": "IDS guarantees completeness and optimal shortest-path discovery like BFS while retaining the minimal linear memory footprint $O(bd)$ of DFS, without risking infinite loops."
+        },
+        {
+          "id": "ai_greedy_best_first",
+          "cat": "Informed Search",
+          "title": "GREEDY BEST-FIRST SEARCH",
+          "sub": "Evaluation Function f(n) = h(n), Susceptibility to False Leads",
+          "plain": "Greedy Best-First Search uses domain knowledge to guess which node is closest to the goal. It evaluates nodes purely by their heuristic value f(n) = h(n). While fast when the heuristic is accurate, it is neither complete nor optimal because it greedily rushes toward the goal and can get trapped in dead ends or cycles.",
+          "def": "Greedy Best-First Search is an informed search strategy that expands the node $n$ estimated to be closest to the goal, using the evaluation function $f(n) = h(n)$, where $h(n)$ is a heuristic estimating the cost from $n$ to the goal. It uses a priority queue sorted by $h(n)$. In the worst case, it is incomplete and non-optimal, with time and space complexity $O(b^m)$.",
+          "exam": "Greedy Search: $f(n) = h(n)$. Expands node with lowest estimated cost to goal. Incomplete in loopy graphs (can loop infinitely); Not optimal.",
+          "trap": "Exam Trap: Greedy Best-First Search ignores path cost $g(n)$ entirely, making it susceptible to taking an extremely expensive or infinite path that looks superficially attractive.",
+          "example": "Driving from Arad to Bucharest: Greedy search goes toward Sibiu because its straight-line distance to Bucharest is lower, even if the road from Arad to Sibiu is mountainous and slow.",
+          "q": "What evaluation function does Greedy Best-First Search use, and why is it not guaranteed to find an optimal solution?",
+          "a": "It uses $f(n) = h(n)$ (heuristic estimate to goal). It is not optimal because it ignores cumulative path cost $g(n)$, greedily choosing locally attractive steps that may lead to costly paths."
+        },
+        {
+          "id": "ai_astar_algorithm",
+          "cat": "Informed Search",
+          "title": "A* SEARCH ALGORITHM",
+          "sub": "Evaluation Function f(n) = g(n) + h(n), Optimal Pathfinding",
+          "plain": "A* is the industry standard for pathfinding. It balances past cost with future estimates using f(n) = g(n) + h(n), where g(n) is the exact cost to reach node n and h(n) is the estimated cost from n to the goal. If h(n) never overestimates the true cost (admissible), A* is guaranteed to find the cheapest path.",
+          "def": "A* is an informed search algorithm that expands nodes in order of minimum $f(n) = g(n) + h(n)$, where $g(n)$ is the exact cost from the start node to $n$, and $h(n)$ is an admissible heuristic estimate of the cost from $n$ to the goal. A* tree search is complete and optimal if $h(n)$ is admissible. A* graph search is optimal if $h(n)$ is consistent (monotonic).",
+          "exam": "A* formula: $f(n) = g(n) + h(n)$. $g(n)$ = path cost so far, $h(n)$ = estimated cost to goal. If $h(n) = 0$, A* degrades into Uniform Cost Search.",
+          "trap": "Exam Trap: If $h(n)$ overestimates the true cost to the goal, A* may return a suboptimal path and lose its optimality guarantee.",
+          "example": "GPS navigation using straight-line Euclidean distance as $h(n)$ and actual road mileage as $g(n)$ to compute the fastest route from Guwahati to Shillong.",
+          "q": "Write the evaluation function for the A* search algorithm, defining each component, and state what A* degrades to when h(n) = 0 for all nodes.",
+          "a": "The evaluation function is $f(n) = g(n) + h(n)$, where $g(n)$ is the actual path cost from start to $n$, and $h(n)$ is the heuristic estimated cost from $n$ to the goal. When $h(n) = 0$, A* degrades into Uniform Cost Search."
+        },
+        {
+          "id": "ai_heuristic_properties",
+          "cat": "Heuristics",
+          "title": "HEURISTIC ADMISSIBILITY & CONSISTENCY",
+          "sub": "Admissible h(n) <= h*(n) vs Consistent Triangle Inequality",
+          "plain": "An admissible heuristic is optimistic: it never overestimates the true cost to reach the goal (h(n) <= h*(n)). A consistent (monotonic) heuristic is stricter: the heuristic estimate at node n can never be greater than the step cost to a neighbor n' plus the heuristic at n' (triangle inequality). Every consistent heuristic is admissible.",
+          "def": "A heuristic $h(n)$ is admissible if $0 \\le h(n) \\le h^*(n)$ for all $n$, where $h^*(n)$ is the true optimal cost from $n$ to the nearest goal state. A heuristic is consistent (monotonic) if for every node $n$ and every successor $n'$ generated by action $a$, $h(n) \\le c(n, a, n') + h(n')$, satisfying the triangle inequality. Consistency guarantees that $f(n)$ values along any path are non-decreasing.",
+          "exam": "Admissibility: $h(n) \\le h^*(n)$ (guarantees A* tree search optimality). Consistency: $h(n) \\le c(n, a, n') + h(n')$ (guarantees A* graph search optimality without reopening closed nodes).",
+          "trap": "Exam Trap: Admissibility is sufficient for tree search, but GRAPH search requires consistency to ensure that the first time a node is expanded, its optimal path is found.",
+          "example": "Straight-line Euclidean distance in a road network is consistent because a straight line is the shortest distance between two points (satisfying triangle inequality).",
+          "q": "State the mathematical definitions of an admissible heuristic and a consistent heuristic, and explain why consistency is required for A* graph search.",
+          "a": "Admissible: $h(n) \\le h^*(n)$ (never overestimates). Consistent: $h(n) \\le c(n, a, n') + h(n')$ (triangle inequality). Consistency guarantees that $f(n)$ never decreases along a path, ensuring the first time any node is expanded, its path cost is optimal."
+        },
+        {
+          "id": "ai_heuristic_dominance",
+          "cat": "Heuristics",
+          "title": "HEURISTIC DOMINANCE & COMPOSITE HEURISTICS",
+          "sub": "Dominance h2(n) >= h1(n), Node Pruning Superiority, max(h1, h2)",
+          "plain": "If you have two admissible heuristics, $h_2$ dominates $h_1$ if $h_2(n) \\ge h_1(n)$ for all nodes. A dominating heuristic is closer to the true cost, so A* will expand fewer or equal nodes. If you have several admissible heuristics and none dominates, you can take their maximum: $h(n) = \\max(h_1(n), h_2(n))$, which is both admissible and dominates all of them.",
+          "def": "For two admissible heuristics $h_1$ and $h_2$, $h_2$ dominates $h_1$ if $h_2(n) \\ge h_1(n)$ for all states $n$. An A* search using dominating heuristic $h_2$ will expand a subset of the nodes expanded by $h_1$ (excluding nodes on the contour $f(n) = C^*$). Given multiple admissible heuristics, the composite heuristic $h(n) = \\max(h_1(n), h_2(n), \\dots, h_k(n))$ is admissible, consistent (if components are), and dominates each individual heuristic.",
+          "exam": "Dominance: $h_2(n) \\ge h_1(n) \\implies A^*(h_2)$ expands fewer nodes than $A^*(h_1)$. Composite: $h(n) = \\max(h_1, h_2)$ combines strengths.",
+          "trap": "Exam Trap: A more informed heuristic reduces search time, but you must verify that computing $h(n)$ does not consume more CPU time than the node expansions it saves.",
+          "example": "In 8-puzzle: Manhattan distance $h_2$ strictly dominates Misplaced Tiles $h_1$ because every misplaced tile must move at least 1 step, so $h_2(n) \\ge h_1(n)$ everywhere.",
+          "q": "Prove that for the 8-puzzle problem, the Manhattan distance heuristic h2 dominates the misplaced tiles heuristic h1.",
+          "a": "Every misplaced tile is at least 1 square away from its target position. Therefore, its Manhattan distance is $\\ge 1$. Summing across all misplaced tiles, the total Manhattan distance $h_2(n)$ is always greater than or equal to the count of misplaced tiles $h_1(n)$ ($h_2(n) \\ge h_1(n)$)."
+        },
+        {
+          "id": "ai_hill_climbing_traps",
+          "cat": "Local Search",
+          "title": "HILL CLIMBING & LOCAL SEARCH TRAPS",
+          "sub": "Steepest-Ascent, Local Maxima, Ridges, Plateaus & Random Restarts",
+          "plain": "Hill climbing is like climbing a mountain in thick fog: you look in all directions and step toward whichever neighbor is steepest. While fast and using almost no memory, it easily gets stuck. It fails at: Local Maxima (peaks lower than the highest peak), Plateaus (flat areas with no gradient), and Ridges (slopes where sideways steps are required). Random restart hill climbing mitigates this.",
+          "def": "Hill Climbing (steepest-ascent) is an iterative local search algorithm that continuously moves in the direction of increasing value (or decreasing cost) without maintaining a search tree. It terminates when no neighbor has a higher value. It suffers from three primary pathologies: (1) Local Maxima (suboptimal peaks), (2) Ridges (sequences of local maxima difficult to traverse), (3) Plateaus / Shoulders (flat regions where gradient is zero).",
+          "exam": "Hill Climbing traps: Local Maxima (stuck on small peak), Ridges (zigzag failure), Plateaus (flat surface). Fix = Random-Restart Hill Climbing.",
+          "trap": "Exam Trap: Hill climbing does NOT keep a memory of past visited states or a search frontier; it stores only the current state.",
+          "example": "In the 8-Queens problem, standard hill climbing gets stuck on local maxima 86% of the time, requiring random restarts to find valid 0-conflict arrangements.",
+          "q": "Identify and explain the three classic failure modes of the standard Hill Climbing algorithm.",
+          "a": "1. Local Maxima: Suboptimal peaks where all neighboring states have lower evaluation values. 2. Plateaus: Flat search landscape regions where all neighbors have identical values, providing no gradient direction. 3. Ridges: Sloped terrains with steep sides where navigating upward requires multiple diagonal steps that standard single-variable moves cannot make."
+        },
+        {
+          "id": "ai_simulated_annealing",
+          "cat": "Local Search",
+          "title": "SIMULATED ANNEALING & METROPOLIS CRITERION",
+          "sub": "Probabilistic Downhill Acceptance e^(delta E / T) & Cooling Schedules",
+          "plain": "Simulated Annealing is inspired by metallurgy, where hot metals are cooled slowly to form crystalline perfection. Unlike hill climbing, which only takes uphill steps, simulated annealing occasionally accepts downhill (worse) moves to escape local maxima. Early on (high temperature T), it explores wildly; as T cools down, it becomes greedy like hill climbing.",
+          "def": "Simulated Annealing is a local search algorithm that escapes local optima by probabilistically accepting downhill moves. At state $s$, a random neighbor $s'$ is selected. If $\\Delta E = E(s') - E(s) > 0$ (improvement), the move is always accepted. If $\\Delta E \\le 0$, the move is accepted with probability $P = e^{\\Delta E / T}$, where $T$ is temperature. As temperature $T \\to 0$ according to a cooling schedule, acceptance of bad moves approaches zero.",
+          "exam": "Metropolis acceptance probability: $P = e^{\\Delta E / T}$ when $\\Delta E < 0$. High $T$ = random walk; Low $T$ = greedy hill climbing. If cooling schedule is sufficiently slow, it is proven to find the global optimum.",
+          "trap": "Exam Trap: If the cooling rate is too fast (quenching), the algorithm freezes into a local optimum, behaving just like standard hill climbing.",
+          "example": "VLSI circuit design placing millions of transistors onto a microchip to minimize wire crossing lengths while escaping local layout traps.",
+          "q": "What is the Metropolis acceptance probability formula in Simulated Annealing for a worsening move, and how does the temperature parameter T govern agent behavior?",
+          "a": "The acceptance probability is $P = e^{\\Delta E / T}$ (where $\\Delta E < 0$ is the change in energy). At high temperatures $T$, $P \\approx 1$, allowing frequent bad moves to explore broadly; as $T \\to 0$, $P \\to 0$, restricting moves to greedy improvements only."
+        },
+        {
+          "id": "ai_minimax_alphabeta",
+          "cat": "Adversarial Search",
+          "title": "MINIMAX & ALPHA-BETA PRUNING",
+          "sub": "Zero-Sum Games, Alpha-Beta Cutoffs & O(b^(d/2)) Complexity",
+          "plain": "Minimax chooses the best move in two-player zero-sum games (like chess) by assuming the opponent always makes their best move: MAX tries to maximize score, MIN tries to minimize it. Alpha-Beta pruning speeds this up dramatically without changing the answer: if a branch is already worse than a previously examined choice (alpha >= beta), it stops searching that branch immediately.",
+          "def": "Minimax is a decision-theoretic algorithm for two-player, zero-sum, perfect-information games that recursively calculates the minimax value of states. Alpha-Beta pruning is an optimization that prunes subtrees that cannot influence the final decision. $\\alpha$ is the highest value found so far for MAX; $\\beta$ is the lowest value found so far for MIN. A branch is pruned whenever $\\alpha \\ge \\beta$. With optimal move ordering, time complexity drops from $O(b^d)$ to $O(b^{d/2})$, doubling the effective search depth.",
+          "exam": "Alpha-Beta pruning condition: Prune when $\\alpha \\ge \\beta$. $\\alpha$ = best already explored option for MAX (starts at $-\\infty$); $\\beta$ = best already explored option for MIN (starts at $+\\infty$).",
+          "trap": "Exam Trap: Alpha-Beta pruning never changes the final move selected by Minimax; it computes the EXACT same result, just exploring substantially fewer nodes.",
+          "example": "In chess engines, Alpha-Beta pruning with killer move heuristics allows searching 10-12 plies deep instead of 5-6 plies within tournament time limits.",
+          "q": "Under what condition does Alpha-Beta pruning cut off a branch in game trees, and what is its optimal time complexity compared to standard Minimax?",
+          "a": "A branch is pruned whenever $\\alpha \\ge \\beta$ (where $\\alpha$ is MAX's best guaranteed score and $\\beta$ is MIN's best guaranteed score). With optimal move ordering, the time complexity improves from $O(b^d)$ to $O(b^{d/2})$, effectively doubling the search depth."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Why is Breadth-First Search (BFS) rarely used to solve complex real-world state space search problems?",
+          "opts": [
+            "BFS can enter infinite loops on finite acyclic graphs",
+            "The memory space requirement grows exponentially as O(b^d), exhausting RAM before execution completes",
+            "BFS is mathematically incapable of finding the shortest path even with uniform step costs",
+            "BFS evaluates nodes using an inadmissible heuristic"
+          ],
+          "ans": 1,
+          "cat": "Uninformed Search",
+          "correctFb": "BFS stores all generated frontier nodes in memory, causing an exponential O(b^d) space explosion that exhausts system memory long before CPU time is exhausted.",
+          "distractors": [
+            "BFS cannot enter infinite loops on finite acyclic graphs.",
+            "BFS is guaranteed to find the shortest path when all step costs are equal.",
+            "BFS is an uninformed search and does not use any heuristic evaluation function."
+          ]
+        },
+        {
+          "q": "In Uniform Cost Search (UCS), why must the goal test be evaluated when a node is removed from the priority queue for expansion rather than when it is first generated?",
+          "opts": [
+            "Because priority queues cannot store goal states",
+            "Because testing at expansion ensures all alternative paths with lower cumulative path cost g(n) have already been exhausted",
+            "Because UCS requires calculating heuristic estimates h(n) during node generation",
+            "Because expanding a goal state resets the path cost to zero"
+          ],
+          "ans": 1,
+          "cat": "Uninformed Search",
+          "correctFb": "A cheaper path to the goal state might exist in the frontier; waiting until the goal node is selected for expansion guarantees that its cumulative cost g(n) is optimal.",
+          "distractors": [
+            "Priority queues can store any state including goal states.",
+            "UCS is an uninformed search and does not compute heuristic estimates h(n).",
+            "Expanding a goal state terminates the search; it does not reset path costs."
+          ]
+        },
+        {
+          "q": "What is the primary architectural advantage of Iterative Deepening Search (IDS) over Breadth-First Search (BFS)?",
+          "opts": [
+            "IDS has linear space complexity O(bd) while preserving completeness and optimality for uniform step costs",
+            "IDS completely avoids generating duplicate nodes at upper tree levels",
+            "IDS requires an admissible heuristic function h(n)",
+            "IDS has lower asymptotic time complexity than DFS on infinite trees"
+          ],
+          "ans": 0,
+          "cat": "Uninformed Search",
+          "correctFb": "IDS retains the complete and optimal solution discovery of BFS while consuming only O(bd) linear memory by running depth-limited DFS passes.",
+          "distractors": [
+            "IDS does regenerate upper tree nodes across iterations, though overhead is bounded and small.",
+            "IDS is an uninformed search technique and requires no heuristic.",
+            "IDS and DFS both have exponential time complexity O(b^d) / O(b^m)."
+          ]
+        },
+        {
+          "q": "What is the evaluation function f(n) used by Greedy Best-First Search?",
+          "opts": [
+            "f(n) = g(n)",
+            "f(n) = g(n) + h(n)",
+            "f(n) = h(n)",
+            "f(n) = max(g(n), h(n))"
+          ],
+          "ans": 2,
+          "cat": "Informed Search",
+          "correctFb": "Greedy Best-First Search evaluates nodes purely on the estimated cost from node n to the goal: f(n) = h(n).",
+          "distractors": [
+            "f(n) = g(n) is the evaluation function for Uniform Cost Search.",
+            "f(n) = g(n) + h(n) is the evaluation function for A* Search.",
+            "f(n) = max(g(n), h(n)) is not standard Greedy Best-First Search."
+          ]
+        },
+        {
+          "q": "Under what condition is the A* tree search algorithm mathematically guaranteed to be optimal?",
+          "opts": [
+            "The heuristic function h(n) must be admissible (never overestimates the true cost to the goal)",
+            "The heuristic function h(n) must overestimate the goal cost by at least 10%",
+            "The branching factor b must be equal to 1",
+            "The search space must contain no dead-end paths"
+          ],
+          "ans": 0,
+          "cat": "Informed Search",
+          "correctFb": "For tree search, admissibility (h(n) <= h*(n)) ensures that A* will never overlook an optimal path in favor of a suboptimal one.",
+          "distractors": [
+            "Overestimating goal costs destroys the admissibility condition and can lead to suboptimal paths.",
+            "A* operates on arbitrary branching factors b >= 1.",
+            "A* handles dead-end paths correctly by exploring other frontier nodes."
+          ]
+        },
+        {
+          "q": "What condition must a heuristic function h(n) satisfy to be classified as consistent (monotonic)?",
+          "opts": [
+            "h(n) >= h*(n) for all nodes n",
+            "h(n) <= c(n, a, n') + h(n') for every node n and successor n'",
+            "h(n) must equal 0 for all non-goal states",
+            "h(n) must grow exponentially with search tree depth"
+          ],
+          "ans": 1,
+          "cat": "Heuristics",
+          "correctFb": "Consistency requires that the heuristic satisfies the triangle inequality: h(n) <= c(n, a, n') + h(n').",
+          "distractors": [
+            "h(n) >= h*(n) violates admissibility and is not consistency.",
+            "Setting h(n) = 0 for non-goal states is a trivial heuristic, not the consistency definition.",
+            "Heuristic values should estimate remaining cost, not arbitrarily grow with depth."
+          ]
+        },
+        {
+          "q": "If heuristic h2 dominates heuristic h1 for all states n in an A* search problem, what conclusion is guaranteed?",
+          "opts": [
+            "A* using h1 will expand fewer nodes than A* using h2",
+            "A* using h2 will expand fewer or equal nodes than A* using h1",
+            "h2 is inadmissible and produces suboptimal solutions",
+            "h1 requires more memory per node than h2"
+          ],
+          "ans": 1,
+          "cat": "Heuristics",
+          "correctFb": "Because h2 is more informed (closer to true cost h*), it prunes more search space, ensuring A*(h2) expands a subset of nodes expanded by A*(h1).",
+          "distractors": [
+            "A* using h1 will expand more nodes because it is less informed.",
+            "Dominance between admissible heuristics maintains admissibility.",
+            "Memory per node depends on data structures, not the heuristic value."
+          ]
+        },
+        {
+          "q": "Which failure mode in Hill Climbing search describes an extended flat area of the search space where all neighboring states have identical evaluation values?",
+          "opts": [
+            "Ridge",
+            "Local Maximum",
+            "Plateau / Shoulder",
+            "Valley"
+          ],
+          "ans": 2,
+          "cat": "Local Search",
+          "correctFb": "A plateau is a flat region of the state space landscape where the evaluation gradient is zero, leaving the algorithm unable to select an uphill direction.",
+          "distractors": [
+            "A ridge is a sequence of local maxima sloped steeply on both sides.",
+            "A local maximum is a peak higher than all its neighbors but lower than the global maximum.",
+            "A valley is a low-cost basin in minimization problems, not a flat zero-gradient zone."
+          ]
+        },
+        {
+          "q": "In Simulated Annealing, what is the probability of accepting a worsening move with energy difference Delta E < 0 at temperature T?",
+          "opts": [
+            "P = e^(Delta E / T)",
+            "P = 1 - e^(Delta E * T)",
+            "P = Delta E / T",
+            "P = 0"
+          ],
+          "ans": 0,
+          "cat": "Local Search",
+          "correctFb": "The Metropolis acceptance criterion states that suboptimal moves are accepted with probability P = e^(Delta E / T).",
+          "distractors": [
+            "1 - e^(Delta E * T) is not the Boltzmann/Metropolis probability formula.",
+            "Delta E / T is not bounded in [0, 1] and cannot represent probability.",
+            "Acceptance probability P > 0 allows escaping local optima, so P is not 0."
+          ]
+        },
+        {
+          "q": "In the Alpha-Beta pruning algorithm for two-player zero-sum games, when is a branch pruned?",
+          "opts": [
+            "Whenever alpha < beta",
+            "Whenever alpha >= beta",
+            "Whenever the game reaches depth d = 1",
+            "Whenever MAX evaluates a leaf node with utility 0"
+          ],
+          "ans": 1,
+          "cat": "Adversarial Search",
+          "correctFb": "A cutoff occurs when alpha >= beta because the opponent would never allow play to reach a state worse than their existing alternative.",
+          "distractors": [
+            "When alpha < beta, search continues because an improved move may still be found.",
+            "Pruning can occur at any depth, not just depth 1.",
+            "Evaluating utility 0 does not trigger pruning unless alpha >= beta."
+          ]
+        }
+      ],
+      "bossChallenges": [
+        {
+          "marks": 10,
+          "scenario": "[10 MARKS] University Exam Question: Execute the A* Search algorithm on a given weighted graph from start node S to goal node G. Detail the open and closed lists at every step, verify the admissibility and consistency of the heuristic function, and prove why A* is guaranteed to be optimal.",
+          "rubric": [
+            "Criterion 1 (2.5 Marks): Complete step-by-step tracing of Open (Priority Queue) and Closed lists with f(n) = g(n) + h(n) calculations.",
+            "Criterion 2 (2.5 Marks): Mathematical proof of admissibility (h(n) <= h*(n)) and consistency (triangle inequality h(n) <= c(n,a,n') + h(n')).",
+            "Criterion 3 (2.5 Marks): Formal proof of A* optimality showing that suboptimal goal G2 cannot be expanded before optimal goal G.",
+            "Criterion 4 (2.5 Marks): Detailed analysis of time and space complexity and behavior when h(n) = 0 vs h(n) = h*(n)."
+          ]
+        },
+        {
+          "marks": 5,
+          "scenario": "[5 MARKS] Practical Problem-Solving Scenario: You are designing an adversarial AI engine for a turn-based board game. The game tree has branching factor b = 16 and maximum depth d = 8. Explain how Alpha-Beta pruning reduces the node evaluations, calculate the theoretical best-case speedup, and describe move ordering heuristics.",
+          "rubric": [
+            "Criterion 1 (1.25 Marks): Clear mathematical derivation of Minimax complexity O(b^d) vs Alpha-Beta optimal complexity O(b^(d/2)).",
+            "Criterion 2 (1.25 Marks): Exact numerical calculation of node count reduction for b=16, d=8.",
+            "Criterion 3 (1.25 Marks): Detailed explanation of the alpha >= beta cutoff mechanism with a game tree diagram description.",
+            "Criterion 4 (1.25 Marks): Implementation of practical move-ordering techniques (killer moves, transposition tables, iterative deepening)."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m3",
+      "num": 3,
+      "title": "Knowledge Representation and Reasoning",
+      "topics": [
+        {
+          "id": "ai_prop_logic_syntax_semantics",
+          "cat": "Logic",
+          "title": "PROPOSITIONAL LOGIC: SYNTAX & SEMANTICS",
+          "sub": "Truth Tables, Validity, Satisfiability, Tautology & Logical Equivalence",
+          "plain": "Propositional logic uses symbols (P, Q, R) connected by operators: NOT, AND, OR, IMPLIES, and IFF. A sentence is valid (a tautology) if it is TRUE in all possible worlds (like P OR NOT P). It is satisfiable if it is true in at least one world. Entailment means that if your knowledge base is true, the conclusion must also be true.",
+          "def": "Propositional logic is a formal system comprising atomic propositions connected by truth-functional operators: $\\neg$ (negation), $\\land$ (conjunction), $\\lor$ (disjunction), $\\implies$ (implication), and $\\iff$ (biconditional). A sentence $\\alpha$ is valid (tautology) iff it is true under all interpretations; satisfiable iff true under at least one interpretation; unsatisfiable iff false under all interpretations. Knowledge base $KB$ entails $\\alpha$ ($KB \\models \\alpha$) iff $M(KB) \\subseteq M(\\alpha)$.",
+          "exam": "Validity: True in ALL models (tautology). Satisfiability: True in AT LEAST ONE model. Deduction Theorem: $KB \\models \\alpha \\iff (KB \\implies \\alpha)$ is valid.",
+          "trap": "Exam Trap: $P \\implies Q$ is logically equivalent to $\\neg P \\lor Q$; it is FALSE ONLY when $P$ is TRUE and $Q$ is FALSE.",
+          "example": "Modus Ponens: If 'It rains -> ground is wet' and 'It rains', we logically infer 'Ground is wet'.",
+          "q": "Define logical entailment (KB |= alpha) and state the relationship between entailment and unsatisfiability.",
+          "a": "$KB \\models \\alpha$ means that in every model where $KB$ is true, $\\alpha$ is also true. By the refutation principle, $KB \\models \\alpha$ if and only if $(KB \\land \\neg \\alpha)$ is unsatisfiable (a contradiction)."
+        },
+        {
+          "id": "ai_cnf_conversion",
+          "cat": "Logic",
+          "title": "CONJUNCTIVE NORMAL FORM (CNF) CONVERSION",
+          "sub": "Eliminating Implications, De Morgan's Laws, Distributive Laws",
+          "plain": "Computers cannot easily process arbitrary logical formulas. Conjunctive Normal Form (CNF) standardizes every formula into an AND of ORs (like (A OR B) AND (NOT B OR C)). To convert, you eliminate biconditionals and implications, push NOTs inward using De Morgan's laws, and distribute ORs over ANDs.",
+          "def": "Conjunctive Normal Form (CNF) is a canonical representation of logical formulas consisting of a conjunction of disjunctions of literals: $\\bigwedge_{i} (\\bigvee_{j} L_{i,j})$. The conversion algorithm involves: (1) Eliminate $\\iff$ via $(P \\implies Q) \\land (Q \\implies P)$; (2) Eliminate $\\implies$ via $\\neg P \\lor Q$; (3) Drive $\\neg$ inward via De Morgan's laws $\\neg(P \\land Q) \\equiv \\neg P \\lor \\neg Q$ and double negation elimination; (4) Distribute $\\lor$ over $\\land$ via $(A \\lor (B \\land C)) \\equiv (A \\lor B) \\land (A \\lor C)$.",
+          "exam": "CNF = AND of OR clauses. Literal = propositional symbol or its negation ($P$ or $\\neg P$). Clause = disjunction of literals $(A \\lor \\neg B)$.",
+          "trap": "Exam Trap: Distributing $\\lor$ over $\\land$ can exponentially increase clause length if not simplified systematically.",
+          "example": "Convert $P \\implies (Q \\land R)$: 1. Eliminate $\\implies$: $\\neg P \\lor (Q \\land R)$. 2. Distribute $\\lor$ over $\\land$: $(\\neg P \\lor Q) \\land (\\neg P \\lor R)$. This is in CNF.",
+          "q": "Convert the logical statement (P OR Q) -> R into Conjunctive Normal Form (CNF) step-by-step.",
+          "a": "1. Eliminate implication: $\\neg(P \\lor Q) \\lor R$. 2. Apply De Morgan's law: $(\\neg P \\land \\neg Q) \\lor R$. 3. Distribute $\\lor$ over $\\land$: $(\\neg P \\lor R) \\land (\\neg Q \\lor R)$. This is in CNF."
+        },
+        {
+          "id": "ai_first_order_logic",
+          "cat": "Logic",
+          "title": "FIRST-ORDER PREDICATE LOGIC (FOL)",
+          "sub": "Constants, Predicates, Functions, Quantifiers (Universal & Existential)",
+          "plain": "Propositional logic cannot say 'All humans are mortal' without writing a rule for every human. First-Order Logic (FOL) adds objects, relations (predicates), functions, and quantifiers: Universal (for all x) and Existential (there exists some x). It lets you express general facts compactly.",
+          "def": "First-Order Predicate Logic (FOL) represents worlds in terms of objects, relations (predicates), and functions. Syntax includes: Constant symbols (individual objects), Predicate symbols (relations), Function symbols (mappings), Variables, Connectives, and Quantifiers: Universal $(\\forall x)$ asserting a property holds for all domain elements, and Existential $(\\exists x)$ asserting a property holds for at least one domain element.",
+          "exam": "Universal rule: $\\forall x (\\text{Condition}(x) \\implies \\text{Property}(x))$ (connect with $\\implies$). Existential rule: $\\exists x (\\text{Condition}(x) \\land \\text{Property}(x))$ (connect with $\\land$).",
+          "trap": "Exam Trap: Never connect a Universal quantifier with $\\land$ (e.g. $\\forall x (\\text{Dog}(x) \\land \\text{Barks}(x))$ asserts everything in the universe is a dog and barks!). Never connect an Existential quantifier with $\\implies$.",
+          "example": "'Every student loves AI': $\\forall x (\\text{Student}(x) \\implies \\text{Loves}(x, \\text{AI}))$. 'Some student passed': $\\exists x (\\text{Student}(x) \\land \\text{Passed}(x))$.",
+          "q": "Translate the English sentence 'Every engineer loves some programming language' into First-Order Predicate Logic.",
+          "a": "$\\forall x (\\text{Engineer}(x) \\implies \\exists y (\\text{Language}(y) \\land \\text{Loves}(x, y)))$."
+        },
+        {
+          "id": "ai_fol_skolemization",
+          "cat": "Logic",
+          "title": "SKOLEMIZATION & FOL CLAUSE FORM",
+          "sub": "Eliminating Existential Quantifiers via Skolem Constants & Skolem Functions",
+          "plain": "To convert First-Order Logic into clauses for automated reasoning, you must get rid of existential quantifiers (there exists). If there is no universal quantifier outside, you replace the existential variable with a new named constant (Skolem constant). But if it is inside the scope of a universal quantifier (for all x), you must replace it with a function of x (Skolem function).",
+          "def": "Skolemization is the process of removing existential quantifiers in First-Order Logic by introducing Skolem constants or functions. For $\\exists x P(x)$, $x$ is replaced by a fresh Skolem constant $C$: $P(C)$. For $\\forall x \\exists y \\text{Loves}(x, y)$, because the choice of $y$ depends on $x$, $y$ is replaced by a Skolem function $f(x)$: $\\forall x \\text{Loves}(x, f(x))$.",
+          "exam": "Existential outside scope of universal = Skolem Constant. Existential INSIDE scope of universal = Skolem Function of all preceding universal variables.",
+          "trap": "Exam Trap: Replacing $\\forall x \\exists y \\text{Loves}(x, y)$ with a Skolem constant $C$ asserts everyone loves the exact same person; it MUST be a Skolem function $f(x)$!",
+          "example": "'Everyone has a mother': $\\forall x \\exists y \\text{MotherOf}(y, x) \\implies \\forall x \\text{MotherOf}(m(x), x)$, where $m(x)$ is the Skolem function returning $x$'s mother.",
+          "q": "Why must the existential quantifier in the sentence forall x exists y Loves(x, y) be replaced by a Skolem function rather than a Skolem constant?",
+          "a": "Because the identity of $y$ (the person loved) depends on the individual $x$; a Skolem constant would incorrectly assert that every person loves the exact same single individual."
+        },
+        {
+          "id": "ai_unification_mgu",
+          "cat": "Logic",
+          "title": "UNIFICATION & THE OCCURS-CHECK",
+          "sub": "Most General Unifier (MGU), Variable Substitution & Cyclic Binding Prevention",
+          "plain": "Unification is the pattern-matching process that finds a variable substitution to make two logical expressions look identical. For example, unifying Knows(John, x) with Knows(John, Jane) gives the substitution {x/Jane}. The occurs-check prevents assigning a variable to a term containing that same variable (like x/f(x)), which would create infinite loops.",
+          "def": "Unification is an algorithmic process that takes two First-Order Logic expressions and returns a substitution $\\theta = \\text{MGU}(p, q)$ (Most General Unifier) such that $\\text{Subst}(\\theta, p) = \\text{Subst}(\\theta, q)$, or failure if no substitution exists. The Occurs-Check verifies that variable $v$ does not appear inside term $t$ before binding $v/t$, preventing circular self-referential structures such as $x = f(x)$.",
+          "exam": "MGU = Most General Unifier (imposes fewest constraints). Occurs-check failure: Unify(x, f(x)) must fail; omitting occurs-check creates unsound reasoning.",
+          "trap": "Exam Trap: Prolog omits the occurs-check by default for execution speed, making it technically unsound on cyclic expressions.",
+          "example": "Unifying $P(x, g(x))$ and $P(A, y)$: Step 1: $x/A$. Step 2: $y/g(A)$. MGU $\\theta = \\{x/A, y/g(A)\\}$.",
+          "q": "Find the Most General Unifier (MGU) of P(x, f(y)) and P(g(z), f(A)), and explain why Unify(x, f(x)) must fail.",
+          "a": "MGU $\\theta = \\{x/g(z), y/A\\}$. $\\text{Unify}(x, f(x))$ fails because of the occurs-check: variable $x$ occurs inside term $f(x)$, which would cause an infinite recursive substitution."
+        },
+        {
+          "id": "ai_resolution_refutation",
+          "cat": "Inference",
+          "title": "RESOLUTION REFUTATION & EMPTY CLAUSE",
+          "sub": "Proof by Contradiction: KB & ~alpha yields Empty Clause (Box)",
+          "plain": "Resolution is a single, powerful inference rule that does all logical reasoning. If you have (P OR Q) and (NOT P OR R), you resolve them to get (Q OR R). To prove a theorem alpha from KB, you negate alpha (NOT alpha), add it to KB, and keep resolving pairs of clauses. If you derive an empty clause (False / contradiction), the theorem is proven!",
+          "def": "Resolution Refutation is an automated theorem-proving technique based on the resolution rule: from $(A \\lor B)$ and $(\\neg B \\lor C)$, infer resolvent $(A \\lor C)$. To prove $KB \\models \\alpha$, the query is negated to form $KB \\land \\neg \\alpha$, converted into CNF clause form, and resolved iteratively. Deriving the empty clause $\\Box$ (a contradiction) proves $KB \\models \\alpha$. Resolution refutation is sound and refutation-complete.",
+          "exam": "Resolution refutation steps: 1. Negate query $\\neg \\alpha$. 2. Convert all axioms and $\\neg \\alpha$ to CNF. 3. Resolve clauses until empty clause $\\Box$ is derived. Sound and refutation-complete.",
+          "trap": "Exam Trap: You cannot resolve two pairs of complementary literals simultaneously; from $(P \\lor Q)$ and $(\\neg P \\lor \\neg Q)$, resolving yields $(Q \\lor \\neg Q) \\equiv \\text{True}$, NOT the empty clause!",
+          "example": "Clause 1: $P \\lor Q$. Clause 2: $\\neg P$. Resolve on $P \\implies Q$. Clause 3: $\\neg Q$. Resolve with Clause 2's resolvent $\\implies \\Box$ (empty clause, contradiction derived).",
+          "q": "What does the derivation of the empty clause (Box) signify in an automated resolution refutation proof?",
+          "a": "Deriving the empty clause signifies that $KB \\land \\neg \\alpha$ is unsatisfiable (contains a logical contradiction), thereby proving by refutation that the original query $\\alpha$ is entailed ($KB \\models \\alpha$)."
+        },
+        {
+          "id": "ai_horn_clauses",
+          "cat": "Logic",
+          "title": "HORN CLAUSES & DEFINITE CLAUSES",
+          "sub": "At Most One Positive Literal, Linear-Time Inference, Prolog Foundation",
+          "plain": "A Horn clause is a clause with at most one positive literal. A definite clause has exactly one positive literal (like (NOT A OR NOT B OR C), which means (A AND B) -> C). Horn clauses are loved in AI because reasoning with them is lightning-fast: forward and backward chaining can answer queries in linear time O(n) without combinatorial explosion.",
+          "def": "A Horn clause is a disjunctive clause with at most one positive literal. A Definite clause has exactly one positive literal: $(\\neg P_1 \\lor \\dots \\lor \\neg P_n \\lor Q) \\equiv ((P_1 \\land \\dots \\land P_n) \\implies Q)$, where $P_i$ are premises and $Q$ is the conclusion. A Goal clause has zero positive literals: $(\\neg P_1 \\lor \\dots \\lor \\neg P_n)$. Entailment with Horn clauses is decidable in linear time $O(n)$ relative to knowledge base size.",
+          "exam": "Definite clause = exactly 1 positive literal. Horn clause = at most 1 positive literal. Enables linear time $O(n)$ forward/backward chaining. Foundation of Prolog.",
+          "trap": "Exam Trap: Not all logical statements can be converted into Horn clauses; disjunctions of positive literals like $P \\lor Q$ cannot be represented as Horn clauses.",
+          "example": "In Prolog: 'mortal(X) :- human(X).' represents the definite clause $\\neg \\text{human}(X) \\lor \\text{mortal}(X)$, having exactly one positive literal.",
+          "q": "Define a Definite Clause and explain why Horn clauses are widely utilized in rule-based expert systems.",
+          "a": "A Definite Clause is a disjunction of literals containing exactly one positive literal, equivalent to an implication $(P_1 \\land \\dots \\land P_k) \\implies Q$. They are utilized because inference can be solved in linear time $O(n)$ using forward or backward chaining."
+        },
+        {
+          "id": "ai_forward_backward_chaining",
+          "cat": "Inference",
+          "title": "FORWARD VS BACKWARD CHAINING",
+          "sub": "Data-Driven Antecedent Matching vs Goal-Driven Query Reduction",
+          "plain": "Forward chaining is data-driven: it starts with known facts and triggers rules whose conditions are met, generating new facts until the goal is reached. Backward chaining is goal-driven: it starts with the question, finds rules that conclude that goal, and works backward to see if the required premises exist in the facts.",
+          "def": "Forward Chaining is a data-driven inference mechanism for Horn knowledge bases that begins with known atomic facts, fires all rules whose premises are satisfied, asserts their conclusions, and repeats until the query is answered. Backward Chaining is a goal-driven mechanism that starts from the query goal, identifies rules that conclude that goal, and recursively attempts to prove their antecedents as subgoals.",
+          "exam": "Forward chaining = Data-driven, bottom-up (facts -> conclusions). Good for monitoring, diagnosis. Backward chaining = Goal-driven, top-down (query -> subgoals). Good for queries, theorem proving, Prolog.",
+          "trap": "Exam Trap: Forward chaining may compute many irrelevant conclusions that have nothing to do with the target query, whereas backward chaining only explores goal-relevant paths.",
+          "example": "Medical diagnosis: Forward chaining starts with patient symptoms to deduce all possible illnesses; Backward chaining starts with hypothesis 'Has Malaria?' and checks required test indicators.",
+          "q": "Contrast Forward Chaining and Backward Chaining in terms of starting points, search direction, and typical application domains.",
+          "a": "Forward Chaining starts with known facts, searches forward (bottom-up) by firing rules to infer new conclusions; it suits monitoring and system diagnosis. Backward Chaining starts with a query hypothesis, searches backward (top-down) to find supporting facts; it suits interactive querying and automated theorem proving."
+        },
+        {
+          "id": "ai_semantic_networks",
+          "cat": "Structured KR",
+          "title": "SEMANTIC NETWORKS & PROPERTY INHERITANCE",
+          "sub": "Directed Graphs, is-a & has-a Links, Default Value Overriding",
+          "plain": "Semantic networks represent knowledge as a graph of concepts. Nodes represent objects or classes, and directed edges represent relationships. The most important links are 'is-a' (subclass/instance) and 'has-a' (properties). Concepts automatically inherit properties from parent concepts higher in the hierarchy, but specific nodes can override defaults.",
+          "def": "A Semantic Network is a structured graphical knowledge representation consisting of nodes (representing individual objects, concepts, or categories) connected by directed labeled edges (representing semantic relations). Primary relations include 'is-a' (taxonomic generalization/subsumption) and 'part-of' / 'has-a'. Property inheritance traverses 'is-a' links from specific instances to general classes, with local node attributes overriding inherited defaults.",
+          "exam": "Semantic Net: Nodes = Concepts/Objects. Edges = Relations ('is-a', 'has-a'). Key mechanism = Property Inheritance via 'is-a' transitive links.",
+          "trap": "Exam Trap: Semantic networks lack formal semantics compared to First-Order Logic; resolving multiple inheritance conflicts (e.g. Nixon Diamond) requires explicit priority rules.",
+          "example": "Robin is-a Bird. Bird has-a Wings. Bird can-fly True. Penguin is-a Bird. Penguin can-fly False (overrides inherited default 'can-fly True').",
+          "q": "How does property inheritance operate in a Semantic Network, and how are exceptions (like flightless birds) handled?",
+          "a": "Inheritance traverses directed 'is-a' taxonomy links upward from instance to parent classes to retrieve attributes. Exceptions are handled by defining an overriding attribute directly at the specific node (e.g. Penguin -> can-fly: False), which takes precedence over the inherited default."
+        },
+        {
+          "id": "ai_frames_knowledge_rep",
+          "cat": "Structured KR",
+          "title": "FRAMES, SLOTS & DEMONS",
+          "sub": "Minsky's Frame System, Slots, Fillers, Default Values & Procedural Attachments",
+          "plain": "Proposed by Marvin Minsky, a frame is like an object-oriented class that represents a stereotypical situation or entity. It consists of named 'slots' that hold attributes ('fillers'), default values, and 'demons'—small attached procedures that run automatically when a slot is read, created, or modified (e.g. if-needed, if-added).",
+          "def": "Frames (Minsky, 1975) are structured knowledge representations organizing information into prototypical entities. A frame comprises named 'slots' holding attribute 'fillers' (values, pointers to other frames, or default values). Frames support procedural attachments known as 'demons' (e.g., 'if-needed', 'if-added', 'if-removed') that execute programmatic actions dynamically when slot values are queried or modified.",
+          "exam": "Frame components: Name, Slots (attributes), Fillers (values), Default values, Demons (procedural attachments: if-needed, if-added). Precursor to object-oriented programming.",
+          "trap": "Exam Trap: Do not confuse slots with demons; slots are attribute placeholders, whereas demons are executable procedures attached to slots.",
+          "example": "Car frame: Slot 'wheels' = 4 (default); Slot 'engine' = V6; Slot 'mileage' attached to demon 'if-needed' that reads odometer hardware.",
+          "q": "What is a 'demon' in frame-based knowledge representation, and give an example of an 'if-needed' demon.",
+          "a": "A demon is a procedural attachment (code routine) that executes automatically when a slot is accessed or updated. An 'if-needed' demon executes when a slot value is queried but empty, computing the value on demand (e.g., calculating a patient's age from birthdate)."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Under what condition is a sentence alpha in propositional logic classified as valid (a tautology)?",
+          "opts": [
+            "alpha is true in at least one possible world/model",
+            "alpha is true in all possible interpretations and models",
+            "alpha cannot be converted into Conjunctive Normal Form",
+            "alpha contains only negative literals"
+          ],
+          "ans": 1,
+          "cat": "Logic",
+          "correctFb": "A sentence is valid (tautological) if and only if it evaluates to TRUE under all possible truth-value assignments across every model.",
+          "distractors": [
+            "Being true in at least one model defines satisfiability, not validity.",
+            "All propositional sentences can be converted into Conjunctive Normal Form.",
+            "Negative literals have no bearing on whether a sentence is a tautology."
+          ]
+        },
+        {
+          "q": "What is the correct Conjunctive Normal Form (CNF) representation of the propositional implication P -> (Q and R)?",
+          "opts": [
+            "(~P or Q) and (~P or R)",
+            "(P or ~Q) and (P or ~R)",
+            "~P or (Q and R)",
+            "(P and Q) or (~P and R)"
+          ],
+          "ans": 0,
+          "cat": "Logic",
+          "correctFb": "P -> (Q and R) becomes ~P or (Q and R). Distributing or over and yields (~P or Q) and (~P or R), which is in valid CNF.",
+          "distractors": [
+            "(P or ~Q) and (P or ~R) incorrectly negates Q and R instead of antecedent P.",
+            "~P or (Q and R) is not in CNF because it has an 'or' applied to an 'and'.",
+            "(P and Q) or (~P and R) is in Disjunctive Normal Form (DNF), not CNF."
+          ]
+        },
+        {
+          "q": "Which First-Order Predicate Logic expression correctly translates 'Every student attends some lecture'?",
+          "opts": [
+            "forall x (Student(x) and exists y (Lecture(y) and Attends(x, y)))",
+            "forall x (Student(x) -> exists y (Lecture(y) and Attends(x, y)))",
+            "exists x (Student(x) -> forall y (Lecture(y) and Attends(x, y)))",
+            "forall x forall y (Student(x) -> (Lecture(y) -> Attends(x, y)))"
+          ],
+          "ans": 1,
+          "cat": "Logic",
+          "correctFb": "Universal quantifiers connect conditional predicates using implication (->), and the existential object is connected via conjunction (and).",
+          "distractors": [
+            "Connecting universal quantifiers with 'and' asserts that all entities in the universe are students.",
+            "Using existential quantifier for students asserts that only one specific student attends lectures.",
+            "Universal quantifier for lectures asserts every student attends ALL lectures, not 'some' lecture."
+          ]
+        },
+        {
+          "q": "When converting the First-Order Logic formula forall x exists y Likes(x, y) into Clause Form, why must y be replaced by a Skolem function f(x)?",
+          "opts": [
+            "Because y occurs outside the scope of quantifier forall x",
+            "Because the choice of entity y depends on the universally quantified variable x",
+            "Because Skolem constants are illegal in First-Order Logic",
+            "Because unification requires functions to replace all variables"
+          ],
+          "ans": 1,
+          "cat": "Logic",
+          "correctFb": "Because exists y is inside the scope of forall x, each x may like a different y, requiring a Skolem function f(x) of variable x.",
+          "distractors": [
+            "exists y is INSIDE the scope of forall x, not outside.",
+            "Skolem constants are completely legal when an existential quantifier is not governed by any universal quantifier.",
+            "Unification matches terms; it does not mandate turning all variables into functions."
+          ]
+        },
+        {
+          "q": "What is the primary function of the 'occurs-check' in the First-Order Logic unification algorithm?",
+          "opts": [
+            "To ensure constants are replaced by numbers",
+            "To prevent binding a variable x to a term that already contains x, avoiding infinite loops and unsound inferences",
+            "To verify that two clauses share identical predicate names",
+            "To count the number of existential quantifiers in a clause"
+          ],
+          "ans": 1,
+          "cat": "Logic",
+          "correctFb": "The occurs-check prevents circular substitutions like x / f(x), which would create infinite cyclic terms and make theorem proving unsound.",
+          "distractors": [
+            "Unification operates on symbolic terms, not numerical conversions.",
+            "Predicate name matching is handled in the base case, not by the occurs-check.",
+            "Clause form has already eliminated existential quantifiers prior to unification."
+          ]
+        },
+        {
+          "q": "Applying the Resolution rule to the two clauses (P or Q) and (~P or R) yields which resolvent clause?",
+          "opts": [
+            "Q and R",
+            "Q or R",
+            "~Q or ~R",
+            "Empty Clause (Box)"
+          ],
+          "ans": 1,
+          "cat": "Inference",
+          "correctFb": "Resolving complementary literals P and ~P cancels them out and takes the disjunction of the remaining literals: (Q or R).",
+          "distractors": [
+            "Resolution creates a disjunction (OR), not a conjunction (AND).",
+            "~Q or ~R incorrectly negates the remaining literals.",
+            "Deriving the empty clause requires resolving two single complementary unit clauses like P and ~P."
+          ]
+        },
+        {
+          "q": "In an automated resolution refutation proof, deriving the Empty Clause (Box) establishes that:",
+          "opts": [
+            "The knowledge base contains no valid rules",
+            "The negated query combined with the knowledge base is unsatisfiable, proving the query theorem",
+            "The resolution algorithm ran out of memory",
+            "The query is undecidable and has no solution"
+          ],
+          "ans": 1,
+          "cat": "Inference",
+          "correctFb": "Deriving the empty clause proves that KB and ~alpha is unsatisfiable (contains a logical contradiction), proving that KB entails alpha.",
+          "distractors": [
+            "The knowledge base rules remain fully valid.",
+            "Deriving an empty clause is an explicit proof completion, not an out-of-memory error.",
+            "Deriving an empty clause proves decidable entailment, not undecidability."
+          ]
+        },
+        {
+          "q": "What defines a Definite Clause in knowledge representation?",
+          "opts": [
+            "A clause containing zero literals",
+            "A clause containing exactly one positive literal",
+            "A clause containing at least two positive literals",
+            "A clause that cannot be converted to CNF"
+          ],
+          "ans": 1,
+          "cat": "Logic",
+          "correctFb": "A definite clause is a Horn clause containing exactly one positive literal, equivalent to an implication (~P1 or ... or ~Pn or Q) == ((P1 and ... and Pn) -> Q).",
+          "distractors": [
+            "A clause with zero literals is the empty clause.",
+            "Clauses with multiple positive literals are general non-Horn clauses.",
+            "All definite clauses are already in Conjunctive Normal Form."
+          ]
+        },
+        {
+          "q": "Which inference strategy starts with known facts and repeatedly matches them against rule antecedents to infer new conclusions until a goal is reached?",
+          "opts": [
+            "Backward Chaining",
+            "Forward Chaining",
+            "Minimax Search",
+            "Simulated Annealing"
+          ],
+          "ans": 1,
+          "cat": "Inference",
+          "correctFb": "Forward chaining is a bottom-up data-driven strategy starting from known facts and firing rules to assert new facts.",
+          "distractors": [
+            "Backward chaining is goal-driven, starting from the query hypothesis and searching for supporting premises.",
+            "Minimax is an adversarial game-tree algorithm, not a rule-based logic inference mechanism.",
+            "Simulated annealing is a stochastic local optimization algorithm."
+          ]
+        },
+        {
+          "q": "In Marvin Minsky's Frame-based knowledge representation system, what is an 'if-needed' demon?",
+          "opts": [
+            "A program that deletes corrupt frames",
+            "A procedural attachment that executes to calculate or retrieve a slot value only when that slot is queried and empty",
+            "A compiler directive that compiles frames into C++ classes",
+            "A security sandbox preventing unauthorized frame access"
+          ],
+          "ans": 1,
+          "cat": "Structured KR",
+          "correctFb": "An 'if-needed' demon is a procedural routine attached to a slot that automatically triggers to compute or fetch the value when requested.",
+          "distractors": [
+            "Demons are procedural attachments for reasoning, not garbage collectors.",
+            "Frames are AI knowledge representation formalisms, not compiler directives.",
+            "Demons provide dynamic calculation, not network security sandboxing."
+          ]
+        }
+      ],
+      "bossChallenges": [
+        {
+          "marks": 10,
+          "scenario": "[10 MARKS] University Exam Question: Consider the following knowledge base in English:\n1. Marcus was a man.\n2. Marcus was a Pompeian.\n3. All Pompeians were Romans.\n4. Caesar was a ruler.\n5. All Romans were either loyal to Caesar or hated him.\n6. Everyone is loyal to someone.\n7. People only try to assassinate rulers they are not loyal to.\n8. Marcus tried to assassinate Caesar.\nTranslate these statements into First-Order Predicate Logic (FOL), convert them into Clause Form (CNF), and prove by Resolution Refutation that 'Marcus hated Caesar'.",
+          "rubric": [
+            "Criterion 1 (2.5 Marks): Accurate First-Order Logic translations with correct predicates, variables, constants, and quantifiers.",
+            "Criterion 2 (2.5 Marks): Rigorous step-by-step conversion to CNF (eliminating implications, standardizing variables, Skolemization, dropping universal quantifiers).",
+            "Criterion 3 (2.5 Marks): Negation of the query ('Marcus hated Caesar' -> ~Hate(Marcus, Caesar)) and setup of the resolution refutation clause set.",
+            "Criterion 4 (2.5 Marks): Complete resolution refutation tree with explicit Most General Unifiers (MGU) at each step, culminating in derivation of the Empty Clause (Box)."
+          ]
+        },
+        {
+          "marks": 5,
+          "scenario": "[5 MARKS] Practical Problem-Solving Scenario: Compare and contrast Semantic Networks, Frames, and First-Order Predicate Logic as knowledge representation schemes. Provide a 4-point comparison table covering expressiveness, computational complexity, handling of exceptions/inheritance, and practical use cases.",
+          "rubric": [
+            "Criterion 1 (1.25 Marks): Clear definition of all three representation paradigms.",
+            "Criterion 2 (1.25 Marks): Structured comparison table covering Expressiveness and Formal Semantics.",
+            "Criterion 3 (1.25 Marks): Rigorous analysis of property inheritance mechanisms and exception overriding.",
+            "Criterion 4 (1.25 Marks): Identification of realistic industrial application domains for each paradigm (e.g. Wikidata/Knowledge Graphs vs Expert Systems vs Theorem Provers)."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m4",
+      "num": 4,
+      "title": "Reasoning Under Uncertainty",
+      "topics": [
+        {
+          "id": "ai_uncertainty_sources",
+          "cat": "Uncertainty",
+          "title": "SOURCES OF UNCERTAINTY IN AI",
+          "sub": "Noisy Sensors, Incomplete Knowledge, Partial Observability, Non-Determinism",
+          "plain": "In the real world, AI agents cannot have 100% certainty. Uncertainty arises because: sensors have noise and hardware errors; human domains are too complex to write every rule (qualification problem); environments are partially observable (you cannot see inside a patient's body); and actions have unpredictable outcomes.",
+          "def": "Uncertainty in Artificial Intelligence stems from four fundamental sources: (1) Partial Observability (agent lacks sensor access to the complete world state); (2) Noisy / Inaccurate Sensors (hardware limitations and noise corruption); (3) Non-deterministic Action Outcomes (stochastic dynamics); (4) The Qualification Problem (incompleteness of logical rules due to boundless potential exceptions). Probability theory provides the formal mathematical foundation to quantify and reason under uncertainty.",
+          "exam": "Core sources of uncertainty: Partial observability, Noisy sensors, Non-determinism, Qualification problem. Pure logic fails because truth values cannot capture degrees of belief.",
+          "trap": "Exam Trap: Uncertainty does not mean ignorance; probabilistic reasoning lets agents make mathematically optimal decisions even with imperfect data.",
+          "example": "Medical diagnosis: A doctor cannot observe internal arterial plaque directly (partial observability), tests produce false positives (noisy sensors), and medications affect patients differently (stochastic outcomes).",
+          "q": "Why does classical propositional and predicate logic fail in real-world domains like medical diagnosis, necessitating probabilistic reasoning?",
+          "a": "Because real-world domains suffer from the qualification problem (too many exceptions to list), partial observability (internal symptoms cannot be directly seen), and noisy sensor data that produce degrees of belief rather than binary True/False certainty."
+        },
+        {
+          "id": "ai_conditional_probability_bayes",
+          "cat": "Probability",
+          "title": "CONDITIONAL PROBABILITY & BAYES' RULE",
+          "sub": "Prior, Posterior, Likelihood, Evidence & P(H|E) Calculation",
+          "plain": "Bayes' Rule is the mathematical formula for updating your beliefs when new evidence arrives. Prior probability is what you believed before the evidence. Posterior probability is your updated belief after seeing the evidence. Bayes' formula states: Posterior = (Likelihood * Prior) / Evidence.",
+          "def": "Conditional Probability is the probability of event $A$ given that event $B$ has occurred: $P(A|B) = \\frac{P(A \\land B)}{P(B)}$. Bayes' Rule updates the hypothesis prior probability $P(H)$ into the posterior probability $P(H|E)$ upon observing evidence $E$: $P(H|E) = \\frac{P(E|H) P(H)}{P(E)} = \\frac{P(E|H) P(H)}{\\sum_i P(E|H_i) P(H_i)}$. $P(E|H)$ is the likelihood, $P(H)$ is the prior, and $P(E)$ is the marginal evidence probability.",
+          "exam": "Bayes' Rule: $P(H|E) = \\frac{P(E|H) \\cdot P(H)}{P(E)}$. Critical for medical diagnosis: a positive test result does not mean 99% sickness if disease base rate $P(H)$ is 0.001!",
+          "trap": "Exam Trap: Base-rate fallacy: forgetting to multiply by the prior $P(H)$. If a disease is rare, a positive test with 95% accuracy still yields a low true posterior probability.",
+          "example": "Meningitis causes a stiff neck 70% of the time ($P(S|M) = 0.7$). Prior $P(M) = 1/50,000$. Prior stiff neck $P(S) = 0.01$. $P(M|S) = (0.7 \\times 0.00002) / 0.01 = 0.0014$ (0.14%).",
+          "q": "Write Bayes' Rule formula and define each of its four components: prior, likelihood, marginal evidence, and posterior probability.",
+          "a": "Formula: $P(H|E) = \\frac{P(E|H) P(H)}{P(E)}$. $P(H|E)$ is the posterior probability (belief in $H$ after observing $E$), $P(E|H)$ is the likelihood (probability of evidence given $H$), $P(H)$ is the prior probability (initial belief before evidence), and $P(E)$ is the marginal probability of the evidence."
+        },
+        {
+          "id": "ai_bayesian_belief_networks",
+          "cat": "Bayesian Networks",
+          "title": "BAYESIAN BELIEF NETWORKS (BBN)",
+          "sub": "Directed Acyclic Graphs (DAG), Conditional Probability Tables (CPT)",
+          "plain": "A full joint probability table with n boolean variables needs $2^n - 1$ numbers, which is impossible to store. Bayesian Belief Networks solve this by representing causal relationships as a Directed Acyclic Graph (DAG). Nodes are random variables, arrows represent direct causes, and each node has a small Conditional Probability Table (CPT) given only its parents.",
+          "def": "A Bayesian Belief Network (BBN) is a probabilistic graphical model that represents a set of random variables and their conditional dependencies via a Directed Acyclic Graph (DAG). Nodes represent random variables, and directed edges represent direct probabilistic or causal influences. Each node $X_i$ is annotated with a Conditional Probability Table (CPT) quantifying $P(X_i \\mid \\text{Parents}(X_i))$.",
+          "exam": "BBN = DAG + CPTs. Solves exponential state explosion: transforms full joint distribution from $2^n$ parameters into compact local distributions.",
+          "trap": "Exam Trap: A Bayesian network must be ACYCLIC (no directed loops permitted), otherwise cyclic dependencies prevent valid topological joint probability factorization.",
+          "example": "Burglary and Earthquake independently cause an Alarm; the Alarm causes John and Mary to call. Network nodes: Burglary, Earthquake -> Alarm -> JohnCalls, MaryCalls.",
+          "q": "How does a Bayesian Belief Network drastically reduce the number of parameters required compared to a full joint probability distribution?",
+          "a": "By exploiting conditional independence relationships. Instead of storing $2^n - 1$ joint probabilities, each node stores a local Conditional Probability Table conditioned only on its direct parents, reducing parameters from exponential $O(2^n)$ to $O(n \\cdot 2^k)$, where $k$ is the maximum parent count."
+        },
+        {
+          "id": "ai_bbn_joint_factorization",
+          "cat": "Bayesian Networks",
+          "title": "BBN JOINT PROBABILITY FACTORIZATION",
+          "sub": "Chain Rule Factorization: P(X1..Xn) = Product P(Xi | Parents(Xi))",
+          "plain": "Because each node in a Bayesian network is conditionally independent of its non-descendants given its parents, you can compute the probability of ANY complete world state by simply multiplying the numbers from each node's CPT: P(X1, X2, ..., Xn) = Product of P(Xi | Parents(Xi)).",
+          "def": "The joint probability distribution of any Bayesian Network is factorized using the chain rule of probability simplified by local Markov independence assumptions: $P(X_1, X_2, \\dots, X_n) = \\prod_{i=1}^n P(X_i \\mid \\text{Parents}(X_i))$. A node $X_i$ is conditionally independent of its non-descendants in the DAG given its immediate parents $\\text{Parents}(X_i)$.",
+          "exam": "Joint Factorization Formula: $P(x_1, \\dots, x_n) = \\prod_{i=1}^n P(x_i \\mid \\text{parents}(X_i))$. To compute any full state, look up each variable's CPT value and multiply.",
+          "trap": "Exam Trap: Remember to look up values conditioned ONLY on the explicit parents indicated by incoming directed arrows, not on predecessors in other branches.",
+          "example": "In Burglary alarm: $P(b, \\neg e, a, j, \\neg m) = P(b) \\times P(\\neg e) \\times P(a \\mid b, \\neg e) \\times P(j \\mid a) \\times P(\\neg m \\mid a)$.",
+          "q": "Write the general formula for the joint probability distribution of n variables represented in a Bayesian Belief Network.",
+          "a": "$P(X_1, X_2, \\dots, X_n) = \\prod_{i=1}^n P(X_i \\mid \\text{Parents}(X_i))$."
+        },
+        {
+          "id": "ai_d_separation_independence",
+          "cat": "Bayesian Networks",
+          "title": "D-SEPARATION & CONDITIONAL INDEPENDENCE",
+          "sub": "Linear Chains, Diverging Forks & Converging Colliders (Explaining Away)",
+          "plain": "D-separation tells you whether two variables in a Bayesian network are conditionally independent given evidence. There are three connection types: 1. Serial (chain A->B->C): blocked when B is observed. 2. Diverging (fork A<-B->C): blocked when B is observed. 3. Converging / V-structure (collider A->C<-B): BLOCKED by default, but UNBLOCKED when C (or its descendant) is observed! This is called 'explaining away'.",
+          "def": "D-separation (directed separation) is a graphical criterion determining whether variable set $X$ is conditionally independent of $Y$ given evidence set $Z$ in a DAG ($X \\perp Y \\mid Z$). A path is blocked if: (1) It contains a chain $A \\to B \\to C$ or fork $A \\leftarrow B \\to C$ and $B \\in Z$; or (2) It contains a collider (v-structure) $A \\to B \\leftarrow C$ where neither $B$ nor any descendant of $B$ is in $Z$. If all paths are blocked, $X$ and $Y$ are d-separated given $Z$.",
+          "exam": "Explaining away: In a converging collider ($A \\to C \\leftarrow B$), observing evidence $C$ MAKES $A$ and $B$ dependent! If the alarm went off ($C$) and an earthquake ($B$) occurred, burglary ($A$) is 'explained away'.",
+          "trap": "Exam Trap: A collider $A \\to B \\leftarrow C$ blocks information flow when $B$ is UNKNOWN, but opens the path when $B$ is OBSERVED.",
+          "example": "Sprinkler and Rain both cause WetGrass ($S \\to W \\leftarrow R$). Knowing the grass is wet ($W$) couples Sprinkler and Rain: if we look outside and see Rain, the probability that the Sprinkler was on drops drastically.",
+          "q": "Explain the 'Explaining Away' phenomenon in Bayesian networks with reference to a converging collider structure (A -> C <- B).",
+          "a": "In a converging collider ($A \\to C \\leftarrow B$), $A$ and $B$ are marginally independent. However, once common effect $C$ is observed (evidence), $A$ and $B$ become conditionally dependent: observing that cause $B$ occurred explains the occurrence of $C$, thereby reducing the probability of cause $A$."
+        },
+        {
+          "id": "ai_exact_approximate_inference",
+          "cat": "Inference in BBN",
+          "title": "EXACT VS APPROXIMATE INFERENCE IN BBN",
+          "sub": "Variable Elimination vs MCMC & Likelihood Weighting, NP-Hard Complexity",
+          "plain": "Inference in a Bayesian network means calculating the probability of a query variable given evidence. Exact inference (like Variable Elimination) sums out hidden variables, but is NP-hard in general networks. For large complex networks, AI uses approximate inference by generating random samples (rejection sampling, likelihood weighting, Markov Chain Monte Carlo / MCMC).",
+          "def": "Inference in Bayesian networks computes the posterior distribution $P(Q \\mid E = e)$. Exact inference algorithms include Enumeration and Variable Elimination (which optimizes summation order by storing intermediate factors). Exact inference in general multiply connected networks is NP-hard (and #P-hard). Approximate inference methods employ stochastic simulation: Rejection Sampling, Likelihood Weighting, and Markov Chain Monte Carlo (MCMC / Gibbs Sampling).",
+          "exam": "Exact inference in BBN is NP-hard. Variable elimination improves over naive enumeration by factoring out summations. MCMC generates random walks through state space to estimate posteriors.",
+          "trap": "Exam Trap: Rejection sampling discards samples that do not match the observed evidence, making it extremely inefficient when evidence is rare; Likelihood Weighting fixes this by forcing evidence variables to match.",
+          "example": "In a genetic disease network with 500 nodes, exact variable elimination causes factor tables to explode, so Gibbs sampling is used to estimate patient risk.",
+          "q": "What is the computational complexity of exact inference in arbitrary Bayesian networks, and how does Likelihood Weighting improve upon Rejection Sampling?",
+          "a": "Exact inference is NP-hard in general networks. Likelihood Weighting avoids the waste of Rejection Sampling (which discards samples that don't match evidence) by fixing evidence variables and weighting each sample by the likelihood of the evidence given its parents."
+        },
+        {
+          "id": "ai_dempster_shafer_theory",
+          "cat": "Uncertainty",
+          "title": "DEMPSTER-SHAFER THEORY OF EVIDENCE",
+          "sub": "Frame of Discernment, Basic Probability Assignment m(A), Belief & Plausibility",
+          "plain": "In standard probability, if you have zero knowledge about a coin, you must assign P(Heads) = 0.5. Dempster-Shafer theory allows you to model complete ignorance by assigning mass to sets of hypotheses instead of single events. It defines an interval: Belief (minimum support) and Plausibility (maximum potential support).",
+          "def": "Dempster-Shafer Theory is a mathematical framework for reasoning with uncertainty that generalizes Bayesian probability by assigning mass to sets of propositions. It operates on a Frame of Discernment $\\Theta$ (mutually exclusive propositions). A Basic Probability Assignment (BPA) $m: 2^\\Theta \\to [0, 1]$ satisfies $m(\\emptyset) = 0$ and $\\sum_{A \\subseteq \\Theta} m(A) = 1$. Belief is $\\text{Bel}(A) = \\sum_{B \\subseteq A} m(B)$, and Plausibility is $\\text{Pl}(A) = \\sum_{B \\cap A \\ne \\emptyset} m(B) = 1 - \\text{Bel}(\\neg A)$.",
+          "exam": "Dempster-Shafer interval: $[\\text{Bel}(A), \\text{Pl}(A)]$. $\\text{Bel}(A) \\le P(A) \\le \\text{Pl}(A)$. Plausibility formula: $\\text{Pl}(A) = 1 - \\text{Bel}(\\neg A)$. Dempster's rule combines independent evidence.",
+          "trap": "Exam Trap: In Dempster-Shafer, complete ignorance about $\\{A, B\\}$ is modeled by $m(\\{A, B\\}) = 1$, NOT $m(A) = 0.5, m(B) = 0.5$.",
+          "example": "A sensor detects an intruder but cannot distinguish between Cat (C) and Burglar (B): it assigns mass $m(\\{C, B\\}) = 0.8$ and $m(\\Theta) = 0.2$. Belief in Burglar alone is 0, but Plausibility is 1.0.",
+          "q": "Define the relationship between the Belief function Bel(A) and the Plausibility function Pl(A) in Dempster-Shafer theory.",
+          "a": "$\\text{Pl}(A) = 1 - \\text{Bel}(\\neg A)$. Belief measures the total evidence directly supporting $A$, while Plausibility measures the maximum potential evidence that does not contradict $A$, defining the confidence interval $[\\text{Bel}(A), \\text{Pl}(A)]$."
+        },
+        {
+          "id": "ai_fuzzy_sets_membership",
+          "cat": "Fuzzy Logic",
+          "title": "FUZZY SETS & MEMBERSHIP FUNCTIONS",
+          "sub": "Crisp Sets vs Fuzzy Sets, Continuous Membership mu_A(x) in [0, 1]",
+          "plain": "In classical crisp logic, an element either belongs to a set or it does not (membership is 0 or 1). A person 179 cm tall is either 'Tall' (1) or 'Not Tall' (0). Fuzzy logic allows partial membership: the membership function assigns a continuous value between 0.0 and 1.0, so someone 179 cm tall can be 0.75 Tall.",
+          "def": "A Fuzzy Set $A$ in universe of discourse $X$ is characterized by a continuous membership function $\\mu_A: X \\to [0, 1]$, where $\\mu_A(x)$ quantifies the grade of membership of element $x$ in set $A$. Unlike classical crisp sets whose characteristic function is binary $\\chi_A(x) \\in \\{0, 1\\}$, fuzzy sets model linguistic vagueness and imprecision (e.g. 'Warm', 'Young', 'Fast'). Common membership function shapes include triangular, trapezoidal, and Gaussian curves.",
+          "exam": "Crisp set: $\\mu(x) \\in \\{0, 1\\}$. Fuzzy set: $\\mu(x) \\in [0, 1]$ (continuous degree of truth). Models linguistic vagueness, NOT probabilistic likelihood.",
+          "trap": "Exam Trap: Fuzzy logic is NOT probability; probability models likelihood of an event whose truth is binary, while fuzzy logic models degrees of truth for vague linguistic concepts.",
+          "example": "Speed: Crisp set 'Fast' might require speed >= 80 km/h (79.9 km/h is 0). In a fuzzy set, 70 km/h has membership 0.5, 80 km/h has 0.8, and 100 km/h has 1.0.",
+          "q": "Distinguish between a classical crisp set and a fuzzy set using their respective membership function definitions.",
+          "a": "A classical crisp set uses a binary characteristic function $\\chi_A(x) \\in \\{0, 1\\}$ where an element is strictly in or out of the set. A fuzzy set uses a continuous membership function $\\mu_A(x) \\in [0, 1]$ representing partial degrees of membership."
+        },
+        {
+          "id": "ai_fuzzy_logic_operators",
+          "cat": "Fuzzy Logic",
+          "title": "FUZZY LOGIC OPERATIONS & DEFUZZIFICATION",
+          "sub": "Zadeh Operators: Min Intersection, Max Union, 1-mu Complement, Centroid Method",
+          "plain": "To combine fuzzy rules, Lotfi Zadeh defined fuzzy operators: AND is the MINIMUM of the membership values; OR is the MAXIMUM; and NOT is 1 minus the membership. After applying fuzzy IF-THEN rules, the resulting fuzzy shape is converted back into a crisp real-world control number using Defuzzification (most commonly the Centroid / Center of Gravity method).",
+          "def": "Standard Zadeh fuzzy set operations are defined as: (1) Intersection (Fuzzy AND): $\\mu_{A \\cap B}(x) = \\min(\\mu_A(x), \\mu_B(x))$; (2) Union (Fuzzy OR): $\\mu_{A \\cup B}(x) = \\max(\\mu_A(x), \\mu_B(x))$; (3) Complement (Fuzzy NOT): $\\mu_{\\neg A}(x) = 1 - \\mu_A(x)$. Defuzzification maps the aggregated fuzzy output set into a crisp control value; the Centroid (Center of Gravity) method calculates $z^* = \\frac{\\int z \\cdot \\mu(z) dz}{\\int \\mu(z) dz}$ or in discrete form $z^* = \\frac{\\sum z_i \\mu(z_i)}{\\sum \\mu(z_i)}$.",
+          "exam": "Zadeh operators: $A \\land B = \\min(\\mu_A, \\mu_B)$; $A \\lor B = \\max(\\mu_A, \\mu_B)$; $\\neg A = 1 - \\mu_A$. Defuzzification = Centroid method (Center of Area / Gravity).",
+          "trap": "Exam Trap: In fuzzy logic, the law of excluded middle $A \\lor \\neg A = 1$ and law of non-contradiction $A \\land \\neg A = 0$ DO NOT HOLD because $\\max(0.6, 0.4) = 0.6 \\ne 1.0$.",
+          "example": "Fuzzy washing machine: If Dirtiness is High (0.8) and Grease is Medium (0.5), Wash Time is High with membership $\\min(0.8, 0.5) = 0.5$. Centroid defuzzifies this into a 32-minute cycle.",
+          "q": "Calculate the Fuzzy AND (intersection), Fuzzy OR (union), and Fuzzy NOT (complement) of A given mu_A = 0.7 and mu_B = 0.4.",
+          "a": "Fuzzy AND: $\\min(0.7, 0.4) = 0.4$. Fuzzy OR: $\\max(0.7, 0.4) = 0.7$. Fuzzy NOT: $1 - 0.7 = 0.3$."
+        },
+        {
+          "id": "ai_maximum_expected_utility_mdp",
+          "cat": "Decision Theory",
+          "title": "UTILITY THEORY & MARKOV DECISION PROCESSES",
+          "sub": "Maximum Expected Utility (MEU), MDP 4-Tuple <S, A, P, R>, Bellman Equation",
+          "plain": "When actions have uncertain outcomes, an AI chooses the move that gives the highest average reward. This is the Maximum Expected Utility (MEU) principle. For sequential decisions where actions change the state over time, we use a Markov Decision Process (MDP). The optimal value of any state is governed by the famous Bellman Equation.",
+          "def": "The Principle of Maximum Expected Utility (MEU) dictates that a rational agent should select action $a$ maximizing expected utility: $\\text{MEU}(a) = \\arg\\max_a \\sum_{s'} P(s' \\mid s, a) U(s')$. A Markov Decision Process (MDP) models sequential stochastic decision environments as a 4-tuple $\\langle S, A, P, R, \\gamma \\rangle$: State space $S$, Actions $A$, Transition model $P(s' \\mid s, a)$, Reward function $R(s, a, s')$, and discount factor $\\gamma \\in [0, 1)$. The optimal state value satisfies the Bellman Optimality Equation: $V^*(s) = \\max_{a \\in A} \\sum_{s'} P(s' \\mid s, a) [R(s, a, s') + \\gamma V^*(s')]$.",
+          "exam": "MEU Principle: Rational agent chooses $a = \\arg\\max_a \\sum P(s'|s,a) U(s')$. MDP = States, Actions, Transition probabilities, Rewards, Discount factor $\\gamma$. Solved via Value Iteration or Policy Iteration.",
+          "trap": "Exam Trap: The Markov property asserts that the future state depends ONLY on the current state and action, completely independent of the historical path taken to reach the current state.",
+          "example": "Gridworld robot navigating toward a +1 goal diamond while avoiding a -1 pit of fire: stochastic wind blows the robot sideways with 20% probability, so Value Iteration finds a safe, conservative path.",
+          "q": "State the Bellman Optimality Equation for state values V*(s) in a Markov Decision Process (MDP) and explain the role of discount factor gamma.",
+          "a": "Equation: $V^*(s) = \\max_{a} \\sum_{s'} P(s' \\mid s, a) [R(s, a, s') + \\gamma V^*(s')]$. The discount factor $\\gamma \\in [0, 1)$ models the present value of future rewards, ensuring infinite horizon sums converge and encouraging the agent to achieve rewards sooner rather than later."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "A medical clinic evaluates a test for a rare disease affecting 1 in 1000 people (P(D) = 0.001). The test has a 95% true positive rate (P(+|D) = 0.95) and a 5% false positive rate (P(+|~D) = 0.05). If a patient tests positive, what is the approximate posterior probability P(D|+) that they actually have the disease?",
+          "opts": [
+            "Approximately 95.0%",
+            "Approximately 50.0%",
+            "Approximately 1.86% (~0.0186)",
+            "Approximately 0.001%"
+          ],
+          "ans": 2,
+          "cat": "Probability",
+          "correctFb": "P(D|+) = (0.95 * 0.001) / [(0.95 * 0.001) + (0.05 * 0.999)] = 0.00095 / (0.00095 + 0.04995) = 0.00095 / 0.0509 = ~0.0186 (1.86%). Due to base-rate neglect, rare diseases yield low posterior probabilities.",
+          "distractors": [
+            "95% commits the base-rate fallacy by confusing likelihood P(+|D) with posterior P(D|+).",
+            "50% occurs if prior probability was ignored and false positives equaled true positives.",
+            "0.001% is the prior base rate before considering the positive test result."
+          ]
+        },
+        {
+          "q": "In a Bayesian Belief Network representing n variables, how is the joint probability distribution P(X1, X2, ..., Xn) calculated?",
+          "opts": [
+            "P(X1..Xn) = sum_{i=1}^n P(Xi)",
+            "P(X1..Xn) = product_{i=1}^n P(Xi | Parents(Xi))",
+            "P(X1..Xn) = max_{i} P(Xi | Children(Xi))",
+            "P(X1..Xn) = product_{i=1}^n P(Xi) / P(Parents(Xi))"
+          ],
+          "ans": 1,
+          "cat": "Bayesian Networks",
+          "correctFb": "By the local Markov property, the joint probability is the product of each variable conditioned exclusively on its immediate parent variables in the DAG.",
+          "distractors": [
+            "Summing marginal probabilities does not compute a joint distribution.",
+            "Maximizing over children has no basis in Bayesian network probability theory.",
+            "Dividing by parent probabilities violates the chain rule factorization."
+          ]
+        },
+        {
+          "q": "In a Bayesian network with converging V-structure A -> C <- B (collider), what happens to the relationship between causes A and B when the common effect C is observed?",
+          "opts": [
+            "A and B remain completely independent",
+            "A and B become conditionally dependent (explaining away)",
+            "The network collapses into an undirected graph",
+            "All Conditional Probability Tables are deleted"
+          ],
+          "ans": 1,
+          "cat": "Bayesian Networks",
+          "correctFb": "Observing the common effect in a collider unblocks the path and makes the two previously independent parent causes conditionally dependent (explaining away).",
+          "distractors": [
+            "A and B are independent only when C and its descendants are unobserved.",
+            "A Bayesian network remains a Directed Acyclic Graph regardless of observations.",
+            "CPT tables are invariant parameters and are never deleted during inference."
+          ]
+        },
+        {
+          "q": "How many independent numerical parameters are required to specify the full joint probability distribution for 10 binary random variables without independence assumptions, and how does a BBN help?",
+          "opts": [
+            "10 parameters; BBN reduces it to 5",
+            "2^10 - 1 = 1,023 parameters; BBN exploits local dependencies to dramatically reduce this number",
+            "100 parameters; BBN maintains the exact same number",
+            "Zero parameters; probabilities are deduced dynamically"
+          ],
+          "ans": 1,
+          "cat": "Bayesian Networks",
+          "correctFb": "A full joint distribution over 10 binary variables requires 2^10 - 1 = 1,023 parameters. BBNs exploit conditional independence to store only local CPTs, requiring far fewer parameters.",
+          "distractors": [
+            "10 parameters assumes complete independence between all variables, which is naive Bayes.",
+            "100 parameters is linear-quadratic and does not reflect the 2^n exponential state space.",
+            "Probabilities require quantitative prior and conditional numbers to compute distributions."
+          ]
+        },
+        {
+          "q": "What is the computational complexity of exact inference in an arbitrary multiply connected Bayesian Belief Network?",
+          "opts": [
+            "Linear time O(n)",
+            "Polynomial time O(n^2)",
+            "NP-hard",
+            "Constant time O(1)"
+          ],
+          "ans": 2,
+          "cat": "Inference in BBN",
+          "correctFb": "Cooper (1990) proved that exact probabilistic inference in general multiply connected Bayesian networks is NP-hard (and #P-hard).",
+          "distractors": [
+            "Linear time inference is only possible on singly connected polytrees, not general networks.",
+            "Polynomial time is only achievable with tree-decompositions of bounded treewidth.",
+            "Constant time is impossible for probabilistic inference across variable networks."
+          ]
+        },
+        {
+          "q": "In Dempster-Shafer theory of evidence, what is the mathematical relationship between the Plausibility of proposition A (Pl(A)) and the Belief in its negation (Bel(~A))?",
+          "opts": [
+            "Pl(A) = Bel(~A)",
+            "Pl(A) = 1 - Bel(~A)",
+            "Pl(A) = 1 + Bel(~A)",
+            "Pl(A) = Bel(A) * Bel(~A)"
+          ],
+          "ans": 1,
+          "cat": "Uncertainty",
+          "correctFb": "Plausibility represents the total mass not committed to contradicting A: Pl(A) = 1 - Bel(~A).",
+          "distractors": [
+            "Pl(A) = Bel(~A) falsely equates plausibility with contradictory belief.",
+            "Probabilities and beliefs cannot exceed 1.0, making 1 + Bel(~A) invalid.",
+            "Multiplying beliefs does not produce the plausibility upper bound."
+          ]
+        },
+        {
+          "q": "Using standard Zadeh fuzzy logic operations, what is the fuzzy intersection (Fuzzy AND) of two fuzzy sets with membership values mu_A(x) = 0.8 and mu_B(x) = 0.3?",
+          "opts": [
+            "0.8",
+            "0.3",
+            "0.24",
+            "1.1"
+          ],
+          "ans": 1,
+          "cat": "Fuzzy Logic",
+          "correctFb": "Under Zadeh fuzzy set theory, the intersection (Fuzzy AND) is the minimum of the membership values: min(0.8, 0.3) = 0.3.",
+          "distractors": [
+            "0.8 is the fuzzy union (Fuzzy OR), which takes the maximum: max(0.8, 0.3) = 0.8.",
+            "0.24 is the product t-norm operator, not the standard Zadeh min operator.",
+            "1.1 is arithmetic addition, which exceeds the valid [0, 1] fuzzy membership range."
+          ]
+        },
+        {
+          "q": "Why do the classical Laws of Excluded Middle (A or ~A = True) and Non-Contradiction (A and ~A = False) fail in Fuzzy Logic?",
+          "opts": [
+            "Because fuzzy logic prohibits logical negation",
+            "Because with intermediate membership mu_A(x) = 0.6, max(0.6, 0.4) = 0.6 != 1.0 and min(0.6, 0.4) = 0.4 != 0.0",
+            "Because fuzzy logic only allows integer membership values",
+            "Because fuzzy logic requires prior probability distributions"
+          ],
+          "ans": 1,
+          "cat": "Fuzzy Logic",
+          "correctFb": "When membership is intermediate (e.g. 0.6), ~A is 0.4. Fuzzy OR yields max(0.6, 0.4) = 0.6 (not 1), and Fuzzy AND yields min(0.6, 0.4) = 0.4 (not 0).",
+          "distractors": [
+            "Fuzzy logic explicitly defines negation as 1 - mu_A.",
+            "Fuzzy logic uses real-valued continuous numbers in [0, 1], not integers.",
+            "Fuzzy logic does not use probability distributions; it operates on set membership."
+          ]
+        },
+        {
+          "q": "Which defuzzification technique calculates the center of gravity of the aggregated fuzzy membership function curve?",
+          "opts": [
+            "Mean of Maxima (MOM) method",
+            "Centroid method",
+            "First of Maxima (FOM) method",
+            "Alpha-cut thresholding"
+          ],
+          "ans": 1,
+          "cat": "Fuzzy Logic",
+          "correctFb": "The Centroid method (Center of Gravity / Center of Area) integrates z * mu(z) dz over mu(z) dz to determine the balance point of the fuzzy set.",
+          "distractors": [
+            "Mean of Maxima calculates the average of points with maximum membership value.",
+            "First of Maxima selects the smallest domain value that achieves maximum membership.",
+            "Alpha-cut thresholding extracts crisp sets above membership alpha, without defuzzifying."
+          ]
+        },
+        {
+          "q": "According to the Principle of Maximum Expected Utility (MEU), how should a rational agent select an action in an uncertain environment?",
+          "opts": [
+            "Select the action that minimizes worst-case path cost regardless of probability",
+            "Select the action that maximizes the sum of utilities weighted by the conditional probability of reaching each outcome state",
+            "Select the action with the lowest algorithmic time complexity",
+            "Select the action that ignores utility and maximizes entropy"
+          ],
+          "ans": 1,
+          "cat": "Decision Theory",
+          "correctFb": "MEU dictates selecting action a = argmax_a sum_{s'} P(s' | s, a) * U(s'), which balances the payoff of each outcome against its likelihood.",
+          "distractors": [
+            "Minimizing worst-case cost is minimax risk aversion, ignoring probabilities.",
+            "Algorithmic time complexity does not evaluate the quality of actions in the environment.",
+            "Maximizing entropy creates random exploration rather than rational goal-directed decisions."
+          ]
+        }
+      ],
+      "bossChallenges": [
+        {
+          "marks": 10,
+          "scenario": "[10 MARKS] University Exam Question: Consider the classic Alarm Bayesian Network with two independent causes: Burglary (B) and Earthquake (E). Both influence Alarm (A). The Alarm in turn causes JohnCalls (J) and MaryCalls (M). Given the Conditional Probability Tables (CPTs):\n- P(B) = 0.001, P(E) = 0.002\n- P(A | B, E) = 0.95, P(A | B, ~E) = 0.94, P(A | ~B, E) = 0.29, P(A | ~B, ~E) = 0.001\n- P(J | A) = 0.90, P(J | ~A) = 0.05\n- P(M | A) = 0.70, P(M | ~A) = 0.01\nCalculate the probability that the alarm has sounded but neither burglary nor earthquake occurred, and both John and Mary call: P(~B, ~E, A, J, M). Then, calculate P(Burglary | JohnCalls = true).",
+          "rubric": [
+            "Criterion 1 (2.5 Marks): Correct factorization of the full joint probability using the BBN chain rule formula.",
+            "Criterion 2 (2.5 Marks): Accurate numerical substitution and arithmetic evaluation of P(~B, ~E, A, J, M).",
+            "Criterion 3 (2.5 Marks): Formally setting up the marginalization and normalization steps for the posterior query P(B | J).",
+            "Criterion 4 (2.5 Marks): Conceptual explanation of d-separation in this network, explaining why JohnCalls and MaryCalls are conditionally independent given Alarm."
+          ]
+        },
+        {
+          "marks": 5,
+          "scenario": "[5 MARKS] Practical Problem-Solving Scenario: Design a Fuzzy Logic Controller for an autonomous braking system in an electric vehicle. Define two linguistic input variables ('Distance to Obstacle' and 'Vehicle Speed') and one linguistic output variable ('Braking Pressure'). Provide the fuzzy membership functions, write 4 representative fuzzy inference rules, and demonstrate how Centroid Defuzzification calculates the final brake force.",
+          "rubric": [
+            "Criterion 1 (1.25 Marks): Definition of linguistic input and output variables with clear membership functions (Close, Medium, Far; Low, High; Light, Hard).",
+            "Criterion 2 (1.25 Marks): Set of 4 logical fuzzy IF-THEN rules covering safety boundary cases.",
+            "Criterion 3 (1.25 Marks): Application of Zadeh Min/Max operators to aggregate rule outputs for an example input scenario.",
+            "Criterion 4 (1.25 Marks): Mathematical formulation and step-by-step application of Centroid Defuzzification to compute crisp brake pressure."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m5",
+      "num": 5,
+      "title": "Machine Learning in AI",
+      "topics": [
+        {
+          "id": "ai_ml_paradigms",
+          "cat": "ML Paradigms",
+          "title": "MACHINE LEARNING PARADIGMS",
+          "sub": "Supervised, Unsupervised & Reinforcement Learning",
+          "plain": "Machine learning has three core families: Supervised Learning trains on labeled data (inputs paired with known answers, for regression and classification). Unsupervised Learning finds hidden patterns in unlabeled data (clustering and compression). Reinforcement Learning trains an agent through trial and error using reward penalties in a dynamic environment.",
+          "def": "Machine Learning is partitioned into three canonical paradigms: (1) Supervised Learning: maps input vectors $x \\in X$ to target outputs $y \\in Y$ from labeled training pairs $\\{(x_i, y_i)\\}$, encompassing classification (discrete labels) and regression (continuous values); (2) Unsupervised Learning: discovers latent data structures, density distributions, or groupings from unlabeled data $\\{x_i\\}$ (e.g. clustering, dimensionality reduction); (3) Reinforcement Learning: an active agent learns a behavioral policy $\\pi(a|s)$ to maximize cumulative scalar reward signals through environment interaction.",
+          "exam": "Supervised = Labeled data (Classification & Regression). Unsupervised = Unlabeled data (Clustering like k-Means). Reinforcement = Agent, Environment, States, Actions, Rewards.",
+          "trap": "Exam Trap: Reinforcement learning is NOT unsupervised learning; it receives external feedback, but the feedback is an evaluative reward score rather than an explicit instructive ground-truth label.",
+          "example": "Spam classification (Supervised: emails labeled spam/ham); Customer market segmentation (Unsupervised: clustering shopping patterns); AlphaGo playing board moves (Reinforcement learning: win/loss reward).",
+          "q": "Contrast the feedback mechanism and objective of Supervised Learning versus Reinforcement Learning.",
+          "a": "Supervised learning receives instructive feedback (correct ground-truth labels for each training example) to minimize prediction error. Reinforcement learning receives evaluative feedback (scalar reward/penalty signals) to learn a policy maximizing cumulative future reward."
+        },
+        {
+          "id": "ai_decision_tree_id3",
+          "cat": "Supervised Learning",
+          "title": "DECISION TREES & ID3 ALGORITHM",
+          "sub": "Shannon Entropy H(S), Information Gain & Recursive Splitting",
+          "plain": "A Decision Tree classifies data through a series of yes/no questions like a flowchart. The ID3 algorithm builds the tree greedily from the top down: at each step, it chooses the feature that best reduces uncertainty. Uncertainty is measured by Shannon Entropy, and the reduction in uncertainty is called Information Gain.",
+          "def": "Decision Tree learning is a non-parametric supervised model where internal nodes test attribute values, branches represent test outcomes, and leaf nodes denote class labels. The ID3 algorithm uses a top-down greedy search driven by Information Gain. Shannon Entropy of sample set $S$ is $H(S) = -\\sum_{i=1}^c p_i \\log_2 p_i$. Information Gain of attribute $A$ is $IG(S, A) = H(S) - \\sum_{v \\in \\text{Values}(A)} \\frac{|S_v|}{|S|} H(S_v)$. The attribute maximizing $IG(S, A)$ is selected as the split node.",
+          "exam": "Entropy formula: $H(S) = -\\sum p_i \\log_2 p_i$. Information Gain: $IG(S, A) = H(S) - H(S|A)$. Pure node (all same class) $\\implies H = 0$. Completely balanced binary node (50/50) $\\implies H = 1.0$ bit.",
+          "trap": "Exam Trap: Information Gain is biased toward attributes with many distinct values (like Student ID or Date); C4.5 fixes this by using Gain Ratio ($IG / \\text{SplitInfo}$).",
+          "example": "Deciding whether to play tennis based on Outlook, Humidity, and Wind: if $S$ has 9 positive and 5 negative examples, $H(S) = -(9/14)\\log_2(9/14) - (5/14)\\log_2(5/14) \\approx 0.940$ bits.",
+          "q": "Calculate the Shannon Entropy H(S) of a training set S containing 4 positive examples and 4 negative examples.",
+          "a": "With equal probabilities $p_+ = 4/8 = 0.5$ and $p_- = 4/8 = 0.5$, $H(S) = -0.5 \\log_2(0.5) - 0.5 \\log_2(0.5) = -0.5(-1) - 0.5(-1) = 0.5 + 0.5 = 1.0$ bit (maximum uncertainty for binary classification)."
+        },
+        {
+          "id": "ai_knn_algorithm",
+          "cat": "Supervised Learning",
+          "title": "K-NEAREST NEIGHBORS (K-NN)",
+          "sub": "Lazy Learning, Non-Parametric Instance Classification & Distance Metrics",
+          "plain": "K-Nearest Neighbors is a 'lazy' algorithm that does no training upfront. When a new query point arrives, it calculates the distance (like Euclidean distance) to all training points, finds the k closest points, and takes a majority vote. Choosing an odd k (like 3 or 5) prevents ties in binary classification.",
+          "def": "k-Nearest Neighbors (k-NN) is an instance-based (lazy), non-parametric supervised learning algorithm. It stores all training samples $\\{(x_i, y_i)\\}$ and defers computation until query time. For a test point $x_q$, it computes distances $d(x_q, x_i)$ using Euclidean distance $d(x, y) = \\sqrt{\\sum_{j=1}^m (x_j - y_j)^2}$ (or Manhattan/Minkowski), identifies the $k$ nearest instances, and assigns the majority class label (classification) or mean target value (regression).",
+          "exam": "k-NN = Lazy learner (zero training time, slow prediction time $O(N)$). Odd $k$ prevents ties in 2-class problems. Sensitive to the curse of dimensionality and feature scaling (must normalize!).",
+          "trap": "Exam Trap: If $k=1$, the model overfits to training noise (memorizing outliers); if $k=N$, it underfits and simply predicts the majority class of the entire dataset.",
+          "example": "Diagnosing a patient by finding the 3 medical records with the most similar blood pressure, cholesterol, and age, and taking their majority diagnosis.",
+          "q": "Why is feature normalization mandatory before applying the k-Nearest Neighbors algorithm?",
+          "a": "Because k-NN calculates geometric distances (e.g. Euclidean distance). If features have vastly different scales (e.g. Annual Income in thousands vs Age in tens), the feature with the larger numerical magnitude will dominate the distance calculation completely."
+        },
+        {
+          "id": "ai_kmeans_clustering",
+          "cat": "Unsupervised Learning",
+          "title": "K-MEANS CLUSTERING ALGORITHM",
+          "sub": "Centroid Initialization, Assignment & Update Steps, Voronoi Partitions",
+          "plain": "K-Means groups unlabeled data points into k clusters. It works in three simple steps: 1. Randomly place k center points (centroids). 2. Assign each data point to its nearest centroid. 3. Move each centroid to the average position of all points assigned to it. Repeat steps 2 and 3 until the centroids stop moving.",
+          "def": "k-Means is an iterative, partitional clustering algorithm that partitions $n$ observations into $k$ clusters where each observation belongs to the cluster with the nearest mean (centroid). It minimizes the Within-Cluster Sum of Squares (WCSS / Inertia): $J = \\sum_{j=1}^k \\sum_{x_i \\in S_j} \\|x_i - \\mu_j\\|^2$. The algorithm alternates between: (1) Assignment step: assign each point to nearest centroid $\\mu_j$; (2) Update step: recalculate centroid $\\mu_j = \\frac{1}{|S_j|} \\sum_{x_i \\in S_j} x_i$ until convergence.",
+          "exam": "k-Means steps: 1. Initialize $k$ centroids. 2. Assign points to nearest centroid (Euclidean distance). 3. Recalculate centroids as cluster means. Repeat until convergence. Minimizes WCSS.",
+          "trap": "Exam Trap: k-Means is sensitive to initial centroid placement and can get stuck in poor local minima; k-Means++ solves this by spreading out initial centroids.",
+          "example": "Customer segmentation: An e-commerce platform clusters 100,000 customers into $k=5$ personas based on purchase frequency and average spending.",
+          "q": "What objective function does the k-Means clustering algorithm minimize, and what is its primary sensitivity issue?",
+          "a": "It minimizes the Within-Cluster Sum of Squares (WCSS): $J = \\sum_{j=1}^k \\sum_{x \\in S_j} \\|x - \\mu_j\\|^2$. Its primary issue is high sensitivity to random initial centroid selection, which can trap the algorithm in suboptimal local minima."
+        },
+        {
+          "id": "ai_confusion_matrix_metrics",
+          "cat": "Evaluation Metrics",
+          "title": "EVALUATION METRICS: ACCURACY, PRECISION & RECALL",
+          "sub": "Confusion Matrix (TP, FP, TN, FN), Precision, Recall & F1 Harmonic Mean",
+          "plain": "Accuracy (correct / total) can be dangerously misleading on imbalanced datasets (e.g. predicting 'No Cancer' 99% of the time). A Confusion Matrix breaks down predictions into True Positives (TP), False Positives (FP), True Negatives (TN), and False Negatives (FN). Precision measures: out of all positive predictions, how many were right? Recall measures: out of all actual positive cases, how many did we catch? The F1-Score is the harmonic mean of both.",
+          "def": "Evaluation metrics for classification are derived from the Confusion Matrix: (1) Accuracy $= \\frac{TP + TN}{TP + TN + FP + FN}$; (2) Precision $= \\frac{TP}{TP + FP}$ (fraction of positive predictions that are correct); (3) Recall (Sensitivity) $= \\frac{TP}{TP + FN}$ (fraction of actual positives correctly identified); (4) Specificity $= \\frac{TN}{TN + FP}$; (5) F1-Score $= 2 \\cdot \\frac{\\text{Precision} \\cdot \\text{Recall}}{\\text{Precision} + \\text{Recall}}$ (harmonic mean balancing precision and recall).",
+          "exam": "Precision = $TP / (TP + FP)$ (penalizes false alarms). Recall = $TP / (TP + FN)$ (penalizes missed cases). F1 = $2PR / (P + R)$. In medical tests, high Recall is critical.",
+          "trap": "Exam Trap: Accuracy is a useless metric when classes are heavily imbalanced (e.g. in credit card fraud where 99.9% of transactions are legitimate).",
+          "example": "A cancer screening test detects 90 out of 100 actual cancer patients ($TP=90, FN=10 \\implies \\text{Recall} = 90\\%$), but flags 20 healthy patients ($FP=20 \\implies \\text{Precision} = 90 / (90+20) = 81.8\\%$).",
+          "q": "Define Precision and Recall in terms of True Positives (TP), False Positives (FP), and False Negatives (FN), and explain why the F1-score uses the harmonic mean rather than the arithmetic mean.",
+          "a": "Precision $= \\frac{TP}{TP + FP}$ and Recall $= \\frac{TP}{TP + FN}$. The F1-score uses the harmonic mean because it punishes extreme disparities: if either Precision or Recall is close to 0, the harmonic mean drops sharply toward 0, unlike the arithmetic mean."
+        },
+        {
+          "id": "ai_bias_variance_tradeoff",
+          "cat": "Model Evaluation",
+          "title": "BIAS-VARIANCE TRADEOFF & OVERFITTING",
+          "sub": "Underfitting (High Bias) vs Overfitting (High Variance), Model Complexity",
+          "plain": "Bias is error from overly simplistic assumptions (underfitting, like fitting a straight line to a curve). Variance is error from being overly sensitive to tiny fluctuations in the training data (overfitting, like memorizing training noise). As model complexity increases, bias drops but variance rises. The goal of machine learning is finding the sweet spot that minimizes total error.",
+          "def": "The Bias-Variance Tradeoff decomposes expected generalization error into three additive components: $\\text{Expected Error} = \\text{Bias}^2 + \\text{Variance} + \\sigma^2$ (irreducible noise). Bias measures how far the average model prediction is from the true underlying function (high bias causes Underfitting). Variance measures how much model predictions fluctuate across different training sets (high variance causes Overfitting). Regularization ($L_1, L_2$) and cross-validation help achieve the optimal complexity trade-off.",
+          "exam": "High Bias = Underfitting (model too simple, poor train & test score). High Variance = Overfitting (model memorizes noise, great train score but poor test score). Sweet spot balances both.",
+          "trap": "Exam Trap: A 100% training accuracy is usually NOT a good sign; it almost always indicates severe overfitting (high variance) that will fail on unseen test data.",
+          "example": "Fitting a polynomial to data: Degree 1 (linear) has high bias / underfits. Degree 15 has high variance / oscillates wildly through every noise point. Degree 2 fits the true curve.",
+          "q": "Explain the difference between High Bias (underfitting) and High Variance (overfitting) in terms of training error versus test error.",
+          "a": "High Bias (underfitting) produces high training error and high test error because the model is too simple to capture the underlying pattern. High Variance (overfitting) produces very low training error but high test error because the model memorizes training noise and fails to generalize."
+        },
+        {
+          "id": "ai_perceptron_model",
+          "cat": "Neural Networks",
+          "title": "PERCEPTRON & LINEAR SEPARABILITY",
+          "sub": "Frank Rosenblatt's Model, Activation Functions & Minsky-Papert XOR Failure",
+          "plain": "The Perceptron is the simplest artificial neuron. It takes inputs x, multiplies each by a weight w, adds a bias b, and passes the total sum through a step function: if the sum >= 0, output 1; else output 0. In 1969, Marvin Minsky and Seymour Papert proved that a single-layer perceptron can ONLY learn linearly separable patterns, meaning it cannot even solve a simple XOR function.",
+          "def": "The Perceptron (Rosenblatt, 1958) is a mathematical model of a single biological neuron. It computes a linear combination of input features $z = \\sum_{i=1}^m w_i x_i + b = \\mathbf{w}^T \\mathbf{x} + b$ and applies an activation function $y = f(z)$. The perceptron learning rule updates weights via $\\Delta w_i = \\eta (y - \\hat{y}) x_i$. Minsky and Papert (1969) proved the Perceptron Convergence Theorem applies only to linearly separable data, showing that a single perceptron cannot compute non-linear functions like XOR.",
+          "exam": "Perceptron formula: $y = f(\\sum w_i x_i + b)$. Linearly separable: Can be separated by a single hyperplane. XOR problem: Cannot be separated by a line $\\implies$ caused the first AI Winter.",
+          "trap": "Exam Trap: A single-layer perceptron CAN compute AND, OR, and NOT (linearly separable), but CANNOT compute XOR or XNOR without an added hidden layer.",
+          "example": "AND gate: weights $w_1 = 1, w_2 = 1$, bias $b = -1.5$. If both inputs are 1, sum $= 1+1-1.5 = 0.5 > 0 \\implies 1$. For XOR, points (0,1) and (1,0) need output 1 while (0,0) and (1,1) need 0, requiring two lines.",
+          "q": "Why is a single-layer perceptron incapable of computing the logical XOR function, and what historical impact did this proof have on AI research?",
+          "a": "A single-layer perceptron can only create a single linear decision boundary (hyperplane). The XOR truth table points (0,1) and (1,0) cannot be separated from (0,0) and (1,1) by any single line. Minsky and Papert's 1969 proof of this limitation triggered the first 'AI Winter' by halting funding for neural network research."
+        },
+        {
+          "id": "ai_activation_functions",
+          "cat": "Neural Networks",
+          "title": "ACTIVATION FUNCTIONS: SIGMOID, RELU & TANH",
+          "sub": "Non-Linearity, Vanishing Gradient Problem & Dying ReLU",
+          "plain": "Without activation functions, stacking 100 neural network layers is completely pointless because multiplying linear equations just produces another linear equation! Non-linear activation functions allow networks to learn complex curves. Common functions: Sigmoid maps numbers to (0, 1) but causes vanishing gradients; ReLU (Rectified Linear Unit, max(0, x)) is fast and widely used in deep learning.",
+          "def": "Activation functions introduce non-linearity into neural networks, enabling them to approximate arbitrary non-linear functions (Universal Approximation Theorem). Key activations: (1) Sigmoid: $\\sigma(z) = \\frac{1}{1 + e^{-z}} \\in (0, 1)$, prone to vanishing gradients when $|z| \\gg 0$ ($d\\sigma/dz \\le 0.25$); (2) Tanh: $\\tanh(z) = \\frac{e^z - e^{-z}}{e^z + e^{-z}} \\in (-1, 1)$, zero-centered; (3) ReLU: $f(z) = \\max(0, z)$, computationally efficient with constant gradient 1 for $z > 0$, but vulnerable to 'dying ReLU' if neurons permanently output 0.",
+          "exam": "Sigmoid: $\\sigma(z) = 1 / (1 + e^{-z})$ (range 0 to 1). Tanh: range -1 to 1 (zero-centered). ReLU: $\\max(0, z)$ (solves vanishing gradient for positive inputs, default for hidden layers).",
+          "trap": "Exam Trap: If you use identity/linear activations $f(z) = z$ in all hidden layers, a multilayer neural network collapses into an ordinary single-layer linear regression model.",
+          "example": "In a 50-layer deep network, Sigmoid activation causes gradients to shrink exponentially ($0.25^{50} \\approx 0$), halting early layer learning. Switching to ReLU keeps gradients at 1.0, enabling effective training.",
+          "q": "Why are non-linear activation functions mandatory in multilayer neural networks, and why has ReLU largely replaced Sigmoid in hidden layers?",
+          "a": "Without non-linear activations, any composition of linear layers collapses into a single linear transformation, eliminating the network's ability to learn complex non-linear patterns. ReLU has replaced Sigmoid because its derivative is 1 for positive inputs, avoiding the vanishing gradient problem and computing much faster."
+        },
+        {
+          "id": "ai_backpropagation_mlp",
+          "cat": "Neural Networks",
+          "title": "MULTILAYER PERCEPTRON & BACKPROPAGATION",
+          "sub": "Feedforward Architecture, Chain Rule Gradient Descent & Weight Updates",
+          "plain": "A Multilayer Perceptron (MLP) has an input layer, one or more hidden layers, and an output layer. Backpropagation is the training engine: data flows forward to make a prediction (forward pass), the error is calculated at the output, and the chain rule of calculus passes error signals backward through the layers (backward pass) so every weight is adjusted via Gradient Descent.",
+          "def": "A Multilayer Perceptron (MLP) is a feedforward artificial neural network with at least one hidden layer. Training utilizes the Backpropagation algorithm, which calculates the partial derivative of loss function $E$ with respect to each weight $w_{ij}$ using the chain rule of differential calculus: $\\frac{\\partial E}{\\partial w_{ij}} = \\frac{\\partial E}{\\partial y_j} \\cdot \\frac{\\partial y_j}{\\partial z_j} \\cdot \\frac{\\partial z_j}{\\partial w_{ij}} = \\delta_j x_i$. Weights are iteratively updated via Gradient Descent: $w_{ij} \\leftarrow w_{ij} - \\eta \\frac{\\partial E}{\\partial w_{ij}}$, where $\\eta > 0$ is the learning rate.",
+          "exam": "Backpropagation = Chain rule of calculus applied backward through layers + Gradient Descent weight update ($w \\leftarrow w - \\eta \\nabla E$). Forward pass computes activations; backward pass computes error gradients $\\delta$.",
+          "trap": "Exam Trap: Backpropagation calculates the GRADIENTS of the loss function; Gradient Descent is the optimizer that actually updates the weights using those gradients.",
+          "example": "Training an MLP on the MNIST handwritten digit dataset: forward pass outputs 10 class probabilities; cross-entropy loss computes errors; backpropagation updates weights across hidden layers.",
+          "q": "State the core mathematical principle behind the Backpropagation algorithm and write the weight update equation in gradient descent.",
+          "a": "Backpropagation applies the Chain Rule of calculus to propagate error gradients from output layers backward through hidden layers. The weight update rule is: $w_{ij} \\leftarrow w_{ij} - \\eta \\frac{\\partial E}{\\partial w_{ij}}$, where $\\eta$ is the learning rate and $E$ is the error/loss function."
+        },
+        {
+          "id": "ai_ethics_fairness",
+          "cat": "AI Ethics",
+          "title": "AI ETHICS, ALGORITHMIC BIAS & SAFETY",
+          "sub": "Training Data Bias, Fairness Metrics, Explainable AI (XAI) & Alignment",
+          "plain": "AI models are only as fair as the data used to train them. If historical training data contains human prejudices, the AI will learn and amplify those biases (e.g. discriminating in loan approvals or hiring). AI ethics focuses on creating fair models, ensuring Explainability (XAI - understanding why an AI made a decision), safeguarding data privacy, and keeping powerful AI aligned with human values.",
+          "def": "AI Ethics encompasses the principles, governance frameworks, and technical methods designed to ensure intelligent systems are fair, transparent, accountable, and safe. Key concerns include: (1) Algorithmic Bias (reproducing or amplifying societal disparities present in training data); (2) Fairness Criteria (Demographic Parity, Equalized Odds); (3) Explainable AI (XAI methods like LIME and SHAP to reveal black-box decision logic); (4) Privacy (differential privacy); (5) The AI Alignment Problem (ensuring AI objectives match human values).",
+          "exam": "AI Ethics pillars: Fairness (combating training data bias), Accountability (identifying responsibility), Transparency / Explainability (XAI), Privacy, and Value Alignment.",
+          "trap": "Exam Trap: Removing sensitive attributes (like race or gender) does NOT eliminate bias; machine learning models easily reconstruct protected attributes from proxy features (like zip code or browsing history).",
+          "example": "An automated hiring algorithm trained on 10 years of male-dominated resumes penalized resumes containing the word 'women's' (e.g. 'women's rugby club'), illustrating proxy bias in historical training data.",
+          "q": "Why does simply removing protected attributes (such as gender or race) from a training dataset fail to prevent algorithmic bias in machine learning models?",
+          "a": "Because complex machine learning models readily identify correlated proxy variables (such as zip codes, schools attended, extracurricular activities, or language patterns) that reconstruct the protected attributes, continuing biased decision-making."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Which machine learning paradigm involves an autonomous agent learning optimal decision policies through sequential trial-and-error interactions governed by reward and penalty signals?",
+          "opts": [
+            "Supervised Learning",
+            "Unsupervised Learning",
+            "Reinforcement Learning",
+            "Rule-Based Deductive Inference"
+          ],
+          "ans": 2,
+          "cat": "ML Paradigms",
+          "correctFb": "Reinforcement Learning optimizes a policy through environmental interactions guided by evaluative scalar reward signals.",
+          "distractors": [
+            "Supervised learning trains on static input-output labeled datasets.",
+            "Unsupervised learning discovers latent clustering patterns in unlabeled data with no reward signal.",
+            "Rule-based deductive inference uses logical resolution without learning from experience."
+          ]
+        },
+        {
+          "q": "In the ID3 decision tree algorithm, if a dataset partition contains 10 positive examples and 0 negative examples, what is its Shannon Entropy?",
+          "opts": [
+            "1.0 bit",
+            "0.0 bits",
+            "0.5 bits",
+            "Undefined"
+          ],
+          "ans": 1,
+          "cat": "Supervised Learning",
+          "correctFb": "A completely pure sample set has zero uncertainty: H(S) = -1.0 * log2(1.0) - 0 * log2(0) = 0.0 bits.",
+          "distractors": [
+            "1.0 bit represents maximum uncertainty (e.g. 50% positive and 50% negative).",
+            "0.5 bits is an intermediate entropy value.",
+            "Entropy is fully defined; by convention, 0 * log2(0) = 0."
+          ]
+        },
+        {
+          "q": "How does the ID3 algorithm determine which feature attribute to select for the root node split of a decision tree?",
+          "opts": [
+            "It selects the attribute with the lowest number of unique values",
+            "It selects the attribute that maximizes Information Gain (greatest reduction in entropy)",
+            "It selects attributes alphabetically",
+            "It selects the attribute with the largest Euclidean variance"
+          ],
+          "ans": 1,
+          "cat": "Supervised Learning",
+          "correctFb": "ID3 evaluates all available candidate attributes and selects the one providing the highest Information Gain IG(S, A).",
+          "distractors": [
+            "Attribute cardinality alone does not guide splitting in standard ID3.",
+            "Alphabetical ordering has no relationship to machine learning entropy reduction.",
+            "Euclidean variance is used in regression trees, not ID3 categorical classification."
+          ]
+        },
+        {
+          "q": "In k-Nearest Neighbors (k-NN) classification, what is the risk of selecting an extremely small hyperparameter value like k = 1?",
+          "opts": [
+            "The model will underfit and predict the global majority class everywhere",
+            "The model will be highly sensitive to noise and outliers in the training data, leading to overfitting",
+            "The prediction computation time at query time will increase by 100x",
+            "The algorithm will fail to calculate Euclidean distances"
+          ],
+          "ans": 1,
+          "cat": "Supervised Learning",
+          "correctFb": "Setting k = 1 causes the decision boundary to wrap tightly around individual noisy training points, causing high variance and overfitting.",
+          "distractors": [
+            "Predicting the global majority class happens when k is set equal to the total dataset size N (underfitting).",
+            "Prediction time is actually fastest when k = 1 since finding the single nearest neighbor requires minimal sorting.",
+            "Euclidean distance calculations are independent of the value of k."
+          ]
+        },
+        {
+          "q": "What is the update step in the standard k-Means clustering algorithm after all data points have been assigned to their nearest cluster centroid?",
+          "opts": [
+            "Delete the smallest cluster",
+            "Recalculate each centroid as the arithmetic mean of all data points assigned to that cluster",
+            "Randomly initialize new centroids across the feature space",
+            "Compute the gradient of the weights using backpropagation"
+          ],
+          "ans": 1,
+          "cat": "Unsupervised Learning",
+          "correctFb": "The centroid update step recomputes each centroid position mu_j as the mean vector of all points belonging to cluster j.",
+          "distractors": [
+            "Small clusters are retained unless explicit empty cluster reassignment is triggered.",
+            "Random reinitialization only occurs at the initial startup or for empty clusters.",
+            "Backpropagation trains neural networks and has no connection to k-Means."
+          ]
+        },
+        {
+          "q": "A medical diagnostic machine learning model for a critical disease produces 80 True Positives, 20 False Negatives, and 10 False Positives. What is the Recall (Sensitivity) of this model?",
+          "opts": [
+            "Recall = 80 / (80 + 10) = 88.9%",
+            "Recall = 80 / (80 + 20) = 80.0%",
+            "Recall = (80 + 20) / (80 + 10 + 20) = 90.9%",
+            "Recall = 10 / (80 + 20) = 10.0%"
+          ],
+          "ans": 1,
+          "cat": "Evaluation Metrics",
+          "correctFb": "Recall = TP / (TP + FN) = 80 / (80 + 20) = 80 / 100 = 80.0%. It measures the proportion of actual sick patients correctly diagnosed.",
+          "distractors": [
+            "80 / (80 + 10) = 88.9% calculates Precision (TP / (TP + FP)), not Recall.",
+            "90.9% uses an incorrect composite ratio.",
+            "10.0% divides False Positives by actual positives, which is meaningless."
+          ]
+        },
+        {
+          "q": "What is the mathematical definition of the F1-Score in machine learning model evaluation?",
+          "opts": [
+            "F1 = (Precision + Recall) / 2",
+            "F1 = 2 * (Precision * Recall) / (Precision + Recall)",
+            "F1 = sqrt(Precision * Recall)",
+            "F1 = Precision / Recall"
+          ],
+          "ans": 1,
+          "cat": "Evaluation Metrics",
+          "correctFb": "The F1-Score is the harmonic mean of Precision and Recall: 2 * (P * R) / (P + R).",
+          "distractors": [
+            "(Precision + Recall) / 2 is the arithmetic mean, which fails to penalize extreme imbalances.",
+            "sqrt(Precision * Recall) is the geometric mean (G-measure).",
+            "Precision / Recall is a ratio, not the F1 harmonic mean."
+          ]
+        },
+        {
+          "q": "What landmark theoretical limitation of single-layer perceptrons was proven by Marvin Minsky and Seymour Papert in their 1969 book?",
+          "opts": [
+            "Perceptrons cannot be trained using gradient descent",
+            "Perceptrons cannot classify non-linearly separable patterns such as the XOR function",
+            "Perceptrons can only process text and cannot process images",
+            "Perceptrons require infinite training epochs to converge on separable data"
+          ],
+          "ans": 1,
+          "cat": "Neural Networks",
+          "correctFb": "Minsky and Papert proved that single-layer perceptrons can only construct linear hyperplanes and cannot compute non-linearly separable logic functions like XOR.",
+          "distractors": [
+            "Perceptrons can be trained with the Perceptron Learning Rule and gradient descent.",
+            "Perceptrons process arbitrary numerical vectors, including image pixel values.",
+            "The Perceptron Convergence Theorem guarantees convergence in finite steps on linearly separable data."
+          ]
+        },
+        {
+          "q": "Why is the Rectified Linear Unit (ReLU: f(z) = max(0, z)) widely preferred over the Sigmoid function in hidden layers of deep neural networks?",
+          "opts": [
+            "ReLU outputs values strictly between 0 and 1",
+            "ReLU has a constant gradient of 1 for positive inputs, overcoming the vanishing gradient problem and speeding up convergence",
+            "ReLU is a completely linear function that allows layers to be collapsed",
+            "ReLU eliminates the need for backpropagation"
+          ],
+          "ans": 1,
+          "cat": "Neural Networks",
+          "correctFb": "Sigmoid saturates at both tails with derivative approaching 0, causing vanishing gradients in deep networks; ReLU maintains derivative 1 for z > 0, ensuring robust gradient flow.",
+          "distractors": [
+            "ReLU outputs values in [0, infinity), whereas Sigmoid outputs in (0, 1).",
+            "ReLU is non-linear due to the threshold at 0, which prevents layers from collapsing.",
+            "Backpropagation is still required to calculate weight gradients with ReLU."
+          ]
+        },
+        {
+          "q": "In training multilayer neural networks, what mathematical operation forms the core of the Backpropagation algorithm?",
+          "opts": [
+            "Applying the Chain Rule of calculus to compute the gradient of the loss function with respect to every weight in reverse topological order",
+            "Solving a system of linear equations using Gaussian Elimination",
+            "Sorting weights using the QuickSort algorithm",
+            "Computing the eigenvalues of the Hessian matrix"
+          ],
+          "ans": 0,
+          "cat": "Neural Networks",
+          "correctFb": "Backpropagation applies the Chain Rule of differential calculus backward from output errors to compute partial derivatives dE/dw for gradient descent updates.",
+          "distractors": [
+            "Neural network optimization is non-linear and cannot be solved with Gaussian elimination.",
+            "Sorting weights has no connection to error gradient computation.",
+            "Computing full Hessian eigenvalues is computationally prohibitive and not part of standard backpropagation."
+          ]
+        }
+      ],
+      "bossChallenges": [
+        {
+          "marks": 10,
+          "scenario": "[10 MARKS] University Exam Question: You are given a training dataset of 14 examples for a credit card approval system with attributes {Income (High, Medium, Low), CreditScore (Good, Bad), Employed (Yes, No)} and target class Approved (Yes, No). Calculate the prior Entropy H(S). Compute the Information Gain for each attribute using the ID3 algorithm, determine which attribute is chosen as the root node, and draw the resulting partial decision tree.",
+          "rubric": [
+            "Criterion 1 (2.5 Marks): Accurate calculation of prior Shannon Entropy H(S) with explicit logarithmic steps.",
+            "Criterion 2 (2.5 Marks): Detailed conditional entropy and Information Gain calculations for all three attributes: IG(S, Income), IG(S, CreditScore), IG(S, Employed).",
+            "Criterion 3 (2.5 Marks): Correct selection of the root node attribute having the maximum Information Gain.",
+            "Criterion 4 (2.5 Marks): Architectural drawing/description of the decision tree branches and recursive stopping conditions (pure leaf nodes)."
+          ]
+        },
+        {
+          "marks": 5,
+          "scenario": "[5 MARKS] Practical Problem-Solving Scenario: A deep learning model for skin lesion diagnosis achieves 99.2% training accuracy but only 71.4% validation accuracy. Diagnose the machine learning failure mode, explain the Bias-Variance tradeoff at play, and propose three concrete engineering remedies (such as regularization, dropout, and data augmentation) to resolve it.",
+          "rubric": [
+            "Criterion 1 (1.25 Marks): Accurate diagnosis of Overfitting (High Variance) caused by excessive model capacity and training noise memorization.",
+            "Criterion 2 (1.25 Marks): Theoretical breakdown of the Bias-Variance tradeoff curve and identification of the validation loss inflection point.",
+            "Criterion 3 (1.25 Marks): Detailed operational explanation of L2 weight decay regularization and Dropout (random neuron deactivation).",
+            "Criterion 4 (1.25 Marks): Practical data pipeline solutions including Data Augmentation (flips, rotations) and Early Stopping via cross-validation."
+          ]
+        }
+      ]
+    }
+  ]
+}

