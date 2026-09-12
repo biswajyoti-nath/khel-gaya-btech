@@ -1,6 +1,6 @@
 {
-  "name": "CYBER//BRAINROT",
-  "short_name": "Brainrot",
+  "name": "Khel Gaya B.Tech",
+  "short_name": "KhelGaya",
   "description": "Multi-Subject Active-Recall Study Engine for ASTU B.Tech CSE 5th Semester",
   "start_url": "./index.html",
   "display": "standalone",

@@ -981,8 +981,8 @@ with open('curriculum.json', 'w', encoding='utf-8') as f:
 
 # Write js/curriculum.js
 with open('js/curriculum.js', 'w', encoding='utf-8') as f:
-    f.write('// CYBER//BRAINROT CURRICULUM DATA (ASTU 5TH SEMESTER)\n')
-    f.write('const DEFAULT_CURRICULUM = ')
+    f.write('// KHEL GAYA B.TECH CURRICULUM DATA (ASTU 5TH SEMESTER)\n')
+    f.write('var DEFAULT_CURRICULUM = window.DEFAULT_CURRICULUM = ')
     json.dump(curriculum, f, indent=2)
     f.write(';\n')
 

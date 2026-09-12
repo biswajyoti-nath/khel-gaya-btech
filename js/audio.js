@@ -1,4 +1,4 @@
-// CYBER//BRAINROT SYNTHESIS AUDIO ENGINE (Zero-Dependency Web Audio API)
+// KHEL GAYA B.TECH SYNTHESIS AUDIO ENGINE (Zero-Dependency Web Audio API)
 class CyberAudio {
   constructor() {
     this.ctx = null;

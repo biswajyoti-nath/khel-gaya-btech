@@ -1,4 +1,4 @@
-// CYBER//BRAINROT MAIN APPLICATION CONTROLLER
+// KHEL GAYA B.TECH MAIN APPLICATION CONTROLLER
 // Multi-Subject Study & Gamification System for ASTU B.Tech CSE 5th Semester
 
 (function() {

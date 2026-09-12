@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-CYBER//BRAINROT GAMIFICATION & SYLLABUS ENGINE
+KHEL GAYA B.TECH GAMIFICATION & SYLLABUS ENGINE
 Interactive CLI for transforming college syllabus topics into active-recall gamified study packs.
 Supports multi-subject hierarchy: Subject -> Module -> Topic.
 """
@@ -31,7 +31,7 @@ def save_curriculum(curriculum):
 
 def gamify_topic(title, category="Core", raw_notes=""):
     """
-    Transforms a raw syllabus topic into the standardized Cyber//Brainrot gamified format.
+    Transforms a raw syllabus topic into the standardized Khel Gaya B.Tech gamified format.
     """
     slug = re.sub(r'[^a-zA-Z0-9]+', '_', title.lower()).strip('_')
     
@@ -80,7 +80,7 @@ def gamify_topic(title, category="Core", raw_notes=""):
 
 def list_curriculum(curriculum):
     print("=" * 65)
-    print("CYBER//BRAINROT MULTI-SUBJECT CURRICULUM HIERARCHY")
+    print("KHEL GAYA B.TECH MULTI-SUBJECT CURRICULUM HIERARCHY")
     print("=" * 65)
     for s_idx, subj in enumerate(curriculum.get("subjects", [])):
         print(f"\n[{s_idx + 1}] {subj.get('icon', '📚')} {subj.get('title')} ({subj.get('code')}) [ID: {subj.get('id')}]")
@@ -152,7 +152,7 @@ def interactive_mode():
     add_topic_cli(subj_id, mod_num, title, cat, notes)
 
 def main():
-    parser = argparse.ArgumentParser(description="Cyber//Brainrot Multi-Subject Gamification Engine")
+    parser = argparse.ArgumentParser(description="Khel Gaya B.Tech Multi-Subject Gamification Engine")
     parser.add_argument("--list", action="store_true", help="List all subjects, modules, and topics")
     parser.add_argument("--interactive", action="store_true", help="Run interactive topic gamifier")
     parser.add_argument("--add", action="store_true", help="Add a new topic from flags")

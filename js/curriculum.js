@@ -1,4 +1,4 @@
-// CYBER//BRAINROT CURRICULUM DATA (ASTU 5TH SEMESTER)
+// KHEL GAYA B.TECH CURRICULUM DATA (ASTU 5TH SEMESTER)
 var DEFAULT_CURRICULUM = window.DEFAULT_CURRICULUM = {
   "version": "2.0.0",
   "institution": "Assam Science and Technology University (ASTU)",

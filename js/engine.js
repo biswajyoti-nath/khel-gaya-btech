@@ -1,4 +1,4 @@
-// CYBER//BRAINROT SYLLABUS GAMIFICATION ENGINE
+// KHEL GAYA B.TECH SYLLABUS GAMIFICATION ENGINE
 // Transforms raw college syllabus topics, textbook outlines, or PDF bullets into active recall packs.
 
 class GamificationEngine {

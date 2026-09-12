@@ -1,4 +1,4 @@
-# ⚡ CYBER//BRAINROT — Multi-Subject Study & Gamification Engine
+# ⚡ KHEL GAYA B.TECH — Multi-Subject Study & Gamification Engine
 
 > **"Break the concepts before they break you."**  
 > An active-recall, spaced-repetition study and gamification engine built for **Assam Science and Technology University (ASTU) B.Tech CSE 5th Semester** (based on `B.Tech-CSE-5th-Sem-Final.pdf`).
@@ -19,12 +19,12 @@ npx vercel --prod
 ```
 
 ### Option B: Deploy via GitHub
-1. Push this folder to a GitHub repository:
+1. Push this repository to GitHub:
    ```bash
    git add .
    git commit -m "feat: complete multi-subject gamification engine"
-   git remote add origin https://github.com/<your-username>/cyber-brainrot.git
    git push -u origin main
+   # Remote: https://github.com/biswajyoti-nath/khel-gaya-btech
    ```
 2. Go to [vercel.com](https://vercel.com/new), select your repository, and click **Deploy**.
 3. Vercel automatically detects the static configuration (`vercel.json`) and deploys to its global Edge Network with 100/100 Lighthouse performance.
@@ -47,7 +47,7 @@ Navigate seamlessly across all 5th semester courses:
 
 ## 🎮 The Gamification Engine (Topic Studio)
 
-You can feed **ANY** syllabus bullet point, textbook topic, or exam heading into the engine, and it automatically formats it into the **Cyber//Brainrot Active-Recall Schema**:
+You can feed **ANY** syllabus bullet point, textbook topic, or exam heading into the engine, and it automatically formats it into the **Khel Gaya B.Tech Active-Recall Schema**:
 1. 💡 **Intuitive Mental Model (Plain English / ELI5)**
 2. 📝 **University Full-Marks Academic Definition**
 3. ⚡ **Exam Punchline & Mnemonic**
