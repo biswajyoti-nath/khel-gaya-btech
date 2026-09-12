@@ -1,0 +1,27 @@
+{
+  "name": "cyber-brainrot",
+  "version": "2.0.0",
+  "description": "Multi-Subject Active-Recall Study Engine for ASTU B.Tech CSE 5th Semester",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx -y serve . -l 3000",
+    "start": "npx -y serve . -l 3000",
+    "test": "node -e \"console.log('Validating project files...'); require('fs').readFileSync('index.html'); require('fs').readFileSync('js/curriculum.js'); console.log('All files intact!')\"",
+    "engine": "python3 gamify_engine.py --interactive",
+    "list-syllabus": "python3 gamify_engine.py --list"
+  },
+  "keywords": [
+    "astu",
+    "btech-cse",
+    "active-recall",
+    "cyber-security",
+    "operating-systems",
+    "computer-networks",
+    "artificial-intelligence",
+    "automata",
+    "gamified-learning",
+    "vercel"
+  ],
+  "author": "Biswajyoti Nath",
+  "license": "MIT"
+}

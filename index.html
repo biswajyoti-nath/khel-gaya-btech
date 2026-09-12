@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CYBER//BRAINROT — ASTU 5th Sem Multi-Subject Study Engine</title>
+  
+  <meta name="description" content="Gamified active-recall study engine for Assam Science and Technology University (ASTU) B.Tech CSE 5th Semester. Cyber Security, OS, Networks, AI, Automata & DevOps.">
+  <meta name="theme-color" content="#090b0c">
+  
+  <!-- OpenGraph / Social Media Meta -->
+  <meta property="og:title" content="CYBER//BRAINROT — ASTU 5th Sem Study Engine">
+  <meta property="og:description" content="Break the concepts before they break you. Active recall, spaced repetition, quizzes, and boss fights for B.Tech CSE 5th Sem.">
+  <meta property="og:type" content="website">
+  
+  <!-- Favicon & PWA Manifest -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside>
+    <div>
+      <div class="brand-wrap">
+        <div class="brand">CYBER<span>//</span>BRAINROT</div>
+        <button class="sound-toggle-btn" id="btn-sound" onclick="toggleSound()" title="Toggle Audio Synthesizer">🔊 SOUND</button>
+      </div>
+      <div class="tag">ASTU B.Tech CSE • 5th Sem<br>multi-subject retrieval engine</div>
+    </div>
+
+    <nav>
+      <button class="active" data-v="home"><span>🏠 HOME</span></button>
+      <button data-v="learn"><span>⚡ LEARN</span></button>
+      <button data-v="quiz"><span>🎯 QUIZ</span></button>
+      <button data-v="boss"><span>⚔️ BOSS</span></button>
+      <button data-v="refs"><span>📜 CHEAT SHEET</span></button>
+      <button data-v="engine"><span>⚙️ TOPIC STUDIO</span><span class="nav-badge">ENGINE</span></button>
+    </nav>
+
+    <div class="status">
+      <div class="stat-row"><span>TOTAL XP</span><b id="xp">0</b></div>
+      <div class="stat-row"><span>ACTIVE STREAK</span><b id="streak">0</b></div>
+      <div class="stat-row"><span>SUBJECT MASTERY</span><b id="mastery">0%</b></div>
+      <button class="reset-btn" onclick="resetProgress()">RESET STUDY RUN</button>
+    </div>
+  </aside>
+
+  <!-- MAIN VIEW CONTAINER -->
+  <main>
+    <!-- TOP HEADER -->
+    <header class="top">
+      <span>ASTU 5TH SEM // <b id="top-subj-title">CYBER SECURITY</b></span>
+      <div class="hints" id="top-hints">
+        <span>SHORTCUTS:</span>
+        <kbd>R</kbd> reveal • <kbd>N</kbd> next • <kbd>P</kbd> prev • <kbd>1</kbd> missed • <kbd>2</kbd> got it
+      </div>
+    </header>
+
+    <!-- HIERARCHY SELECTOR BAR (Subject -> Module -> Topic) -->
+    <div class="hierarchy-bar">
+      <div class="select-group">
+        <label for="sel-subject">SUBJECT:</label>
+        <select id="sel-subject" onchange="onSubjectChange(this.value)"></select>
+      </div>
+      <div class="select-group">
+        <label for="sel-module">MODULE:</label>
+        <select id="sel-module" onchange="onModuleChange(this.value)"></select>
+      </div>
+      <div class="hierarchy-stats">
+        <span class="badge" id="curr-topic-count">0 TOPICS</span>
+        <span class="badge" id="curr-module-badge">ALL MODULES</span>
+      </div>
+    </div>
+
+    <!-- MOBILE STATUS BAR -->
+    <div class="mobile-bar">
+      <span>XP: <b id="mob-xp">0</b></span>
+      <span>STREAK: <b id="mob-streak">0</b></span>
+      <span>MASTERY: <b id="mob-mastery">0%</b></span>
+    </div>
+
+    <!-- CONTENT VIEWS -->
+    <div class="content">
+
+      <!-- 1. HOME VIEW -->
+      <section class="view active" id="home">
+        <div class="hero">
+          <div class="card">
+            <div class="eyebrow" id="home-eyebrow">SUBJECT EXPLORER</div>
+            <h1 id="home-title">CYBER SECURITY</h1>
+            <p id="home-desc">Curated syllabus for Assam Science and Technology University (ASTU) CSE 5th Semester. Select any Subject and Module in the top selector to train active retrieval flashcards, take quizzes, and battle examiner bosses.</p>
+            <div class="actions">
+              <button class="primary" onclick="go('learn')">TRAIN RETRIEVAL DECK →</button>
+              <button class="ghost" onclick="go('quiz')">TAKE ACTIVE QUIZ</button>
+              <button class="ghost" onclick="go('boss')">BOSS FIGHT</button>
+              <button class="ghost" onclick="go('engine')">⚡ TOPIC STUDIO</button>
+            </div>
+          </div>
+          <div class="card score">
+            <div>
+              <div class="small">SUBJECT MASTERY</div>
+              <strong id="pct">0%</strong>
+              <div class="bar"><i id="bar"></i></div>
+              <p id="mastered-count" class="small" style="margin-top:6px">0 of 0 topics mastered</p>
+            </div>
+            <div>
+              <p class="small">Testing forces active retrieval, strengthening synaptic pathways 2x faster than re-reading notes.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="head" style="margin-top:26px;margin-bottom:0">
+          <div>
+            <h2 id="home-section-head">SYLLABUS TOPICS</h2>
+            <p class="small" id="home-section-sub">Topics in current selection. Click 'TRAIN CONCEPT' to jump directly to retrieval reps.</p>
+          </div>
+        </div>
+        <div class="grid" id="topics"></div>
+      </section>
+
+      <!-- 2. LEARN VIEW (RETRIEVAL FLASHCARDS) -->
+      <section class="view" id="learn">
+        <div class="head">
+          <div>
+            <h2>RETRIEVAL DECK</h2>
+            <p class="small">Answer in your head or on paper first. Then reveal the model answer.</p>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="ghost" onclick="prevCard()">← PREV [P]</button>
+            <button class="ghost" onclick="shuffle()">SHUFFLE</button>
+          </div>
+        </div>
+        <div class="study">
+          <div class="card flash">
+            <div>
+              <div class="flash-meta">
+                <div class="label" id="tag"></div>
+                <span class="small" id="card-counter">CARD 1 / 1</span>
+              </div>
+              <div class="question" id="q"></div>
+            </div>
+            <div>
+              <div class="answer" id="a"></div>
+              <div class="actions" id="card-actions" style="margin-top:16px">
+                <button class="primary" id="btn-reveal" onclick="reveal()">REVEAL [R / Space]</button>
+                <button class="ghost" id="btn-got" onclick="rate(2)">GOT IT (+2 XP) [2]</button>
+                <button class="ghost" id="btn-miss" onclick="rate(1)">MISSED (+1 XP) [1]</button>
+                <button class="ghost" id="btn-next" onclick="next()">NEXT [N] →</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="small" style="color:var(--acid);font-weight:900">STUDY COACHING</div>
+              <p><b>1. Generation First:</b> Formulate your thoughts before reading the model answer.</p>
+              <p style="margin-top:8px"><b>2. Connect & Contrast:</b> Compare against related syllabus concepts to lock in high-mark exam answers.</p>
+            </div>
+            <div class="card" style="margin-top:12px">
+              <div class="small" style="color:var(--blue);font-weight:900">SYLLABUS NOTE</div>
+              <p id="deck-subj-info">Switch subjects anytime in the top hierarchy bar.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. QUIZ VIEW (ACTIVE RECALL MCQS) -->
+      <section class="view" id="quiz">
+        <div class="head">
+          <div>
+            <h2>ACTIVE RECALL QUIZ</h2>
+            <p class="small">Test recognition vs real recall. Full detailed breakdowns for every option.</p>
+          </div>
+          <span class="small" id="qs">Score: 0 / 0</span>
+        </div>
+        <div class="card quiz" id="quiz-card">
+          <div class="quiz-header">
+            <span class="small" id="qn">QUESTION 1 / 1</span>
+            <span class="badge" id="quiz-cat">CONCEPT</span>
+          </div>
+          <div class="quizq" id="qq"></div>
+          <div class="options" id="opts"></div>
+          <div class="feedback" id="fb"></div>
+          <div class="actions" style="margin-top:18px">
+            <button class="primary" id="quiz-next-btn" onclick="nextQuiz()" disabled>NEXT QUESTION →</button>
+          </div>
+        </div>
+        <div class="card quiz-result" id="quiz-result" style="display:none">
+          <div class="eyebrow">ASSESSMENT REPORT</div>
+          <h3 id="result-score">0 / 0</h3>
+          <p id="result-feedback"></p>
+          <div class="actions" style="justify-content:center">
+            <button class="primary" onclick="restartQuiz()">RETRY QUIZ (SHUFFLED) →</button>
+            <button class="ghost" onclick="go('learn')">REVIEW RETRIEVAL DECK</button>
+            <button class="ghost" onclick="go('refs')">EXAM CHEAT SHEET</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. BOSS FIGHT VIEW (EXAM GENERATION) -->
+      <section class="view" id="boss">
+        <div class="head">
+          <div>
+            <h2>BOSS FIGHT: EXAM GENERATION</h2>
+            <p class="small">ASTU 5-Mark & 10-Mark generation practice. Explain from scratch before revealing the grading rubric.</p>
+          </div>
+          <button class="ghost" onclick="newBoss()">NEW THREAT →</button>
+        </div>
+        <div class="card boss">
+          <div class="threat">ASTU EXAMINER CHALLENGE (LV. 99)</div>
+          <div class="bossq" id="bq"></div>
+          <p class="small">Draft your response below. Include: Definition + Technical Mechanism + Concrete Example + Distinction.</p>
+          <textarea id="boss-input" placeholder="Type your answer or outline here (scroll freely as you type)..."></textarea>
+          <div class="actions">
+            <button class="primary" id="boss-reveal-btn" onclick="showBoss()">REVEAL MODEL ANSWER & RUBRIC</button>
+          </div>
+          <div class="answer" id="ba"></div>
+          <div class="eval-box" id="boss-eval">
+            <div class="small" style="font-weight:900;color:var(--acid);margin-bottom:6px">EXAMINER MARKING RUBRIC:</div>
+            <div class="rubric-grid" id="boss-rubric"></div>
+            <div class="small" style="margin-bottom:8px">SELF ASSESSMENT: How thoroughly did your generated answer hit the keywords?</div>
+            <div class="actions">
+              <button class="primary" onclick="gradeBoss(5)">NAILED IT (+5 XP)</button>
+              <button class="ghost" onclick="gradeBoss(2)">PARTIAL (+2 XP)</button>
+              <button class="danger" onclick="gradeBoss(1)">MISSED (+1 XP)</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. CHEAT SHEET VIEW -->
+      <section class="view" id="refs">
+        <div class="head">
+          <div>
+            <h2>EXAM CHEAT SHEET & STUDY GUIDES</h2>
+            <p class="small">Instant search, category filters, and expandable study notes for the active selection.</p>
+          </div>
+        </div>
+        <div class="search-wrap">
+          <div class="search-row">
+            <input id="search" placeholder="Search topics, keywords, definitions, formulas, or attacks..." oninput="refs()">
+            <button class="ghost" onclick="$('search').value='';refs()">CLEAR</button>
+          </div>
+          <div class="filters" id="cat-filters"></div>
+        </div>
+        <div class="grid" id="refgrid"></div>
+      </section>
+
+      <!-- 6. TOPIC ENGINE STUDIO VIEW -->
+      <section class="view" id="engine">
+        <div class="head">
+          <div>
+            <h2>⚡ TOPIC GAMIFICATION ENGINE & SYLLABUS STUDIO</h2>
+            <p class="small">Add raw syllabus topics from college PDFs or textbooks. The engine will auto-gamify them into active recall packs.</p>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="ghost" onclick="exportCurriculumJSON()">EXPORT JSON ⤓</button>
+            <button class="ghost" onclick="promptImportJSON()">IMPORT JSON ⤒</button>
+          </div>
+        </div>
+
+        <div class="engine-grid">
+          <div class="card">
+            <div class="eyebrow">TOPIC BUILDER</div>
+            <h3>ADD OR GAMIFY SYLLABUS TOPIC</h3>
+            <div class="engine-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="eng-subject">TARGET SUBJECT</label>
+                  <select id="eng-subject"></select>
+                </div>
+                <div class="form-group">
+                  <label for="eng-module">TARGET MODULE</label>
+                  <select id="eng-module"></select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="eng-title">TOPIC TITLE (e.g. "Dining Philosophers", "TCP 3-Way Handshake")</label>
+                <input id="eng-title" placeholder="Enter topic title...">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="eng-cat">CATEGORY</label>
+                  <input id="eng-cat" placeholder="Core / Algorithms / Architecture" value="Core">
+                </div>
+                <div class="form-group">
+                  <label for="eng-sub">SUBTITLE / FOCUS</label>
+                  <input id="eng-sub" placeholder="e.g. Synchronization & Deadlock">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="eng-notes">RAW SYLLABUS BULLET POINTS OR NOTES (Optional)</label>
+                <textarea id="eng-notes" style="min-height:75px" placeholder="Paste bullet points, textbook definitions, or syllabus lines..."></textarea>
+              </div>
+              <div class="actions">
+                <button class="primary" onclick="autoGamifyInStudio()">⚡ AUTO-GAMIFY & PREVIEW</button>
+                <button class="ghost" onclick="saveTopicFromStudio()">SAVE TO CURRICULUM</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="eyebrow">ENGINE PREVIEW</div>
+            <h3>GAMIFIED OUTPUT PREVIEW</h3>
+            <div class="preview-box" id="eng-preview">
+              <p style="color:var(--muted)">Fill in the topic form and click "⚡ AUTO-GAMIFY & PREVIEW" to inspect the generated retrieval flashcard, quiz MCQ, and study notes.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast" id="toast"></div>
+
+<!-- SCRIPTS (Zero External Dependencies) -->
+<script src="js/audio.js"></script>
+<script src="js/curriculum.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

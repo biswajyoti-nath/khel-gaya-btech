@@ -1,0 +1,16 @@
+{
+  "name": "CYBER//BRAINROT",
+  "short_name": "Brainrot",
+  "description": "Multi-Subject Active-Recall Study Engine for ASTU B.Tech CSE 5th Semester",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#090b0c",
+  "theme_color": "#090b0c",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml"
+    }
+  ]
+}
